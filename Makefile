@@ -6,6 +6,9 @@ LIBFT_DIR = ./srcs/libft
 
 SOURCES = $(SOURCES_DIR)/main.c\
 		  $(SOURCES_DIR)/read_map.c\
+		  $(SOURCES_DIR)/free.c\
+		  $(SOURCES_DIR)/get_map_data.c\
+		  $(SOURCES_DIR)/init.c\
 		  $(SOURCES_DIR)/print_error.c\
 		  $(GNL_DIR)/get_next_line.c\
 		  $(GNL_DIR)/get_next_line_utils.c\

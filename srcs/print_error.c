@@ -14,6 +14,6 @@
 
 void print_error(char *str)
 {
-    printf("Error\n%s\n",str);
+    printf("\x1b[31mError\n%s\x1b[0m\n",str);
     exit(1);
 }

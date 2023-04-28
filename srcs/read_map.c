@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:34:10 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 17:32:55 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/04/28 18:55:06 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,19 +32,16 @@ static void filename_check(char *filename)
     
 }
 
-int read_map(char *path)
+
+
+void read_map(char *path,t_info *info)
 {
     int fd;
     // char *str;
 
     filename_check(path);
     fd = open(path, O_RDONLY);
-    // if (fd == -1)
-    //     print_error("open");
-    // while(1)
-    // {
-    //     str = get_next_line(fd);
-        
-    // }
-    return (TRUE);
+    if (fd == -1)
+        print_error("open");
+    get_map_data(fd,info);
 }
