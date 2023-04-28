@@ -1,24 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putendl_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 17:29:07 by susasaki         ###   ########.fr       */
+/*   Created: 2022/10/18 14:30:03 by susasaki          #+#    #+#             */
+/*   Updated: 2022/10/22 10:12:41 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "libft.h"
 
-# include "../include/cub3d.h"
-
-int main(int argc, char **argv)
+void	ft_putendl_fd(char *s, int fd)
 {
-    if (argc != 2)
-    {
-        printf("Error:\nno map specified.\n");
-    }
-    if (read_map(argv[1]) == FALSE)
-        printf("map");
+	char	nl;
+
+	nl = '\n';
+	if (!s)
+		return ;
+	write(fd, s, ft_strlen(s));
+	write(fd, &nl, 1);
 }
