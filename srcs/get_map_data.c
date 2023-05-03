@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_map_data.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 19:08:38 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/03 23:59:43 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,22 +82,29 @@ void get_map_data(int fd,t_info *info)
     int flag;
 
     str = get_next_line(fd);
-    if (str)
+    if (!str)
+	{
         print_error("get_next_line");
+	}
     flag = 0;
+	int i = 0;
     while (str)
     {
         if (non_specific_chara(str) == 1)
             flag = 1;
         info->map->map_data = map_str_add(info->map->map_data,str);
+		// printf("info->map->map_data[%d] = %s\n",i,info->map->map_data[i]);
         // info->map->vertical++;
         str = get_next_line(fd);
+		i++ ;
     }
-    printf("vertical = %d\n",info->map->vertical);
+	// debug用
+
+    // printf("vertical = %d\n",info->map->vertical);
+	// printf("flag = %d\n",flag);
     if (flag == 1)
     {
         free_mapdata(info->map->map_data, info->map->vertical);
         print_error("get_next_line");
     }
-    
 }

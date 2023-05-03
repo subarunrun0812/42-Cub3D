@@ -1,1 +1,4 @@
 *.o
+cub3D
+.gitignore
+srcs/libft/libft.a
