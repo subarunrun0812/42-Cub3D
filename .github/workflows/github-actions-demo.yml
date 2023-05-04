@@ -1,39 +1,30 @@
 name: Auto Labeler
 
-# pull request時に特定のディレクトリ下にあった場合、labelを自動的に付与する
+# pull request時に特定の文字列から始まるブランチ名だったら、labelを自動的に付与する
 on:
   pull_request:
     types: [opened, synchronize]
-    paths:
-      - 'raycasting/**'
-      - 'maps/**'
 
 jobs:
   auto_label:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Label PRs
+    - name: Label PRs based on branch
       uses: actions/github-script@v5
       with:
         github-token: ${{secrets.GITHUB_TOKEN}}
         script: |
           const pr = context.payload.pull_request;
-          const changedFiles = await github.rest.pulls.listFiles({
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pull_number: pr.number
-          });
-          
+          const branchName = pr.head.ref;
           const labels = new Set();
-          for (const file of changedFiles.data) {
-            if (file.filename.startsWith('raycasting/')) {
-              labels.add('raycasting');
-            } else if (file.filename.startsWith('maps/')) {
-              labels.add('maps');
-            }
+
+          if (branchName.startsWith("rc-")) {
+            labels.add("raycasting");
+          } else if (branchName.startsWith("map-")) {
+            labels.add("map");
           }
-          
+
           if (labels.size > 0) {
             await github.rest.issues.addLabels({
               owner: context.repo.owner,
