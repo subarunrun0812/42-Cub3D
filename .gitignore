@@ -3,5 +3,6 @@ test.c
 a.out
 cub3D
 .gitignore
-srcs/libft/libft.a
 cub3D
+srcs/libft/libft.a
+*.a
