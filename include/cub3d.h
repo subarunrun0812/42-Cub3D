@@ -14,13 +14,34 @@
 #define TRUE 0
 #define FALSE 1
 
+
+typedef struct s_map
+{
+    char **map_data;
+    int    vertical;
+    int    width;
+}              t_map;
+
+typedef struct s_info
+{
+    t_map *map;
+}               t_info;
+
 // read_map
-int              read_map(char *path);
+void            read_map(char *path,t_info *info);
+
+//get_map_data
+void get_map_data(int fd,t_info *info);
 
 //print_error
 void             print_error(char *str);
 
+//free
+void	free_mapdata(char **map_data, int vertical);
 
+//init
+void init(t_info *info);
+void init_map(t_map *map);
 
 
 #endif

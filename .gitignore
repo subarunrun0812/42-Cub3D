@@ -1,1 +1,8 @@
 *.o
+test.c
+a.out
+cub3D
+.gitignore
+cub3D
+srcs/libft/libft.a
+*.a

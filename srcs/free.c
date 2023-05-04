@@ -1,25 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 18:54:58 by susasaki         ###   ########.fr       */
+/*   Created: 2023/04/28 18:42:45 by susasaki          #+#    #+#             */
+/*   Updated: 2023/04/28 18:44:19 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 # include "../include/cub3d.h"
 
-int main(int argc, char **argv)
+void	free_mapdata(char **map_data, int vertical)
 {
-    t_info info;
-    if (argc != 2)
-    {
-        printf("Error:\nno map specified.\n");
-    }
-    init(&info);
-    read_map(argv[1], &info);
+	int	i;
+
+	i = 0;
+	if (vertical < 1)
+		return ;
+	while (i < vertical)
+	{
+		free(map_data[i]);
+		i++;
+	}
+	free(map_data);
 }
