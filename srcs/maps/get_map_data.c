@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_map_data.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/06 16:22:44 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/06 23:52:58 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ static int	non_specific_chara(char *str)
 	while (str[i] != '\n' && str[i] != '\0')
 	{
 		if (str[i] != '0' && str[i] != '1' && str[i] != 'N'
-			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W')
+			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
+			&& str[i] != ' ' && str[i] != '\t')
 			return (1);
 		i++;
 	}
@@ -88,15 +89,18 @@ void get_map_data(int fd,t_info *info)
 	}
     flag = 0;
 	int i = 0;
-    // printf("str = %s\n",str);
+    // printf("str = %s",str);
     while (str)
     {
         if (non_specific_chara(str) == 1)
+		{
+        	printf("\x1b[31mstr = %s\x1b[0m\n",str);
             flag = 1;
+		}
         info->map->map_data = map_str_add(info->map->map_data,str);
         str = get_next_line(fd);
-        // printf("str = %s\n",str);
 		i++ ;
+        // printf("str = %s",str);
         info->map->height++;
     }
     if (flag == 1)
