@@ -18,8 +18,7 @@
 typedef struct s_map
 {
     char **map_data;
-    int    vertical;
-    int    width;
+    int    height;
 }              t_map;
 
 typedef struct s_info
@@ -43,5 +42,7 @@ void	free_mapdata(char **map_data, int vertical);
 void init(t_info *info);
 void init_map(t_map *map);
 
+// check_map_wall.c
+void    check_map_wall(t_info *info);
 
 #endif
