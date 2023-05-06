@@ -9,6 +9,7 @@ RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
 SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
+          $(MAPS_DIR)/check_map_wall.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\

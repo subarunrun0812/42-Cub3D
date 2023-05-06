@@ -6,11 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/04 22:03:26 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/06 16:22:44 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/cub3d.h"
+# include "../../include/cub3d.h"
 
 static int	non_specific_chara(char *str)
 {
@@ -88,23 +88,20 @@ void get_map_data(int fd,t_info *info)
 	}
     flag = 0;
 	int i = 0;
+    // printf("str = %s\n",str);
     while (str)
     {
         if (non_specific_chara(str) == 1)
             flag = 1;
         info->map->map_data = map_str_add(info->map->map_data,str);
-		// printf("info->map->map_data[%d] = %s\n",i,info->map->map_data[i]);
-        // info->map->vertical++;
         str = get_next_line(fd);
+        // printf("str = %s\n",str);
 		i++ ;
+        info->map->height++;
     }
-	// debug用
-
-    // printf("vertical = %d\n",info->map->vertical);
-	// printf("flag = %d\n",flag);
     if (flag == 1)
     {
-        free_mapdata(info->map->map_data, info->map->vertical);
+        free_mapdata(info->map->map_data, info->map->height);
         print_error("get_next_line");
     }
 }
