@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_map_wall.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/07 00:09:42 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/09 14:59:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,9 +117,6 @@ void check_map_wall(t_info *info)
 	fast = i;
 	printf("fast=%d\n",fast);
     
-    //TODO:2行目の0の斜め上と上の座標が1であるか、左右端が1になっているか確認する
-    //TODO:↑同じやり方で最後の行も確認する。
-    //TODO:2行目~最後-1行目の上下左右斜めにスペースが無いか確認する
     while (i < info->map->height)
     {
         if (i == fast)
