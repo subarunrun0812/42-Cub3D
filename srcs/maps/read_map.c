@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:34:10 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/06 16:35:48 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/09 15:05:31 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,4 +48,5 @@ void	read_map(char *path, t_info *info)
 	}
 	// mapが壁で囲まれているかチェックする
 	check_map_wall(info);
+	close(fd);
 }
