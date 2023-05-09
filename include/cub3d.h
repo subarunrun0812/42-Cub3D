@@ -8,12 +8,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <mlx.h>
 #include "../srcs/get_next_line/get_next_line.h"
 #include "../srcs/libft/libft.h"
 
 #define TRUE 0
 #define FALSE 1
 
+# define W_KEY 13  
+# define A_KEY 0
+# define S_KEY 1
+# define D_KEY 2
+# define ESC_KEY 53
 
 typedef struct s_map
 {
@@ -21,28 +27,51 @@ typedef struct s_map
     int    height;
 }              t_map;
 
+
+typedef struct s_vars
+{
+    void    *mlx;
+    void    *win;
+}               t_vars;
+
 typedef struct s_info
 {
-    t_map *map;
+    t_map       *map;
+    t_vars      *vars;
 }               t_info;
-
-// read_map
-void            read_map(char *path,t_info *info);
-
-//get_map_data
-void get_map_data(int fd,t_info *info);
-
-//print_error
-void             print_error(char *str);
-
-//free
-void	free_mapdata(char **map_data, int vertical);
 
 //init
 void init(t_info *info);
 void init_map(t_map *map);
 
-// check_map_wall.c
-void    check_map_wall(t_info *info);
+
+// ------------------------------------------------
+// MAP
+// ------------------------------------------------
+void            read_map(char *path,t_info *info);
+void            get_map_data(int fd,t_info *info);
+void            check_map_wall(t_info *info);
+
+// ------------------------------------------------
+// ERROR
+// ------------------------------------------------
+
+//free
+void	        free_mapdata(char **map_data, int vertical);
+//print_error
+void             print_error(char *str);
+
+
+// ------------------------------------------------
+// WINDOW
+// ------------------------------------------------
+int             close_window(int keycode, t_vars *vars);
+int             new_window(t_vars *vars);
+
+
+
+
+
+
 
 #endif
