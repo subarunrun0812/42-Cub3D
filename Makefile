@@ -7,11 +7,13 @@ LIBFT_DIR = ./srcs/libft
 MAPS_DIR = $(SOURCES_DIR)/maps
 RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
 WINDOW_DIR = $(SOURCES_DIR)/window
+PLAYER_DIR = $(SOURCES_DIR)/player
 
 SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
           $(MAPS_DIR)/check_map_wall.c\
+          $(PLAYER_DIR)/key_hook.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/new_window.c\
           $(SOURCES_DIR)/free.c\
@@ -29,7 +31,7 @@ MINILIBX	 = $(MINILIBX_DIR)/libmlx.a
 INCLUDE = -I include -I $(LIBFT_DIR) -I $(GNL_DIR) -I $(MINILIBX_DIR)
 
 VPATH = $(SOURCES_DIR):$(MAPS_DIR):$(RAYCASTING_DIR):$(GNL_DIR) \
-		$(WINDOW_DIR)
+		$(WINDOW_DIR):$(PLAYER_DIR)
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SOURCES:.c=.o)))

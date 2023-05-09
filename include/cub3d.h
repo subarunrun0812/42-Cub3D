@@ -19,6 +19,7 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define ON_DESTROY 17
 # define ESC_KEY 53
 
 typedef struct s_map
@@ -63,9 +64,16 @@ void             print_error(char *str);
 
 
 // ------------------------------------------------
+// PLAYER
+// ------------------------------------------------
+int             key_hook(int keycode, t_vars *vars);
+int             ft_key_hook(int keycode, t_vars *vars);
+
+
+// ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
-int             close_window(int keycode, t_vars *vars);
+int             close_window(t_vars *vars);
 int             new_window(t_vars *vars);
 
 
