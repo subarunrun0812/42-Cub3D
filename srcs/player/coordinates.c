@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/11 17:19:53 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/11 18:01:01 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ static void init_player_coordinate(t_pos *pos,t_map *map)
             {
                 pos->x = i;
                 pos->y = j;
+                // printf("map->map_data[%d][%d] == %c\n",i,j,map->map_data[i][j]);
                 return ;
             }
             j++;
