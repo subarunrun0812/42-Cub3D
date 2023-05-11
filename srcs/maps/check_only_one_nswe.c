@@ -24,9 +24,9 @@ void check_only_one_nswe(t_map *map)
         }
         i++;
     }
-    if (count > 1)
+    if (count > 1 || count == 0)
     {
-        print_error("Not only one of NSWE");
+        print_error("Incorrect number of NSWE");
         exit (1);
     }
     return ;
