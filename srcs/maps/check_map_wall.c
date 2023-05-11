@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/09 14:59:24 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/11 17:30:40 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,12 +110,10 @@ static void check_space_around_zero(char *width ,int height,char **map_data)
 
 void check_map_wall(t_info *info)
 {
-    printf("map->height=%d\n",info->map->height);
     int i;
 	int fast;
     i = skip_new_line(info->map->map_data);
 	fast = i;
-	printf("fast=%d\n",fast);
     
     while (i < info->map->height)
     {
