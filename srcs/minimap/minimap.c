@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/13 21:38:33 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/13 22:01:21 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,11 +57,11 @@ void range_to_display_with_player(t_info *info, t_data *data)
         {
             if (info->map->map_data[i][j] == '1')
             {
-                draw_one_block(data,i,j,WHITE);
+                draw_one_block(data,i,j,GREEN);
             }
             else if (info->map->map_data[i][j] == '0')
             {
-                draw_one_block(data,i,j,WHEAT);
+                draw_one_block(data,i,j,WHITE);
             }
             else
                 draw_one_block(data,i,j,WHEAT);

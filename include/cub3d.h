@@ -20,6 +20,7 @@
 
 #define WHITE 0x00FFFFFF
 #define BLACK 0x00000000
+#define GREEN 0x00008000
 #define WHEAT 0x00F5DEB3
 
 #define BLOCK_SIZE 20
