@@ -15,6 +15,9 @@
 #define TRUE 0
 #define FALSE 1
 
+#define WIN_WIDTH 960
+#define WIN_HEIGHT 540
+
 # define W_KEY 13  
 # define A_KEY 0
 # define S_KEY 1
@@ -40,6 +43,16 @@ typedef struct s_vars
     void    *win;
 }               t_vars;
 
+
+typedef struct s_data
+{
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_data;
+
 typedef struct s_info
 {
     t_map       *map;
@@ -59,6 +72,7 @@ void            read_map(char *path,t_info *info);
 void            get_map_data(int fd,t_info *info);
 void            check_map_wall(t_info *info);
 void            check_only_one_nswe(t_map *map);
+int              minimap(t_info *info);
 
 // ------------------------------------------------
 // ERROR
@@ -81,9 +95,9 @@ int             player_coordinate(t_info *info);
 // ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
+void        	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int             close_window(t_vars *vars);
 int             new_window(t_vars *vars);
-void            init_window_image(t_vars *vars);
 
 
 

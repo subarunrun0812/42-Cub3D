@@ -19,7 +19,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(PLAYER_DIR)/key_hook.c\
           $(MINIMAP_DIR)/minimap.c\
           $(WINDOW_DIR)/close_window.c\
-          $(WINDOW_DIR)/init_window.c\
+          $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
