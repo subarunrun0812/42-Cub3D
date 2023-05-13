@@ -15,6 +15,15 @@
 #define TRUE 0
 #define FALSE 1
 
+#define WIN_WIDTH 960
+#define WIN_HEIGHT 540
+
+#define WHITE 0x00FFFFFF
+#define BLACK 0x00000000
+#define WHEAT 0x00F5DEB3
+
+#define BLOCK_SIZE 20
+
 # define W_KEY 13  
 # define A_KEY 0
 # define S_KEY 1
@@ -28,6 +37,11 @@ typedef struct s_map
     int    height;
 }              t_map;
 
+typedef struct s_pos
+{
+    int     x;
+    int     y;
+} t_pos;
 
 typedef struct s_vars
 {
@@ -35,14 +49,25 @@ typedef struct s_vars
     void    *win;
 }               t_vars;
 
+
+typedef struct s_data
+{
+    void        *img;
+    char        *addr;
+    int         bits_per_pixel;
+    int         line_length;
+    int         endian;
+}               t_data;
+
 typedef struct s_info
 {
     t_map       *map;
     t_vars      *vars;
+    t_pos       *pos;
 }               t_info;
 
 //init
-void init(t_info *info);
+void init(t_info *info,t_map *map, t_pos *pos, t_vars *vars);
 void init_map(t_map *map);
 
 
@@ -52,6 +77,8 @@ void init_map(t_map *map);
 void            read_map(char *path,t_info *info);
 void            get_map_data(int fd,t_info *info);
 void            check_map_wall(t_info *info);
+void            check_only_one_nswe(t_map *map);
+int              minimap(t_info *info);
 
 // ------------------------------------------------
 // ERROR
@@ -68,14 +95,15 @@ void             print_error(char *str);
 // ------------------------------------------------
 int             key_hook(int keycode, t_vars *vars);
 int             ft_key_hook(int keycode, t_vars *vars);
+int             player_coordinate(t_info *info);
 
 
 // ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
+void        	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int             close_window(t_vars *vars);
 int             new_window(t_vars *vars);
-
 
 
 

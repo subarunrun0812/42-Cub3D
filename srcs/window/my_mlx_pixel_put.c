@@ -1,20 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   new_window.c                                       :+:      :+:    :+:   */
+/*   my_mlx_pixel_put.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/05/09 15:15:52 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/13 14:25:44 by susasaki         ###   ########.fr       */
+/*   Created: 2023/05/13 14:52:13 by susasaki          #+#    #+#             */
+/*   Updated: 2023/05/13 15:06:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../include/cub3d.h"
+# include "../include/cub3d.h"
 
-int new_window(t_vars *vars)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-    vars->mlx = mlx_init();
-    vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
-    return (0);
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }
