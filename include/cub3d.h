@@ -18,6 +18,12 @@
 #define WIN_WIDTH 960
 #define WIN_HEIGHT 540
 
+#define WHITE 0x00FFFFFF
+#define BLACK 0x00000000
+#define WHEAT 0x00F5DEB3
+
+#define BLOCK_SIZE 20
+
 # define W_KEY 13  
 # define A_KEY 0
 # define S_KEY 1
@@ -61,7 +67,7 @@ typedef struct s_info
 }               t_info;
 
 //init
-void init(t_info *info);
+void init(t_info *info,t_map *map, t_pos *pos, t_vars *vars);
 void init_map(t_map *map);
 
 

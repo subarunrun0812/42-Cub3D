@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:50:28 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/13 15:05:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/13 20:38:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,11 @@ void init_map(t_map *map)
     map->height = 0;
 }
 
-void init(t_info *info)
+void init(t_info *info,t_map *map, t_pos *pos, t_vars *vars)
 {
-    info->map = malloc(sizeof(t_map));
-    info->pos = malloc(sizeof(t_pos));
+    info->map = map;
+    info->pos = pos;
+    info->vars = vars;
     init_map(info->map);
     // init_window_image(info->vars);
 }
