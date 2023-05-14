@@ -21,9 +21,11 @@
 #define WHITE 0x00FFFFFF
 #define BLACK 0x00000000
 #define GREEN 0x00008000
+#define RED 0x00FF0000
 #define WHEAT 0x00F5DEB3
 
 #define BLOCK_SIZE 20
+#define DISPLAY_RADIUS 70
 
 # define W_KEY 13  
 # define A_KEY 0
