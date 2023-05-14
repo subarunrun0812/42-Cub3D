@@ -22,6 +22,7 @@
 #define BLACK 0x00000000
 #define GREEN 0x00008000
 #define RED 0x00FF0000
+#define BLUE 0x000000FF
 #define WHEAT 0x00F5DEB3
 
 #define BLOCK_SIZE 20

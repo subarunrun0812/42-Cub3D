@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/14 18:51:05 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/14 19:52:52 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,10 @@ void	draw_one_block(t_data *data, int i, int j, int color)
 	int	x;
 	int	y;
 
-	x = (i * BLOCK_SIZE);
+	if (i == 0)
+		x = i;
+	else
+		x = (i * BLOCK_SIZE);
 	while (x < ((i * BLOCK_SIZE) + BLOCK_SIZE - 1))
 	{
 		y = (j * BLOCK_SIZE);
@@ -45,10 +48,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int	j;
 
 	// マップのx,y軸の表示する範囲
-	start_x = (info->pos->x * BLOCK_SIZE) - DISPLAY_RADIUS;
-	start_y = (info->pos->y * BLOCK_SIZE) - DISPLAY_RADIUS;
-	end_x = (info->pos->x * BLOCK_SIZE) + DISPLAY_RADIUS;
-	end_y = (info->pos->y * BLOCK_SIZE) + DISPLAY_RADIUS;
+	start_x = (info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
+	start_y = (info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
+	end_x = (info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
+	end_y = (info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
 	start_i = start_x / BLOCK_SIZE;
 	end_i = end_x / BLOCK_SIZE;
 	if (end_x % BLOCK_SIZE != 0)
@@ -77,9 +80,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	printf("end_j = %d\n", end_j);
 	printf("i = %d\n", i);
 	printf("j = %d\n", j);
-	printf("info->map->map_data[%d] = %s\n", i, info->map->map_data[i]);
-	printf("info->map->map_data[%d][%d] = %c\n", i, j,
-			info->map->map_data[i][j]);
+	// printf("info->map->map_data[%d] = %s\n", i, info->map->map_data[i]);
+	// printf("info->map->map_data[%d][%d] = %c\n", i, j,
+	// 		info->map->map_data[i][j]);
 	while (i < end_i)
 	{
 		printf("i = %d\n", i);
@@ -89,10 +92,28 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			printf("j = %d\n", j);
 			if (i < 0)
 			{
-				draw_one_block(data, i, j, RED);
-				break ;
+                while (1)
+                {
+                    printf("\x1b[31mi = %d\x1b[0m\n",i);
+                    if (i >= 0)
+                        break;
+                    i++;
+                    // end_i++;
+                    start_x += BLOCK_SIZE;
+                    end_x += BLOCK_SIZE;
+                }
+                printf("i = %d\n",i);
+                printf("end_i = %d\n",end_i);
+                printf("start_x = %d\n", start_x);
+                printf("end_x = %d\n", end_x);
+				// draw_one_block(data, i, j, RED);
+				// break ;
 			}
-			if (info->map->map_data[i][j] == '1')
+            if (i >= info->map->height)
+            {
+                draw_one_block(data, i, j, RED);
+            }
+			else if (info->map->map_data[i][j] == '1')
 			{
 				draw_one_block(data, i, j, GREEN);
 			}
@@ -100,8 +121,12 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			{
 				draw_one_block(data, i, j, WHITE);
 			}
+			else if (info->map->map_data[i][j] == 'N')
+				draw_one_block(data, i, j, BLUE);
 			else
 				draw_one_block(data, i, j, RED);
+	        // printf("info->map->map_data[%d][%d] = %c\n", i, j,
+			//     info->map->map_data[i][j]);
 			j++;
 		}
 		i++;
