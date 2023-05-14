@@ -6,25 +6,22 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/14 19:52:52 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/14 20:25:33 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	draw_one_block(t_data *data, int i, int j, int color)
+void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 {
 	int	x;
 	int	y;
 
-	if (i == 0)
-		x = i;
-	else
-		x = (i * BLOCK_SIZE);
-	while (x < ((i * BLOCK_SIZE) + BLOCK_SIZE - 1))
+	x = (draw_x * BLOCK_SIZE);
+	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE - 1))
 	{
-		y = (j * BLOCK_SIZE);
-		while (y < ((j * BLOCK_SIZE) + BLOCK_SIZE))
+		y = (draw_y * BLOCK_SIZE);
+		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
 		{
 			//
 			my_mlx_pixel_put(data, y, x, color);
@@ -83,10 +80,13 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	// printf("info->map->map_data[%d] = %s\n", i, info->map->map_data[i]);
 	// printf("info->map->map_data[%d][%d] = %c\n", i, j,
 	// 		info->map->map_data[i][j]);
+	int draw_x = 0;
+	int draw_y = 0;
 	while (i < end_i)
 	{
 		printf("i = %d\n", i);
 		j = start_j;
+		draw_y = 0;
 		while (j < end_j)
 		{
 			printf("j = %d\n", j);
@@ -111,25 +111,27 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			}
             if (i >= info->map->height)
             {
-                draw_one_block(data, i, j, RED);
+                draw_one_block(data, draw_x, draw_y, RED);
             }
 			else if (info->map->map_data[i][j] == '1')
 			{
-				draw_one_block(data, i, j, GREEN);
+				draw_one_block(data, draw_x, draw_y, GREEN);
 			}
 			else if (info->map->map_data[i][j] == '0')
 			{
-				draw_one_block(data, i, j, WHITE);
+				draw_one_block(data, draw_x, draw_y, WHITE);
 			}
 			else if (info->map->map_data[i][j] == 'N')
-				draw_one_block(data, i, j, BLUE);
+				draw_one_block(data, draw_x, draw_y, BLUE);
 			else
-				draw_one_block(data, i, j, RED);
+				draw_one_block(data, draw_x, draw_y, RED);
 	        // printf("info->map->map_data[%d][%d] = %c\n", i, j,
 			//     info->map->map_data[i][j]);
 			j++;
+			draw_y++;
 		}
 		i++;
+		draw_x++;
 	}
 }
 
