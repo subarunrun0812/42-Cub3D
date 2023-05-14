@@ -6,13 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/11 18:01:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/14 20:56:48 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
 
-static void init_player_coordinate(t_pos *pos,t_map *map)
+void init_player_coordinate(t_pos *pos,t_map *map)
 {
     int i;
     int j;
