@@ -6,13 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/15 13:27:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:50:10 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
+void	draw_one_block(t_data *data, int draw_y, int draw_x, int color)
 {
 	int	x;
 	int	y;
@@ -75,36 +75,48 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		draw_x = 0;
 		while (j < end_j)
 		{
-			printf("j = %d\n", j);
+			// printf("j = %d\n", j);
+			//TODO:マップの上に上がった時の処理内容を変更する
 			if (i < 0)
 			{
                 while (1)
                 {
                     printf("\x1b[31mi = %d\x1b[0m\n",i);
                     if (i >= 0)
+					{
                         break;
+					}
+					// j = start_j;
+					// draw_x = 0;
+					// while (j < end_j)
+					// {
+					// 	draw_one_block(data, draw_y, draw_x, RED);
+					// 	j++;
+					// }
                     i++;
+					// start_y -= BLOCK_SIZE;
+					// end_y -= BLOCK_SIZE;
                     start_x += BLOCK_SIZE;
                     end_x += BLOCK_SIZE;
                 }
 			}
-            if (i >= info->map->height)
+            else if (i >= info->map->height)
             {
-                draw_one_block(data, draw_x, draw_y, RED);
+                draw_one_block(data, draw_y, draw_x, RED);
             }
 			else if (info->map->map_data[i][j] == '1')
 			{
-				draw_one_block(data, draw_x, draw_y, GREEN);
+				draw_one_block(data, draw_y, draw_x, GREEN);
 			}
 			else if (info->map->map_data[i][j] == '0')
 			{
-				draw_one_block(data, draw_x, draw_y, WHITE);
+				draw_one_block(data, draw_y, draw_x, WHITE);
 			}
 			else if (info->map->map_data[i][j] == 'N' || info->map->map_data[i][j] == 'S'
 			|| info->map->map_data[i][j] == 'E' || info->map->map_data[i][j] == 'W')
-				draw_one_block(data, draw_x, draw_y, BLUE);
+				draw_one_block(data, draw_y, draw_x, BLUE);
 			else
-				draw_one_block(data, draw_x, draw_y, RED);
+				draw_one_block(data, draw_y, draw_x, RED);
 			j++;
 			draw_x++;
 		}
