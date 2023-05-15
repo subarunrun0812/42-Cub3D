@@ -17,6 +17,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/check_only_one_nswe.c\
           $(PLAYER_DIR)/coordinates.c\
           $(PLAYER_DIR)/key_hook.c\
+          $(PLAYER_DIR)/player_move.c\
           $(MINIMAP_DIR)/minimap.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
