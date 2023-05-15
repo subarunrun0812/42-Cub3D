@@ -6,12 +6,24 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/14 22:37:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/15 12:49:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 # include "../include/cub3d.h"
+
+void debug_print_mapdata(t_info *info)
+{
+    int i = 0;
+    while (i < info->map->height)
+    {
+        printf("%s",info->map->map_data[i]);
+        i++;
+    }
+    return ;
+}
+
 
 int main(int argc, char **argv)
 {

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/14 22:49:00 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/15 13:27:08 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
 		{
 			//
-			my_mlx_pixel_put(data, y, x, color);
+			my_mlx_pixel_put(data, x, y, color);
 			y++;
 		}
 		x++;
@@ -44,21 +44,22 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int	i;
 	int	j;
 
+	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
 	start_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
 	start_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
 	end_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
 	end_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
-	start_i = start_x / BLOCK_SIZE;
-	end_i = end_x / BLOCK_SIZE;
-	if (end_x % BLOCK_SIZE != 0)
+	start_i = start_y / BLOCK_SIZE;
+	end_i = end_y / BLOCK_SIZE;
+	if (end_y % BLOCK_SIZE != 0)
 	{
 		printf("end_i = %d\n", end_i);
 		end_i++;
 	}
-	start_j = start_y / BLOCK_SIZE;
-	end_j = end_y / BLOCK_SIZE;
-	if (end_y % BLOCK_SIZE != 0)
+	start_j = start_x / BLOCK_SIZE;
+	end_j = end_x / BLOCK_SIZE;
+	if (end_x % BLOCK_SIZE != 0)
 	{
 		printf("end_j = %d\n", end_j);
 		end_j++;
@@ -71,10 +72,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	{
 		// printf("i = %d\n", i);
 		j = start_j;
-		draw_y = 0;
+		draw_x = 0;
 		while (j < end_j)
 		{
-			// printf("j = %d\n", j);
+			printf("j = %d\n", j);
 			if (i < 0)
 			{
                 while (1)
@@ -99,15 +100,16 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			{
 				draw_one_block(data, draw_x, draw_y, WHITE);
 			}
-			else if (info->map->map_data[i][j] == 'N')
+			else if (info->map->map_data[i][j] == 'N' || info->map->map_data[i][j] == 'S'
+			|| info->map->map_data[i][j] == 'E' || info->map->map_data[i][j] == 'W')
 				draw_one_block(data, draw_x, draw_y, BLUE);
 			else
 				draw_one_block(data, draw_x, draw_y, RED);
 			j++;
-			draw_y++;
+			draw_x++;
 		}
 		i++;
-		draw_x++;
+		draw_y++;
 	}
 }
 
@@ -125,6 +127,7 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	// printf("j = %d\n", j);
 int	minimap(t_info *info, t_data *data)
 {
+	debug_print_mapdata(info);
 	// printf("map->height = %d\n",info->map->height);
 	//minimapの画像表示
 	data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);

@@ -18,6 +18,9 @@
 # define WIN_WIDTH 960
 # define WIN_HEIGHT 540
 
+//キーを押した時の移動距離
+# define MOVE_DISTANCE 0.5
+
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
 # define GREEN 0x00008000
@@ -78,6 +81,7 @@ void		init_map(t_map *map);
 // ------------------------------------------------
 // MAP
 // ------------------------------------------------
+
 void		read_map(char *path, t_info *info);
 void		get_map_data(int fd, t_info *info);
 void		check_map_wall(t_info *info);
@@ -85,6 +89,7 @@ void		check_only_one_nswe(t_map *map);
 int	        minimap(t_info *info,t_data *data);
 void    	range_to_display_with_player(t_info *info, t_data *data);
 void	draw_one_block(t_data *data, int draw_x, int draw_y, int color);
+
 // ------------------------------------------------
 // ERROR
 // ------------------------------------------------
@@ -97,6 +102,7 @@ void		print_error(char *str);
 // ------------------------------------------------
 // PLAYER
 // ------------------------------------------------
+
 int			key_hook(int keycode, t_vars *vars);
 int			ft_key_hook(int keycode, t_info *info);
 int			player_coordinate(t_info *info);
@@ -106,8 +112,16 @@ void		player_move(t_info *info, int keycode);
 // ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
+
 void		my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int			close_window(t_vars *vars);
 int			new_window(t_vars *vars);
+
+// ------------------------------------------------
+// DEBUG
+// ------------------------------------------------
+
+void debug_print_mapdata(t_info *info);
+
 
 #endif
