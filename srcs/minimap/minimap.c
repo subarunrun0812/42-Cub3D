@@ -6,13 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/17 15:33:51 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:38:56 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-void	draw_one_block(t_data *data, int draw_y, int draw_x, int color)
+void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 {
 	int	x;
 	int	y;
@@ -85,23 +85,23 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			if (i < 0 || i >= info->map->height ||
 				j < 0 || j > mapdata_width_length(info->map->map_data[i]))
 			{
-				draw_one_block(data, i - start_i, j - start_j, PINK);
+				draw_one_block(data, j - start_j, i - start_i, PINK);
 			}
 			else if (info->map->map_data[i][j] == '1')
 			{
-				draw_one_block(data, i - start_i, j - start_j, GREEN);
+				draw_one_block(data, j - start_j, i - start_i, GREEN);
 			}
 			else if (info->map->map_data[i][j] == '0')
 			{
-				draw_one_block(data, i - start_i, j - start_j, WHITE);
+				draw_one_block(data, j - start_j, i - start_i, WHITE);
 			}
 			else if (info->map->map_data[i][j] == 'N'
 					|| info->map->map_data[i][j] == 'S'
 					|| info->map->map_data[i][j] == 'E'
 					|| info->map->map_data[i][j] == 'W')
-				draw_one_block(data, i - start_i, j - start_j, BLUE);
+				draw_one_block(data, j - start_j, i - start_i, BLUE);
 			else
-				draw_one_block(data, i - start_i, j - start_j, RED);
+				draw_one_block(data, j - start_j, i - start_i, RED);
 			j++;
 		}
 		i++;
