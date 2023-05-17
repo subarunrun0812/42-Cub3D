@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/17 14:24:30 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/17 15:33:51 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,16 @@ void	draw_one_block(t_data *data, int draw_y, int draw_x, int color)
 
 void	range_to_display_with_player(t_info *info, t_data *data)
 {
-	int	start_x;
-	int	start_y;
-	int	end_x;
-	int	end_y;
-	int	start_i;
-	int	end_i;
-	int	start_j;
-	int	end_j;
-	int	i;
-	int	j;
+	int		start_x;
+	int		start_y;
+	int		end_x;
+	int		end_y;
+	int		start_i;
+	int		end_i;
+	int		start_j;
+	int		end_j;
+	int		i;
+	int		j;
 
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
@@ -70,6 +70,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	}
 	i = start_i;
 	j = start_j;
+	// int map_radius = DISPLAY_RADIUS / BLOCK_SIZE;
+	// int map_top = (int)info->pos->y - map_radius;
+	debug_print_mapdata(info);
 	while (i < end_i)
 	{
 		// printf("i = %d\n", i);
@@ -78,14 +81,11 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		// printf("\x1b[32m %d,%d\x1b[0m",i,j);
 		while (j < end_j)
 		{
-			if (i < 0)
+			//map_top + i - start_i > map_radius * 2
+			if (i < 0 || i >= info->map->height ||
+				j < 0 || j > mapdata_width_length(info->map->map_data[i]))
 			{
 				draw_one_block(data, i - start_i, j - start_j, PINK);
-			}
-			else if (i >= info->map->height)
-			{
-				// printf("\x1b[31 map->height の条件式に入った\x1b[0m\n");
-				draw_one_block(data, i - start_i, j - start_j, YELLOW);
 			}
 			else if (info->map->map_data[i][j] == '1')
 			{
@@ -106,6 +106,43 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		}
 		i++;
 	}
+	// #define MINIMAP_WIDTH 10
+	// #define MINIMAP_HEIGHT 20
+	// #define PLAYER_POS_Y (MINIMAP_WIDTH / 2)
+	// #define PLAYER_POS_X (MINIMAP_HEIGHT / 2)
+	/*akibaコード
+	
+	y = 0;
+	x = 0;
+	map_radius = DISPLAY_RADIUS / BLOCK_SIZE;
+	map_top = (int)info->pos->y - map_radius;
+	map_left = (int)info->pos->x - map_radius;
+	while (y < map_radius * 2)
+	{
+		x = 0;
+		while (x < map_radius * 2)
+		{
+			if (map_top + y < 0 || map_left + x < 0 || 
+				map_left + x > map_radius * 2 || map_top + y > map_radius * 2)
+				draw_one_block(data, y, x, PINK);
+			else
+			{
+				identifer = info->map->map_data[map_top + y][map_left + x];
+				if (identifer == '1')
+					draw_one_block(data, y, x, GREEN);
+				else if (identifer == '0')
+					draw_one_block(data, y, x, WHITE);
+				else if (identifer == 'N')
+					draw_one_block(data, y, x, BLUE);
+				else
+					draw_one_block(data, y, x, RED);
+			}
+			x++;
+		}
+		y++;
+	}
+	debug_print_mapdata(info);
+	*/
 }
 
 // printf("info->pos->x = %d\n", (int)info->pos->x);
