@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/15 13:50:10 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/17 12:21:10 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,19 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int	end_j;
 	int	i;
 	int	j;
+	int	draw_x;
+	int	draw_y;
 
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
-	start_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
-	start_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) - DISPLAY_RADIUS;
-	end_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
-	end_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + DISPLAY_RADIUS;
+	start_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+		- DISPLAY_RADIUS;
+	start_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+		- DISPLAY_RADIUS;
+	end_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+		+ DISPLAY_RADIUS;
+	end_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+		+ DISPLAY_RADIUS;
 	start_i = start_y / BLOCK_SIZE;
 	end_i = end_y / BLOCK_SIZE;
 	if (end_y % BLOCK_SIZE != 0)
@@ -66,44 +72,26 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	}
 	i = start_i;
 	j = start_j;
-	int draw_x = 0;
-	int draw_y = 0;
+	draw_x = 0;
+	draw_y = 0;
 	while (i < end_i)
 	{
 		// printf("i = %d\n", i);
+		// printf("j = %d\n", j);
 		j = start_j;
 		draw_x = 0;
+		// printf("\x1b[32m %d,%d\x1b[0m",i,j);
 		while (j < end_j)
 		{
-			// printf("j = %d\n", j);
-			//TODO:マップの上に上がった時の処理内容を変更する
 			if (i < 0)
 			{
-                while (1)
-                {
-                    printf("\x1b[31mi = %d\x1b[0m\n",i);
-                    if (i >= 0)
-					{
-                        break;
-					}
-					// j = start_j;
-					// draw_x = 0;
-					// while (j < end_j)
-					// {
-					// 	draw_one_block(data, draw_y, draw_x, RED);
-					// 	j++;
-					// }
-                    i++;
-					// start_y -= BLOCK_SIZE;
-					// end_y -= BLOCK_SIZE;
-                    start_x += BLOCK_SIZE;
-                    end_x += BLOCK_SIZE;
-                }
+				draw_one_block(data, draw_y, draw_x, RED);
 			}
-            else if (i >= info->map->height)
-            {
-                draw_one_block(data, draw_y, draw_x, RED);
-            }
+			else if (i >= info->map->height)
+			{
+				// printf("\x1b[31 map->height の条件式に入った\x1b[0m\n");
+				draw_one_block(data, draw_y, draw_x, RED);
+			}
 			else if (info->map->map_data[i][j] == '1')
 			{
 				draw_one_block(data, draw_y, draw_x, GREEN);
@@ -112,8 +100,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 			{
 				draw_one_block(data, draw_y, draw_x, WHITE);
 			}
-			else if (info->map->map_data[i][j] == 'N' || info->map->map_data[i][j] == 'S'
-			|| info->map->map_data[i][j] == 'E' || info->map->map_data[i][j] == 'W')
+			else if (info->map->map_data[i][j] == 'N'
+					|| info->map->map_data[i][j] == 'S'
+					|| info->map->map_data[i][j] == 'E'
+					|| info->map->map_data[i][j] == 'W')
 				draw_one_block(data, draw_y, draw_x, BLUE);
 			else
 				draw_one_block(data, draw_y, draw_x, RED);
@@ -125,18 +115,18 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	}
 }
 
-	// printf("info->pos->x = %d\n", (int)info->pos->x);
-	// printf("info->pos->y = %d\n", (int)info->pos->y);
-	// printf("start_x = %d\n", start_x);
-	// printf("start_y = %d\n", start_y);
-	// printf("end_x = %d\n", end_x);
-	// printf("end_y = %d\n", end_y);
-	// printf("start_i = %d\n", start_i);
-	// printf("end_i = %d\n", end_i);
-	// printf("start_j = %d\n", start_j);
-	// printf("end_j = %d\n", end_j);
-	// printf("i = %d\n", i);
-	// printf("j = %d\n", j);
+// printf("info->pos->x = %d\n", (int)info->pos->x);
+// printf("info->pos->y = %d\n", (int)info->pos->y);
+// printf("start_x = %d\n", start_x);
+// printf("start_y = %d\n", start_y);
+// printf("end_x = %d\n", end_x);
+// printf("end_y = %d\n", end_y);
+// printf("start_i = %d\n", start_i);
+// printf("end_i = %d\n", end_i);
+// printf("start_j = %d\n", start_j);
+// printf("end_j = %d\n", end_j);
+// printf("i = %d\n", i);
+// printf("j = %d\n", j);
 int	minimap(t_info *info, t_data *data)
 {
 	debug_print_mapdata(info);
