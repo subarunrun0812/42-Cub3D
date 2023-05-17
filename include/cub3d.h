@@ -26,9 +26,11 @@
 # define GREEN 0x00008000
 # define RED 0x00FF0000
 # define BLUE 0x000000FF
+# define YELLOW 0x00FFFF00
+# define PINK 0x00FFDBED
 # define WHEAT 0x00F5DEB3
 
-# define BLOCK_SIZE 20
+# define BLOCK_SIZE 15
 # define DISPLAY_RADIUS 70
 
 # define W_KEY 13

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/17 12:21:10 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/17 14:24:30 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	draw_one_block(t_data *data, int draw_y, int draw_x, int color)
 	int	y;
 
 	x = (draw_x * BLOCK_SIZE);
-	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE - 1))
+	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE))
 	{
 		y = (draw_y * BLOCK_SIZE);
 		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
@@ -43,8 +43,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int	end_j;
 	int	i;
 	int	j;
-	int	draw_x;
-	int	draw_y;
 
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
@@ -72,46 +70,41 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	}
 	i = start_i;
 	j = start_j;
-	draw_x = 0;
-	draw_y = 0;
 	while (i < end_i)
 	{
 		// printf("i = %d\n", i);
 		// printf("j = %d\n", j);
 		j = start_j;
-		draw_x = 0;
 		// printf("\x1b[32m %d,%d\x1b[0m",i,j);
 		while (j < end_j)
 		{
 			if (i < 0)
 			{
-				draw_one_block(data, draw_y, draw_x, RED);
+				draw_one_block(data, i - start_i, j - start_j, PINK);
 			}
 			else if (i >= info->map->height)
 			{
 				// printf("\x1b[31 map->height の条件式に入った\x1b[0m\n");
-				draw_one_block(data, draw_y, draw_x, RED);
+				draw_one_block(data, i - start_i, j - start_j, YELLOW);
 			}
 			else if (info->map->map_data[i][j] == '1')
 			{
-				draw_one_block(data, draw_y, draw_x, GREEN);
+				draw_one_block(data, i - start_i, j - start_j, GREEN);
 			}
 			else if (info->map->map_data[i][j] == '0')
 			{
-				draw_one_block(data, draw_y, draw_x, WHITE);
+				draw_one_block(data, i - start_i, j - start_j, WHITE);
 			}
 			else if (info->map->map_data[i][j] == 'N'
 					|| info->map->map_data[i][j] == 'S'
 					|| info->map->map_data[i][j] == 'E'
 					|| info->map->map_data[i][j] == 'W')
-				draw_one_block(data, draw_y, draw_x, BLUE);
+				draw_one_block(data, i - start_i, j - start_j, BLUE);
 			else
-				draw_one_block(data, draw_y, draw_x, RED);
+				draw_one_block(data, i - start_i, j - start_j, RED);
 			j++;
-			draw_x++;
 		}
 		i++;
-		draw_y++;
 	}
 }
 
