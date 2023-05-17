@@ -26,9 +26,11 @@
 # define GREEN 0x00008000
 # define RED 0x00FF0000
 # define BLUE 0x000000FF
+# define YELLOW 0x00FFFF00
+# define PINK 0x00FFDBED
 # define WHEAT 0x00F5DEB3
 
-# define BLOCK_SIZE 20
+# define BLOCK_SIZE 15
 # define DISPLAY_RADIUS 70
 
 # define W_KEY 13
@@ -71,7 +73,7 @@ typedef struct s_info
 	t_map	*map;
 	t_vars	*vars;
 	t_pos	*pos;
-    t_data  *data;
+	t_data	*data;
 }			t_info;
 
 //init
@@ -86,9 +88,10 @@ void		read_map(char *path, t_info *info);
 void		get_map_data(int fd, t_info *info);
 void		check_map_wall(t_info *info);
 void		check_only_one_nswe(t_map *map);
-int	        minimap(t_info *info,t_data *data);
-void    	range_to_display_with_player(t_info *info, t_data *data);
-void	draw_one_block(t_data *data, int draw_y, int draw_x, int color);
+int			minimap(t_info *info, t_data *data);
+void		range_to_display_with_player(t_info *info, t_data *data);
+void		draw_one_block(t_data *data, int draw_x, int draw_y, int color);
+int			mapdata_width_length(char *width);
 
 // ------------------------------------------------
 // ERROR
@@ -121,7 +124,6 @@ int			new_window(t_vars *vars);
 // DEBUG
 // ------------------------------------------------
 
-void debug_print_mapdata(t_info *info);
-
+void		debug_print_mapdata(t_info *info);
 
 #endif
