@@ -47,11 +47,13 @@ typedef struct s_map
 	int		width;
 }			t_map;
 
-typedef struct s_pos
+typedef struct s_player
 {
-	float	x;
-	float	y;
-}			t_pos;
+	float	pos_x;
+	float	pos_y;
+	float	dir_x;
+	float	dir_y;
+}			t_player;
 
 typedef struct s_vars
 {
@@ -70,14 +72,14 @@ typedef struct s_data
 
 typedef struct s_info
 {
-	t_map	*map;
-	t_vars	*vars;
-	t_pos	*pos;
-	t_data	*data;
+	t_map		*map;
+	t_vars		*vars;
+	t_player	*player;
+	t_data		*data;
 }			t_info;
 
 //init
-void		init(t_info *info, t_map *map, t_pos *pos, t_vars *vars);
+void		init(t_info *info, t_map *map, t_player *player, t_vars *vars);
 void		init_map(t_map *map);
 
 // ------------------------------------------------
@@ -109,7 +111,7 @@ void		print_error(char *str);
 int			key_hook(int keycode, t_vars *vars);
 int			ft_key_hook(int keycode, t_info *info);
 int			player_coordinate(t_info *info);
-void		init_player_coordinate(t_pos *pos, t_map *map);
+void		init_player_coordinate(t_player *player, t_map *map);
 void		player_move(t_info *info, int keycode);
 
 // ------------------------------------------------

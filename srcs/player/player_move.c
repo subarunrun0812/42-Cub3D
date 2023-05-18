@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/14 21:58:58 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/15 13:25:41 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:43:25 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,44 +30,44 @@ int width_len(t_map *map,int i)
 
 void    player_move(t_info *info, int keycode)
 {
-    t_pos dst;
+    t_player dst;
     // printf("~~ player_move ~~\n");
-    dst.x = 0;
-    dst.y = 0;
+    dst.pos_x = 0;
+    dst.pos_y = 0;
     if (keycode == W_KEY)
     {
-        dst.y -= MOVE_DISTANCE;
+        dst.pos_y -= MOVE_DISTANCE;
         printf("W");
     }
     else if (keycode == S_KEY)
     {
-        dst.y += MOVE_DISTANCE;
+        dst.pos_y += MOVE_DISTANCE;
         printf("S");
     }
     else if (keycode == D_KEY)
     {
-        dst.x += MOVE_DISTANCE;
+        dst.pos_x += MOVE_DISTANCE;
         printf("D");
     }
     else if (keycode == A_KEY)
     {
-        dst.x -= MOVE_DISTANCE;
+        dst.pos_x -= MOVE_DISTANCE;
         printf("A");
     }
-    info->pos->y += dst.y;
-    info->pos->x += dst.x;
-    printf("\x1b[32mplayer = %c (%f,%f)\x1b[0m\n",info->map->map_data[(int)info->pos->y][(int)info->pos->x]
-    ,info->pos->y,info->pos->x);
-    if (info->map->map_data[(int)(info->pos->y)][(int)(info->pos->x)] == '0')
+    info->player->pos_y += dst.pos_y;
+    info->player->pos_x += dst.pos_x;
+    printf("\x1b[32mplayer = %c (%f,%f)\x1b[0m\n",info->map->map_data[(int)info->player->pos_y][(int)info->player->pos_x]
+    ,info->player->pos_y,info->player->pos_x);
+    if (info->map->map_data[(int)(info->player->pos_y)][(int)(info->player->pos_x)] == '0')
     {
-        info->map->map_data[(int)(info->pos->y - dst.y)][(int)(info->pos->x - dst.x)] = '0';
-        info->map->map_data[(int)(info->pos->y)][(int)(info->pos->x)] = 'N';
+        info->map->map_data[(int)(info->player->pos_y - dst.pos_y)][(int)(info->player->pos_x - dst.pos_x)] = '0';
+        info->map->map_data[(int)(info->player->pos_y)][(int)(info->player->pos_x)] = 'N';
         // debug_print_mapdata(info);
     }
-    else if (info->map->map_data[(int)(info->pos->y)][(int)(info->pos->x)] == '1')
+    else if (info->map->map_data[(int)(info->player->pos_y)][(int)(info->player->pos_x)] == '1')
     {
-        info->pos->y -= dst.y;
-        info->pos->x -= dst.x;
+        info->player->pos_y -= dst.pos_y;
+        info->player->pos_x -= dst.pos_x;
     }
     range_to_display_with_player(info,info->data);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
