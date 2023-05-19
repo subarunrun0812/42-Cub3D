@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/17 15:38:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/18 14:41:45 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,13 +46,13 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
-	start_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	start_x = ((int)info->player->pos_x * BLOCK_SIZE + (BLOCK_SIZE / 2))
 		- DISPLAY_RADIUS;
-	start_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	start_y = ((int)info->player->pos_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
 		- DISPLAY_RADIUS;
-	end_x = ((int)info->pos->x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	end_x = ((int)info->player->pos_x * BLOCK_SIZE + (BLOCK_SIZE / 2))
 		+ DISPLAY_RADIUS;
-	end_y = ((int)info->pos->y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	end_y = ((int)info->player->pos_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
 		+ DISPLAY_RADIUS;
 	start_i = start_y / BLOCK_SIZE;
 	end_i = end_y / BLOCK_SIZE;
