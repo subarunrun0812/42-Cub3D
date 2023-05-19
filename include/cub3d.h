@@ -49,11 +49,17 @@ typedef struct s_map
 
 typedef struct s_player
 {
-	float	pos_x;
-	float	pos_y;
-	float	dir_x;
-	float	dir_y;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
 }			t_player;
+
+typedef struct s_plane
+{
+	double 	x;
+	double 	y;
+}			t_plane;
 
 typedef struct s_vars
 {
@@ -76,6 +82,9 @@ typedef struct s_info
 	t_vars		*vars;
 	t_player	*player;
 	t_data		*data;
+	t_plane		*plane;
+	double		time;
+	double		old_time;
 }			t_info;
 
 //init
