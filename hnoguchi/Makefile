@@ -38,8 +38,14 @@ fclean : clean
 
 re: fclean all
 
+# norm:
+	# norminette srcs/*.c srcs/*/*.c includes/*.h
 
 
+funcs:
+	nm -u cub3D | \
+	grep -v "\(open\|close\|read\|write\|printf\|malloc\|free\|perror\|strerror\|exit\)" | \
+	grep -v '\w\+\s_\w\+'
 
 # NAME = cub3D
 # CC = cc
