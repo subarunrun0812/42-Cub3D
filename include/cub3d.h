@@ -18,6 +18,8 @@
 # define WIN_WIDTH 960
 # define WIN_HEIGHT 540
 
+# define FOV 40
+
 //キーを押した時の移動距離
 # define MOVE_DISTANCE 0.5
 
@@ -53,6 +55,8 @@ typedef struct s_player
 	double	pos_y;
 	double	dir_x;
 	double	dir_y;
+	// double	camera_x;
+	// double	camera_y;
 }			t_player;
 
 typedef struct s_plane
