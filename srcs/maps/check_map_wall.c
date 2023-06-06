@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/06 16:00:45 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:09:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,37 +81,35 @@ static void check_left_right_handsides(char *width)
 }
 
 //0の周りにスペースがないかチェックする
-static void check_space_around_zero(char *width ,int height,char **map_data)
+static void check_space_around_zero(int height,char **map_data)
 {
-	int i;
 	int j;
+	int tmp_j;
 	//壁の次から開始したいため
-	i = skip_space_width(width) + 1;
-	while (width[i] != '\0')
+	j = skip_space_width(map_data[height]) + 1;
+	while (map_data[height][j] != '\0')
 	{
-		if (width[i] == '0' || width[i] == 'N'
-			|| width[i] == 'S' || width[i] == 'E' || width[i] == 'W')
+		if (map_data[height][j] == '0' || map_data[height][j] == 'N'
+			|| map_data[height][j] == 'S' || map_data[height][j] == 'E' || map_data[height][j] == 'W')
 		{	
-			j = i - 1;
-            printf("\x1b[31mbase = %c,i=%d,j=%d\x1b[0m\n",width[i],height,j);
-			while (j < i + 2)
+			tmp_j = j - 1;
+            printf("\x1b[31mbase = %c,i=%d,tmp_j=%d\x1b[0m\n",map_data[height][tmp_j],height,tmp_j);
+			while (tmp_j < j + 2)
 			{
-                // printf("\x1b[32m%c\x1b[0m",map_data[height-1][j]);
-                // printf("\x1b[32m%c\x1b[0m",map_data[height][j]);
-                // printf("\x1b[32m%c\x1b[0m",map_data[height+1][j]);
+                // printf("\x1b[32m%c\x1b[0m",map_data[height-1][tmp_j]);
+                // printf("\x1b[32m%c\x1b[0m",map_data[height][tmp_j]);
+                // printf("\x1b[32m%c\x1b[0m",map_data[height+1][tmp_j]);
                 // printf("\n");
-				if (map_data[height-1][j] == ' ' || map_data[height][j] == ' '
-                || map_data[height+1][j] == ' ' ||  map_data[height-1][j] == '\n'
-                || map_data[height][j] == '\n' || map_data[height+1][j] == '\n')
+				if (map_data[height-1][tmp_j] == ' ' || map_data[height][tmp_j] == ' '
+                || map_data[height+1][tmp_j] == ' ' ||  map_data[height-1][tmp_j] == '\n'
+                || map_data[height][tmp_j] == '\n' || map_data[height+1][tmp_j] == '\n')
 				{
 					print_error("space around zero");
 				}
-				j++;
+				tmp_j++;
 			}
-			if (width[i-1] == ' ' || width[i+1] == ' ')
-				print_error("space around zero");
 		}
-		i++;
+		j++;
 	}
 }
 
@@ -136,7 +134,7 @@ void check_map_wall(t_info *info)
         {
             //2 ~ 最後-1行目までの処理
             check_left_right_handsides(info->map->map_data[i]);
-            check_space_around_zero(info->map->map_data[i],i,info->map->map_data);
+            check_space_around_zero(i,info->map->map_data);
         }
         i++;
     }
