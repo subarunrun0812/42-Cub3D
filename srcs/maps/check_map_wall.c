@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/17 15:39:29 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/06 16:00:45 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,9 +93,16 @@ static void check_space_around_zero(char *width ,int height,char **map_data)
 			|| width[i] == 'S' || width[i] == 'E' || width[i] == 'W')
 		{	
 			j = i - 1;
-			while (j < 3)
+            printf("\x1b[31mbase = %c,i=%d,j=%d\x1b[0m\n",width[i],height,j);
+			while (j < i + 2)
 			{
-				if (map_data[height-1][j] == ' ' || map_data[height+1][j] == ' ')
+                // printf("\x1b[32m%c\x1b[0m",map_data[height-1][j]);
+                // printf("\x1b[32m%c\x1b[0m",map_data[height][j]);
+                // printf("\x1b[32m%c\x1b[0m",map_data[height+1][j]);
+                // printf("\n");
+				if (map_data[height-1][j] == ' ' || map_data[height][j] == ' '
+                || map_data[height+1][j] == ' ' ||  map_data[height-1][j] == '\n'
+                || map_data[height][j] == '\n' || map_data[height+1][j] == '\n')
 				{
 					print_error("space around zero");
 				}
