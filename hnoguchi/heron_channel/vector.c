@@ -6,17 +6,17 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:29:44 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/06 15:09:39 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:24:15 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycasting.h"
 
-vector_2	*create_vector_2(float x, float y)
+t_vector	*create_vector(float x, float y)
 {
-	vector_2	*vector;
+	t_vector	*vector;
 
-	vector = malloc(sizeof(vector_2));
+	vector = malloc(sizeof(t_vector));
 	if (vector == NULL)
 	{
 		write(STDERR_FILENO, "error: failed malloc.", 21);
@@ -27,11 +27,11 @@ vector_2	*create_vector_2(float x, float y)
 	return (vector);
 }
 
-vector_2	*add_vector_2(vector_2 *a, vector_2 *b)
+t_vector	*add_vector(t_vector *a, t_vector *b)
 {
-	vector_2	*result;
+	t_vector	*result;
 
-	result = malloc(sizeof(vector_2));
+	result = malloc(sizeof(t_vector));
 	if (result == NULL)
 	{
 		write(STDERR_FILENO, "error: failed malloc.", 21);
@@ -42,11 +42,11 @@ vector_2	*add_vector_2(vector_2 *a, vector_2 *b)
 	return (result);
 }
 
-vector_2	*sub_vector_2(vector_2 *a, vector_2 *b)
+t_vector	*sub_vector(t_vector *a, t_vector *b)
 {
-	vector_2	*result;
+	t_vector	*result;
 
-	result = malloc(sizeof(vector_2));
+	result = malloc(sizeof(t_vector));
 	if (result == NULL)
 	{
 		write(STDERR_FILENO, "error: failed malloc.", 21);
@@ -57,11 +57,11 @@ vector_2	*sub_vector_2(vector_2 *a, vector_2 *b)
 	return (result);
 }
 
-vector_2	*multi_scalar_vector_2(vector_2 *vector, float scalar)
+t_vector	*multi_scalar_vector(t_vector *vector, float scalar)
 {
-	vector_2	*result;
+	t_vector	*result;
 
-	result = malloc(sizeof(vector_2));
+	result = malloc(sizeof(t_vector));
 	if (result == NULL)
 	{
 		write(STDERR_FILENO, "error: failed malloc.", 21);
@@ -72,7 +72,7 @@ vector_2	*multi_scalar_vector_2(vector_2 *vector, float scalar)
 	return (result);
 }
 
-float	magnitude_vector_2(vector_2 *vector)
+float	magnitude_vector(t_vector *vector)
 {
 	return ((vector->x * vector->x) + (vector->y * vector->y));
 }

@@ -6,17 +6,17 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:36:04 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/06 14:50:48 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/06 17:59:36 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycasting.h"
 
-ray_2	*create_ray_2(vector_2 *start_p, vector_2 *direction)
+t_ray	*create_ray(t_vector *start_p, t_vector *direction)
 {
-	ray_2	*ray;
+	t_ray	*ray;
 
-	ray = malloc(sizeof(ray_2));
+	ray = malloc(sizeof(t_ray));
 	if (ray == NULL)
 	{
 		write(STDERR_FILENO, "error: failed malloc.", 21);
@@ -27,10 +27,10 @@ ray_2	*create_ray_2(vector_2 *start_p, vector_2 *direction)
 	return (ray);
 }
 
-vector_2	*point_at_ray_2(ray_2 *ray, float t)
+t_vector	*point_at_ray(t_ray *ray, float t)
 {
-	vector_2	*point;
+	t_vector	*point;
 	
-	point = add_vector_2(ray->start_point, multi_scalar_vector_2(ray->direction, t));
+	point = add_vector(ray->start_point, multi_scalar_vector(ray->direction, t));
 	return (point);
 }
