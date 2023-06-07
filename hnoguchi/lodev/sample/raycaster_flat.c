@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/07 11:26:41 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/07 13:30:40 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,36 +88,82 @@ int	main(void)
 	current_time_frame = 0;
 	old_time_frame = 0;
 
-  screen(screenWidth, screenHeight, 0, "Raycaster");
-  while(!done())
-  {
-    for(int x = 0; x < w; x++)
-    {
-      //calculate ray position and direction
-      double cameraX = 2 * x / (double)w - 1; //x-coordinate in camera space
-      double rayDirX = dirX + planeX * cameraX;
-      double rayDirY = dirY + planeY * cameraX;
-      //which box of the map we're in
-      int mapX = int(posX);
-      int mapY = int(posY);
+	// screen();
+	// 画面の設定を行う関数
+	screen(screenWidth, screenHeight, 0, "Raycaster");
+	// done();
+	// フレーム全体の描画と、毎回入力を読み取るループ。
+	while(!done())
+	{
+		// raycasting loop
+		/*
+		 * レイキャスティングループは、すべてのxを通過するforループなので、画面のすべてのピクセルに対して計算があるわけではなく、
+		 * 縦のストライプに対してだけで、全然多くないです！
+		 * レイキャスティングループを開始するために、いくつかの変数がデリケートで計算されます：
+		 *
+		 * ¸光線上のみ計算を行う。。。？？
+		 * int	x = 0;
+		 * x¸座標のこと。横軸
+		 * 
+		 * int w;
+		 * 未定義？？多分マップの横幅？？
+		 *
+		 * ray ¸の始点は、x_position_vector_player, y_position_vector_player
+		 */
+		for(int x = 0; x < w; x++)
+		{
+			//calculate ray position and direction
+			//x-coordinate in camera space
+			/*
+			 * doble	current_camera_x_coordinate;
+			 * 現在の画面のx座標にあるカメラ平面上のx 座標を表す。
+			 * 画面の左側が、−１。中央が０。右側が、１。となる。
+			 *
+			 * double	x_ray_direction;
+			 * double	y_ray_direction;
+			 * 光線の方向を表す。
+			 * プレイヤーの方向ベクトル( _direction_player)とカメラの平面ベクトル¸の一部( _camera_plane_player * x_current_camera)の和として計算できる。)
+			 * (x座標とy座標の両方について¸計算を行う必要がある。)
+			 *
+			 * int	x_current_ray_in_map;
+			 * int	y_current_ray_in_map;
+			 * which box of the map we're in
+			 * レイが居る現在のマップのマスの座標のみを表す。
+			 *
+			 * double	x_side_distance;
+			 * double	y_side_distance;
+			 * length of ray from current position to next x or y-side
+			 * レイの開始位置から最初のxサイドと最初のyサイドまでの移動距離を初期値で指定する。
+			 * コードの後半で、ステップを踏みながらインクリメントされる。
+			 *
+			 */
+			double	x_current_camera; // cameraX;
+			double	x_ray_direction; // rayDirX;
+			double	y_ray_direction; // rayDirY;
+			int		x_current_ray_in_map; // mapX
+			int		y_current_ray_in_map; // mapY
+			// TODO:
+			double	x_side_distance; // sideDistX;
+			double	y_side_distance; // sideDistY;
 
-      //length of ray from current position to next x or y-side
-      double sideDistX;
-      double sideDistY;
-
-      //length of ray from one x or y-side to next x or y-side
-      //these are derived as:
-      //deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX))
-      //deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY))
-      //which can be simplified to abs(|rayDir| / rayDirX) and abs(|rayDir| / rayDirY)
-      //where |rayDir| is the length of the vector (rayDirX, rayDirY). Its length,
-      //unlike (dirX, dirY) is not 1, however this does not matter, only the
-      //ratio between deltaDistX and deltaDistY matters, due to the way the DDA
-      //stepping further below works. So the values can be computed as below.
-      // Division through zero is prevented, even though technically that's not
-      // needed in C++ with IEEE 754 floating point values.
-      double deltaDistX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
-      double deltaDistY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
+			x_current_camera = 2 * x / (double)w - 1;
+			x_ray_direction = x_direction_player + (x_camera_plane_player * x_current_camera); // = dirX + planeX * cameraX;
+			y_ray_direction = y_direction_player + (y_camera_plane_player * x_current_camera); // = dirY + planeY * cameraX;
+			x_current_ray_in_map = int(x_position_vector_player); // = int(x_posX);
+			y_current_ray_in_map = int(y_position_vector_player); // = int(posY);
+			// length of ray from one x or y-side to next x or y-side
+			// these are derived as:
+			// deltaDistX = sqrt(1 + (rayDirY * rayDirY) / (rayDirX * rayDirX))
+      		// deltaDistY = sqrt(1 + (rayDirX * rayDirX) / (rayDirY * rayDirY))
+      		// which can be simplified to abs(|rayDir| / rayDirX) and abs(|rayDir| / rayDirY)
+      		// where |rayDir| is the length of the vector (rayDirX, rayDirY). Its length,
+      		// unlike (dirX, dirY) is not 1, however this does not matter, only the
+      		// ratio between deltaDistX and deltaDistY matters, due to the way the DDA
+      		// stepping further below works. So the values can be computed as below.
+      		// Division through zero is prevented, even though technically that's not
+      		// needed in C++ with IEEE 754 floating point values.
+			double	deltaDistX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
+			double	deltaDistY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
 
       double perpWallDist;
 
