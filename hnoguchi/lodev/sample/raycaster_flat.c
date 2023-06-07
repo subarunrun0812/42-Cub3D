@@ -6,14 +6,15 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/07 13:30:40 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/07 18:44:22 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <cmath>
-#include <string>
-#include <vector>
-#include <iostream>
+#include <stdlib.h>
+#include <math.h>
+#include <string.h>
+// #include <vector>
+// #include <iostream>
 
 /*
 #include "quickcg.h"
@@ -23,12 +24,22 @@ g++ *.cpp -lSDL -O3 -W -Wall -ansi -pedantic
 g++ *.cpp -lSDL
 */
 
+typedef enum e_color_rgb	t_color_rgb;
+enum e_color_rgb {
+	RGB_Red,
+	RGB_Green,
+	RGB_Blue,
+	RGB_White,
+	RGB_Yellow
+};
+
 //place the example code below here:
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
-#define MAP_WIDTH 24
-#define MAP_HEIGHT 24
+# define SCREEN_WIDTH 640
+# define SCREEN_HEIGHT 480
+# define MAP_WIDTH 24
+# define MAP_HEIGHT 24
+# define ABS(a) ((a) < 0 ? -(a) : (a))
 
 int world_map[MAP_WIDTH][MAP_HEIGHT] =
 {
@@ -79,7 +90,7 @@ int	main(void)
 	double	current_time_frame; //time of current frame
 	double	old_time_frame; //time of previous frame
 
-	x_position_vector_player = 22;
+	x_position_vector_player = 22; // posX
 	y_position_vector_player = 12;
 	x_direction_player = -1;
 	y_direction_player = 0;
@@ -115,7 +126,7 @@ int	main(void)
 			//calculate ray position and direction
 			//x-coordinate in camera space
 			/*
-			 * doble	current_camera_x_coordinate;
+			 * doble	current_camera_x;
 			 * 現在の画面のx座標にあるカメラ平面上のx 座標を表す。
 			 * 画面の左側が、−１。中央が０。右側が、１。となる。
 			 *
@@ -128,7 +139,7 @@ int	main(void)
 			 * int	x_current_ray_in_map;
 			 * int	y_current_ray_in_map;
 			 * which box of the map we're in
-			 * レイが居る現在のマップのマスの座標のみを表す。
+			 * レイが居る現在のマップのマスの座標のみを表す。レイとマスの交点？？
 			 *
 			 * double	x_side_distance;
 			 * double	y_side_distance;
@@ -136,13 +147,46 @@ int	main(void)
 			 * レイの開始位置から最初のxサイドと最初のyサイドまでの移動距離を初期値で指定する。
 			 * コードの後半で、ステップを踏みながらインクリメントされる。
 			 *
-			 */
+			 * double	x_delta_distance;
+			 * double	y_delta_distance;
+			 * レイが座標１つ分を移動する際の距離を表す。
+			 *
+			 * double perpendicular_wall_distance;
+			 * 壁からレイまでの長さを入れる変数。
+			 * 壁の高さを計算するのに使用する。
+			 *
+			 * int	step_x;
+			 * int	step_y;
+			 * what direction to step in x or y-direction (either +1 or -1)
+			 * direction(x, y)¸の方向（プラスかマイナスか）を示す変数。−１か１が入る。
+			 * 負の成分を持っている場合、−１。それ以外は、１を入れる。
+			 *
+			 * int	x_side_distance;
+			 * int	y_side_distance;
+			 * step_x¸が−１の場合、レイの開始位置から左側の最初の軸までの距離を入れる。
+			 * step_xが、+1¸の場合、右側の最初の軸までの距離を入れる。 
+			 * step_y¸が−１の場合、レイの開始位置から¸上側の最初の軸までの距離を入れる。
+			 * step_y¸が+１の場合、レイの開始位置から¸下側の最初の軸までの距離を入れる。
+			 *
+			 * int hit;
+			 * was there a wall hit?
+			 * ループを抜けるかどうかの判定に使用する変数
+			 * 壁に当たったかどうか？？
+			 *
+			 * int side;
+			 * was a NS or a EW wall hit?
+			 * どの方角の壁にぶつかったか？？
+			 * x軸なら０。y軸なら１。
+			 *
+			 *
+			 * */
+
 			double	x_current_camera; // cameraX;
 			double	x_ray_direction; // rayDirX;
 			double	y_ray_direction; // rayDirY;
 			int		x_current_ray_in_map; // mapX
 			int		y_current_ray_in_map; // mapY
-			// TODO:
+			// TODO: Set initialize value.
 			double	x_side_distance; // sideDistX;
 			double	y_side_distance; // sideDistY;
 
@@ -162,96 +206,160 @@ int	main(void)
       		// stepping further below works. So the values can be computed as below.
       		// Division through zero is prevented, even though technically that's not
       		// needed in C++ with IEEE 754 floating point values.
-			double	deltaDistX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
-			double	deltaDistY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
+			double	x_delta_distance; // deltaDistX
+			double	y_delta_distance; // deltaDistY
 
-      double perpWallDist;
+			// ¸ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
+			x_delta_distance = (x_ray_direction == 0) ? 1e30 : ABS(1 / x_ray_direction); // deltaDistX
+			y_delta_distance = (y_ray_direction == 0) ? 1e30 : ABS(1 / y_ray_direction); // deltaDistY
+			
+			double perpendicular_wall_distance;
 
-      //what direction to step in x or y-direction (either +1 or -1)
-      int stepX;
-      int stepY;
+			int	step_x; // stepX
+			int	step_y; // stepY
+			int hit;
+			int side;
 
-      int hit = 0; //was there a wall hit?
-      int side; //was a NS or a EW wall hit?
-      //calculate step and initial sideDist
-      if(rayDirX < 0)
-      {
-        stepX = -1;
-        sideDistX = (posX - mapX) * deltaDistX;
-      }
-      else
-      {
-        stepX = 1;
-        sideDistX = (mapX + 1.0 - posX) * deltaDistX;
-      }
-      if(rayDirY < 0)
-      {
-        stepY = -1;
-        sideDistY = (posY - mapY) * deltaDistY;
-      }
-      else
-      {
-        stepY = 1;
-        sideDistY = (mapY + 1.0 - posY) * deltaDistY;
-      }
-      //perform DDA
-      while(hit == 0)
-      {
-        //jump to next map square, either in x-direction, or in y-direction
-        if(sideDistX < sideDistY)
-        {
-          sideDistX += deltaDistX;
-          mapX += stepX;
-          side = 0;
-        }
-        else
-        {
-          sideDistY += deltaDistY;
-          mapY += stepY;
-          side = 1;
-        }
-        //Check if ray has hit a wall
-        if(worldMap[mapX][mapY] > 0) hit = 1;
-      }
-      //Calculate distance projected on camera direction. This is the shortest distance from the point where the wall is
-      //hit to the camera plane. Euclidean to center camera point would give fisheye effect!
-      //This can be computed as (mapX - posX + (1 - stepX) / 2) / rayDirX for side == 0, or same formula with Y
-      //for size == 1, but can be simplified to the code below thanks to how sideDist and deltaDist are computed:
-      //because they were left scaled to |rayDir|. sideDist is the entire length of the ray above after the multiple
-      //steps, but we subtract deltaDist once because one step more into the wall was taken above.
-      if(side == 0) perpWallDist = (sideDistX - deltaDistX);
-      else          perpWallDist = (sideDistY - deltaDistY);
+			hit = 0;
+			//calculate step_x(or y) and initial x(or y)_side_distance
+			if(x_ray_direction < 0)
+			{
+				step_x = -1;
+				x_side_distance = (x_position_vector_player - x_current_ray_in_map) * x_delta_distance;
+			}
+			else
+			{
+				step_x = 1;
+				x_side_distance = (x_current_ray_in_map + 1.0 - x_position_vector_player) * x_delta_distance;
+			}
+			if(y_ray_direction < 0)
+			{
+				step_y = -1;
+				y_side_distance = (y_position_vector_player - y_current_ray_in_map) * y_delta_distance;
+			}
+			else
+			{
+				step_y = 1;
+				y_side_distance = (y_current_ray_in_map + 1.0 - y_position_vector_player) * y_delta_distance;
+			}
+			//perform DDA
+			while(hit == 0)
+			{
+				//jump to next map square, either in x-direction, or in y-direction
+				if(x_side_distance < y_side_distance)
+				{
+					x_side_distance += x_delta_distance;
+					x_current_ray_in_map += step_x;
+					side = 0;
+				}
+				else
+				{
+					y_side_distance += y_delta_distance;
+					y_current_ray_in_map += step_y;
+					side = 1;
+				}
+				//Check if ray has hit a wall
+				if(world_map[x_current_ray_in_map][y_current_ray_in_map] > 0)
+				{
+					hit = 1;
+				}
+			}
+			// Calculate distance projected on camera direction. This is the shortest distance from the point where the wall is
+			// hit to the camera plane. Euclidean to center camera point would give fisheye effect!
+			// This can be computed as (mapX - posX + (1 - stepX) / 2) / rayDirX for side == 0, or same formula with Y
+			// for size == 1, but can be simplified to the code below thanks to how sideDist and deltaDist are computed:
+			// because they were left scaled to |rayDir|. sideDist is the entire length of the ray above after the multiple
+			// steps, but we subtract deltaDist once because one step more into the wall was taken above.
+			if(side == 0)
+			{
+				perpendicular_wall_distance = (x_side_distance - x_delta_distance);
+			}
+			else
+			{
+				perpendicular_wall_distance = (y_side_distance - y_delta_distance);
+			}
+			//Calculate height of line to draw on screen
+			/*
+			 * h
+			 * 画面の高さ（ピクセル単位）
+			 * ピクセル座標に変換する際に使用する。
+			 */
+			int	line_height;
+			
+			line_height = (int)(h / perpendicular_wall_distance);
+			// calculate lowest and highest pixel to fill in current stripe
+			int draw_start;
+			
+			draw_start = -line_height / 2 + h / 2;
+			if(draw_start < 0)
+			{
+				draw_start = 0;
+			}
+			
+			int draw_end;
+			
+			draw_end = line_height / 2 + h / 2;
+			if(draw_end >= h)
+			{
+				draw_end = h - 1;
+			}
+			// choose wall color
 
-      //Calculate height of line to draw on screen
-      int lineHeight = (int)(h / perpWallDist);
-
-      //calculate lowest and highest pixel to fill in current stripe
-      int drawStart = -lineHeight / 2 + h / 2;
-      if(drawStart < 0) drawStart = 0;
-      int drawEnd = lineHeight / 2 + h / 2;
-      if(drawEnd >= h) drawEnd = h - 1;
-
-      //choose wall color
-      ColorRGB color;
-      switch(worldMap[mapX][mapY])
-      {
-        case 1:  color = RGB_Red;    break; //red
-        case 2:  color = RGB_Green;  break; //green
-        case 3:  color = RGB_Blue;   break; //blue
-        case 4:  color = RGB_White;  break; //white
-        default: color = RGB_Yellow; break; //yellow
-      }
-
-      //give x and y sides different brightness
-      if(side == 1) {color = color / 2;}
-
-      //draw the pixels of the stripe as a vertical line
-      verLine(x, drawStart, drawEnd, color);
-    }
-    //timing for input and FPS counter
-    oldTime = time;
-    time = getTicks();
-    double frameTime = (time - oldTime) / 1000.0; //frameTime is the time this frame has taken, in seconds
+			t_color_rgb	 color;
+			switch(world_map[x_current_ray_in_map][y_current_ray_in_map])
+			{
+				case 1:
+					color = RGB_Red;
+					break; //red
+				case 2:
+					color = RGB_Green;
+					break; //green
+				case 3:
+					color = RGB_Blue;
+					break; //blue
+				case 4:
+					color = RGB_White;
+					break; //white
+				default:
+					color = RGB_Yellow;
+					break; //yellow
+			}
+			//give x and y sides different brightness
+			if (side == 1)
+			{
+				color = color / 2;
+			}
+			//draw the pixels of the stripe as a vertical line
+			if (color == RGB_Red)
+			{
+				// "red" == 0xff0000
+				verLine(x, drawStart, drawEnd, color);
+			}
+			else if (color == RGB_Green)
+			{
+				// "green" == 0xff00
+				verLine(x, drawStart, drawEnd, color);
+			}
+			else if (color == RGB_Blue)
+			{
+				// "blue" == 0xff
+				verLine(x, drawStart, drawEnd, color);
+			}
+			else if (color == RGB_White)
+			{
+				// "white" == 0xffffff
+				verLine(x, drawStart, drawEnd, color);
+			}
+			else if (color == RGB_Yellow)
+			{
+				// "yellow" == 0xffff00
+				verLine(x, drawStart, drawEnd, color);
+			}
+		}
+	//timing for input and FPS counter
+	oldTime = time;
+	time = getTicks();
+	double frameTime = (time - oldTime) / 1000.0; //frameTime is the time this frame has taken, in seconds
     print(1.0 / frameTime); //FPS counter
     redraw();
     cls();
