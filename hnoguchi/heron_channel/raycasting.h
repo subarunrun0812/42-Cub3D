@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/06 11:30:28 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/06 15:17:05 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/06 18:12:45 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,31 +19,35 @@
 #include <math.h>
 #include "color.h"
 
-typedef struct vector_2 {
+typedef struct s_vector	t_vector;
+typedef struct s_ray	t_ray;
+typedef struct s_player	t_player;
+
+struct s_vector {
 	float	x;
 	float	y;
-}	vector_2;
+};
 
-typedef struct ray_2 {
-	vector_2	*start_point;
-	vector_2	*direction;
-}	ray_2;
+struct s_ray {
+	t_vector	*start_point;
+	t_vector	*direction;
+};
 
-typedef struct s_player {
-	vector_2 	*position;
+struct s_player {
+	t_vector 	*position;
 	float		angle;
-}	t_player;
+};
 
 // Vector
-vector_2	*create_vector_2(float x, float y);
-vector_2	*add_vector_2(vector_2 *a, vector_2 *b);
-vector_2	*sub_vector_2(vector_2 *a, vector_2 *b);
-vector_2	*multi_scalar_vector_2(vector_2 *vector, float scalar);
-float		magnitude_vector_2(vector_2 *vector);
+t_vector	*create_vector(float x, float y);
+t_vector	*add_vector(t_vector *a, t_vector *b);
+t_vector	*sub_vector(t_vector *a, t_vector *b);
+t_vector	*multi_scalar_vector(t_vector *vector, float scalar);
+float		magnitude_vector(t_vector *vector);
 
 // Ray
-ray_2		*create_ray_2(vector_2 *start_p, vector_2 *direction);
-vector_2	*point_at_ray_2(ray_2 *ray, float t);
+t_ray		*create_ray(t_vector *start_p, t_vector *direction);
+t_vector	*point_at_ray(t_ray *ray, float t);
 
 // Player
 t_player	*create_player(float vector_x, float vector_y, float player_angle);

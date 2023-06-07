@@ -42,5 +42,6 @@ re: fclean all
 vector: CFLAGS += -DVECTOR
 vector: re
 
-# norm:
-	# norminette srcs/*.c srcs/*/*.c includes/*.h
+.PHONY: ray
+ray: CFLAGS += -DRAY
+ray: re
