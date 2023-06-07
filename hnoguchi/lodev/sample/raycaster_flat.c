@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/07 09:11:15 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/07 11:26:41 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,12 +61,23 @@ int world_map[MAP_WIDTH][MAP_HEIGHT] =
 // int main(int /*argc*/, char /*argv*/[])
 int	main(void)
 {
+	/*
+	 * camera_palane が direction に対して垂直であることを確認する。camera_plane の長さは変更が可能。
+	 *
+	 * current_time_frame, old_time_frame
+	 * この２つの時間差は、特定のキーが押されたときに、どれくらい動くべきかを決定する。
+	 * （フレームの計算にどれだけ時間が掛かっても、一定の速度で動くため）
+	 * およびFPSカウンターのために使用できる。
+	 */
+
 	double	x_position_vector_player; // player position vector
 	double	y_position_vector_player; // player position vector
 	double	x_direction_player; // initial player direction vector
 	double	y_direction_player; // initial player direction vector
 	double	x_camera_plane_player; //the 2d raycaster version of camera plane of the player
 	double	y_camera_plane_player; //the 2d raycaster version of camera plane of the player
+	double	current_time_frame; //time of current frame
+	double	old_time_frame; //time of previous frame
 
 	x_position_vector_player = 22;
 	y_position_vector_player = 12;
@@ -74,13 +85,8 @@ int	main(void)
 	y_direction_player = 0;
 	x_camera_plane_player = 0;
 	y_camera_plane_player = 0.66;
-
-	/*
-	 * camera_palane が direction に対して垂直であることを確認する。camera_plane の長さは変更が可能。
-	 */
-
-	double	time = 0; //time of current frame
-	double	oldTime = 0; //time of previous frame
+	current_time_frame = 0;
+	old_time_frame = 0;
 
   screen(screenWidth, screenHeight, 0, "Raycaster");
   while(!done())
