@@ -1,19 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_error.c                                           :+:      :+:    :+:   */
+/*   my_mlx_pixel_put.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 16:33:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 17:31:13 by susasaki         ###   ########.fr       */
+/*   Created: 2023/05/13 14:52:13 by susasaki          #+#    #+#             */
+/*   Updated: 2023/05/13 15:06:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/cub3d.h"
 
-void print_error(char *str)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-    printf("\x1b[31mError\n%s\x1b[0m\n",str);
-    exit(1);
+	char	*dst;
+
+	dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+	*(unsigned int*)dst = color;
 }

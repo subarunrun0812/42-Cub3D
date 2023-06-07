@@ -1,90 +1,71 @@
 NAME = cub3D
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
+LIBS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 SOURCES_DIR = ./srcs
 LIBFT_DIR = ./srcs/libft
+MAPS_DIR = $(SOURCES_DIR)/maps
+RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
+WINDOW_DIR = $(SOURCES_DIR)/window
+PLAYER_DIR = $(SOURCES_DIR)/player
+MINIMAP_DIR = $(SOURCES_DIR)/minimap
 
 SOURCES = $(SOURCES_DIR)/main.c\
-		  $(SOURCES_DIR)/read_map.c\
-		  $(SOURCES_DIR)/print_error.c\
-		  $(GNL_DIR)/get_next_line.c\
-		  $(GNL_DIR)/get_next_line_utils.c\
+          $(MAPS_DIR)/read_map.c\
+          $(MAPS_DIR)/get_map_data.c\
+          $(MAPS_DIR)/check_map_wall.c\
+          $(MAPS_DIR)/check_only_one_nswe.c\
+          $(MINIMAP_DIR)/minimap.c\
+          $(PLAYER_DIR)/coordinates.c\
+          $(PLAYER_DIR)/key_hook.c\
+          $(PLAYER_DIR)/player_move.c\
+          $(RAYCASTING_DIR)/raycasting.c\
+          $(WINDOW_DIR)/close_window.c\
+          $(WINDOW_DIR)/my_mlx_pixel_put.c\
+          $(WINDOW_DIR)/new_window.c\
+          $(SOURCES_DIR)/free.c\
+          $(SOURCES_DIR)/init.c\
+          $(SOURCES_DIR)/print_error.c\
+          $(GNL_DIR)/get_next_line.c\
+          $(GNL_DIR)/get_next_line_utils.c\
 
 GNL_DIR = ./srcs/get_next_line
 GNL = $(GNL_DIR)/get_next_line.a
 
-INCLUDE = -I include -I $(LIBFT_DIR) -I $(GNL_DIR)
+MINILIBX_DIR = ./mlx
+MINILIBX	 = $(MINILIBX_DIR)/libmlx.a
 
-OBJS = $(patsubst %.c,%.o,$(SOURCES)) # ここを変更
+INCLUDE = -I include -I $(LIBFT_DIR) -I $(GNL_DIR) -I $(MINILIBX_DIR)
 
-%.o: %.c
+VPATH = $(SOURCES_DIR):$(MAPS_DIR):$(RAYCASTING_DIR):$(GNL_DIR) \
+		$(WINDOW_DIR):$(PLAYER_DIR):$(MINIMAP_DIR)
+
+OBJS_DIR = objs
+OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SOURCES:.c=.o)))
+
+$(OBJS_DIR)/%.o: %.c
+	mkdir -p $(OBJS_DIR)
 	$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 LIBFT = -L$(LIBFT_DIR) -lft
 
 all: $(NAME)
 
+$(MINILIBX_DIR) :
+	make -C $(MINILIBX_DIR)
+
 $(NAME) : $(OBJS)
 	$(MAKE) -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(OBJS) $(INCLUDE) $(LIBFT) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJS) $(INCLUDE) $(LIBFT) $(LIBS) -o $(NAME)
+
 
 clean:
-	rm -f $(OBJS)
+	rm -rf $(OBJS_DIR)
 	$(MAKE) -C $(LIBFT_DIR) clean
 
 fclean : clean
 	rm -f $(NAME)
+	$(MAKE) -C $(MINILIBX_DIR) clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
-
-
-
-
-
-
-# NAME = cub3D
-# CC = cc
-# CFLAGS = -Wall -Wextra -Werror
-# # LIBS = -Lminilibx-linux -lmlx_Linux -L/usr/X11R6/lib -lXext -lX11
-# SOURCES_DIR = ./srcs
-# LIBFT_DIR = ./srcs/libft
-
-# SOURCES = $(SOURCES_DIR)/main.c\
-# 		  $(SOURCES_DIR)/read_map.c\
-# 		  $(SOURCES_DIR)/print_error.c\
-# 		  $(GNL_DIR)/get_next_line.c\
-# 		  $(GNL_DIR)/get_next_line_utils.c\
-
-# GNL_DIR			= ./get_next_line
-# GNL				= $(GNL_DIR)/get_next_line.a
-
-# # MINILIBX_DIR	= ./minilibx-linux
-# # MINILIBX		= $(MINILIBX_DIR)/libmlx.a
-# INCLUDE			= -I include -I $(LIBFT_DIR)
-# # INCLUDE			= -I minilibx-linux -I /usr/X11R6/inxlude
-
-# OBJS = $(SOURCES:.c=.o)
-
-# LIBFT = -L$(LIBFT_DIR) -lft
-
-# all: $(NAME)
-
-# $(NAME) : $(OBJS) $(MINILIBX)
-# 	$(MAKE) -c $(LIBFT_DIR)
-# 	$(CC) $(CFLAGS) $(OBJS) $(INCLUDE) $(LIBFT) -o $(NAME)
-# # $(CC) $(CFLAGS) $(OBJS) $(LIBS) $(INCLUDE) -o $(NAME)
-
-# # $(MINILIBX) :
-# # 	make -C $(MINILIBX_DIR)
-
-# clean:
-# 	rm -f $(OBJS)
-# 	$(MAKE) -C $(LIBFT_DIR) clean
-
-# fclean : clean
-# 	rm -f $(NAME)
-# 	$(MAKE) -C $(LIBFT_DIR) fclean
-# # make -C $(MINILIBX_DIR)  clean 
-
-# re: fclean all

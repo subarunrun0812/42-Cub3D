@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_error.c                                           :+:      :+:    :+:   */
+/*   close_window.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 16:33:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 17:31:13 by susasaki         ###   ########.fr       */
+/*   Created: 2023/05/09 15:30:22 by susasaki          #+#    #+#             */
+/*   Updated: 2023/05/09 21:48:27 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
-void print_error(char *str)
+
+int close_window(t_vars *vars)
 {
-    printf("\x1b[31mError\n%s\x1b[0m\n",str);
-    exit(1);
+    mlx_destroy_window(vars->mlx, vars->win);
+    exit (0);
 }
