@@ -32,8 +32,8 @@
 # define PINK 0x00FFDBED
 # define WHEAT 0x00F5DEB3
 
-# define BLOCK_SIZE 15
-# define DISPLAY_RADIUS 70
+# define BLOCK_SIZE 20
+# define DISPLAY_RADIUS 80
 
 # define W_KEY 13
 # define A_KEY 0
