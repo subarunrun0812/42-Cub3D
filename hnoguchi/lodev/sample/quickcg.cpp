@@ -148,9 +148,9 @@ void unlock()
   SDL_UnlockSurface(scr);
 }
 
-//Updates the screen.  Has to be called to view new pixels, but use only after
-//drawing the whole screen because it's slow.
-void redraw()
+// Updates the screen.  Has to be called to view new pixels, but use only after
+// drawing the whole screen because it's slow.
+void	redraw()
 {
   SDL_UpdateRect(scr, 0, 0, 0, 0);
   //SDL_Flip(scr); // this could potentially be faster than SDL_UpdateRect if double buffering is used
