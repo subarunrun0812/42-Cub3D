@@ -1,29 +1,21 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   my_mlx_pixel_put.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 18:50:28 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/18 15:53:47 by susasaki         ###   ########.fr       */
+/*   Created: 2023/05/13 14:52:13 by susasaki          #+#    #+#             */
+/*   Updated: 2023/06/07 14:36:42 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../include/cub3d.h"
 
-void init_map(t_map *map)
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color)
 {
-    map->map_data = NULL;
-    map->height = 0;
-    map->width = 0;
-}
+	char	*dst;
 
-void init(t_info *info,t_map *map, t_player *player, t_vars *vars)
-{
-    info->map = map;
-    info->player = player;
-    info->vars = vars;
-    init_map(info->map);
-    // init_window_image(info->vars);
+		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
+		*(unsigned int*)dst = color;
 }

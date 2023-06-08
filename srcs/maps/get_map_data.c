@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_map_data.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/06 23:52:58 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/05/11 16:49:03 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static int	non_specific_chara(char *str)
 	{
 		if (str[i] != '0' && str[i] != '1' && str[i] != 'N'
 			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
-			&& str[i] != ' ' && str[i] != '\t')
+			&& str[i] != ' ')
 			return (1);
 		i++;
 	}

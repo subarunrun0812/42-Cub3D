@@ -1,29 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   key_hook.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 18:50:28 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/18 15:53:47 by susasaki         ###   ########.fr       */
+/*   Created: 2023/05/09 21:44:58 by susasaki          #+#    #+#             */
+/*   Updated: 2023/06/07 14:45:25 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
-void init_map(t_map *map)
+int ft_key_hook(int keycode, t_info *info)
 {
-    map->map_data = NULL;
-    map->height = 0;
-    map->width = 0;
-}
-
-void init(t_info *info,t_map *map, t_player *player, t_vars *vars)
-{
-    info->map = map;
-    info->player = player;
-    info->vars = vars;
-    init_map(info->map);
-    // init_window_image(info->vars);
+    // printf("~~ ft_key_hook ~~\n");
+    // printf("keycode = %d", keycode);
+    if (keycode == W_KEY || keycode == S_KEY
+        || keycode == A_KEY || keycode == D_KEY)
+    {
+        player_move(info, keycode);
+    }
+    else if (keycode == ESC_KEY)
+        close_window(info->vars);
+    return (0);
 }
