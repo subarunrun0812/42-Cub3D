@@ -20,6 +20,10 @@
 # define RIGHT_KEY_M1 65363
 # define DOWN_KEY_M1 65364
 # define UP_KEY_M1 65362
+# define W_KEY 13
+# define A_KEY 0
+# define S_KEY 1
+# define D_KEY 2
 
 # define MOVE_SPEED 1
 # define ROT_SPEED 0.5
