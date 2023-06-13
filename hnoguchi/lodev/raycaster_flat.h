@@ -6,19 +6,19 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/11 18:45:55 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/13 17:51:33 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAYCASTER_FLAT_H
 # define RAYCASTER_FLAT_H
 
+# include <stdbool.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <math.h>
 # include <string.h>
 # include <mlx.h>
-# include <time.h>
 # include <sys/time.h>
 
 # define WHITE 0x00FFFFFF
@@ -38,14 +38,18 @@
 # define S_KEY 1
 # define D_KEY 2
 //キーを押した時の移動距離
+
+# define X_AXIS true
+# define Y_AXIS false
+
 # define MOVE_DISTANCE 0.5
 # define ABS(a) ((a) < 0 ? -(a) : (a))
 
 
 typedef enum e_color_rgb	t_color_rgb;
 typedef struct s_vars		t_vars;
-typedef struct	s_data		t_data;
-
+typedef struct s_data		t_data;
+typedef struct s_ray		t_ray;
 
 enum e_color_rgb {
 	RGB_Red,
@@ -100,14 +104,24 @@ struct s_vars
 	double	y_position_vector; // posY
 	double	x_direction; // dirX
 	double	y_direction; // dirY
-	double	move_speed; // moveSpeed
-	double	rotate_speed; // rotSpeed
-	double	current_time;
+	// double	move_speed; // moveSpeed
+	// double	rotate_speed; // rotSpeed
 	double	x_camera_plane; // planeX
 	double	y_camera_plane; // planeY
 	int		screen_width; // width of the screen
 	int		screen_height; // height of the screen
 	t_data	image;
+};
+
+struct s_ray {
+	double	x_direction;
+	double	y_direction;
+	int		current_x_in_map;
+	int		current_y_in_map;
+	double	x_side_distance;
+	double	y_side_distance;
+	double	x_delta_distance;
+	double	y_delta_distance;
 };
 
 #endif
