@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/13 18:17:28 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/13 19:10:17 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 	return (axis);
 }
 
-int	exist_color(t_ray *ray, bool side)
+int	decide_color(t_ray *ray, bool side)
 {
 	int	color;
 
@@ -135,61 +135,43 @@ int	exist_color(t_ray *ray, bool side)
 	return (color);
 }
 
+int	calculate_draw_start(int screen_height, int line_height)
+{
+	int start;
+
+	start = (-line_height / 2) + (screen_height / 2);
+	if(start < 0)
+	{
+		return (0);
+	}
+	return (start);
+}
+
+int	calculate_draw_end(int screen_height, int line_height)
+{
+	int	end;
+
+	end = line_height / 2 + screen_height / 2;
+	if (screen_height <= end)
+	{
+		return (screen_height - 1);
+	}
+	return (end);
+}
+
 void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
 {
 	// Calculate height of line to draw on screen
 	int	line_height;
 	// calculate lowest and highest pixel to fill in current stripe
 	int	draw_start;
-
-	line_height = (int)(vars->screen_height / wall_distance);
-	draw_start = (-line_height / 2) + (vars->screen_height / 2);
-	if(draw_start < 0)
-	{
-		draw_start = 0;
-	}
-
 	int draw_end;
-
-	draw_end = line_height / 2 + vars->screen_height / 2;
-	if (vars->screen_height <= draw_end)
-	{
-		draw_end = vars->screen_height - 1;
-	}
-
-	/*
-	 * マップに合わせて色を塗る。
-	 */
-	// choose wall color
 	int	color;
 
-	color = exist_color(ray, side);
-	// color = BLACK;
-	// if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 1)
-	// {
-	// 	color = RED;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 2)
-	// {
-	// 	color = GREEN;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 3)
-	// {
-	// 	color = BLUE;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 4)
-	// {
-	// 	color = WHITE;
-	// }
-	// else
-	// {
-	// 	color = YELLOW;
-	// }
-	// //give x and y sides different brightness
-	// if (side == Y_AXIS)
-	// {
-	// 	color = color / 2;
-	// }
+	line_height = (int)(vars->screen_height / wall_distance);
+	draw_start = calculate_draw_start(vars->screen_height, line_height);
+	draw_end = calculate_draw_end(vars->screen_height, line_height);
+	color = decide_color(ray, side);
 	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
 }
 
