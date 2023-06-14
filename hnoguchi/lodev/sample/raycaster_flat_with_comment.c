@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/07 18:44:22 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/08 17:25:44 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,29 +75,28 @@ int	main(void)
 	/*
 	 * camera_palane が direction に対して垂直であることを確認する。camera_plane の長さは変更が可能。
 	 *
-	 * current_time_frame, old_time_frame
+	 * current_time, old_time
 	 * この２つの時間差は、特定のキーが押されたときに、どれくらい動くべきかを決定する。
 	 * （フレームの計算にどれだけ時間が掛かっても、一定の速度で動くため）
 	 * およびFPSカウンターのために使用できる。
 	 */
+	double			x_position_vector_player; // player position vector
+	double			y_position_vector_player; // player position vector
+	double			x_direction_player; // initial player direction vector // dirX
+	double			y_direction_player; // initial player direction vector
+	double			x_camera_plane_player; //the 2d raycaster version of camera plane of the player
+	double			y_camera_plane_player; //the 2d raycaster version of camera plane of the player
+	double			current_time; //time of current frame
+	double			old_time; //time of previous frame
 
-	double	x_position_vector_player; // player position vector
-	double	y_position_vector_player; // player position vector
-	double	x_direction_player; // initial player direction vector
-	double	y_direction_player; // initial player direction vector
-	double	x_camera_plane_player; //the 2d raycaster version of camera plane of the player
-	double	y_camera_plane_player; //the 2d raycaster version of camera plane of the player
-	double	current_time_frame; //time of current frame
-	double	old_time_frame; //time of previous frame
-
+	current_time_frame = 0;
+	old_time_frame = 0;
 	x_position_vector_player = 22; // posX
 	y_position_vector_player = 12;
 	x_direction_player = -1;
 	y_direction_player = 0;
 	x_camera_plane_player = 0;
 	y_camera_plane_player = 0.66;
-	current_time_frame = 0;
-	old_time_frame = 0;
 
 	// screen();
 	// 画面の設定を行う関数
@@ -356,40 +355,63 @@ int	main(void)
 				verLine(x, drawStart, drawEnd, color);
 			}
 		}
-	//timing for input and FPS counter
-	oldTime = time;
-	time = getTicks();
-	double frameTime = (time - oldTime) / 1000.0; //frameTime is the time this frame has taken, in seconds
-    print(1.0 / frameTime); //FPS counter
-    redraw();
-    cls();
+		//timing for input and FPS counter
+		/*
+		 * raycasting loop ¸が終わると、次に描画するフレームの描画時刻と前回のフレームの描画時刻から、
+		 * FPS（Frames per second）を計算し、再描画する。
+		 * 再描画を行う際は、一度画面全体を黒く塗りつぶして（cls();）から次のフレームを描画する。
+		 */
+		old_time = current_time;
+		// getTicks(); get millisecond
+		current_time = getTicks();
+		double frame_time = (current_time - old_time) / 1000.0; //frameTime is the time this frame has taken, in seconds
+		print(1.0 / frame_time); //FPS counter
+		redraw();
+		cls();
+		/*
+		 * frame_time と定数値を用いて、入力キーの移動と回転のスピードを決定する。
+		 * frame_time を使用することで、移動と回転速度がプロセッサの速度に依存しないことを確認できる。
+		 */
+		//speed modifiers
+		double move_speed = frame_time * 5.0; //the constant value is in squares/second
+		double rotate_speed = frame_time * 3.0; //the constant value is in radians/second
 
-    //speed modifiers
-    double moveSpeed = frameTime * 5.0; //the constant value is in squares/second
-    double rotSpeed = frameTime * 3.0; //the constant value is in radians/second
-    readKeys();
-    //move forward if no wall in front of you
-    if(keyDown(SDLK_UP))
-    {
-      if(worldMap[int(posX + dirX * moveSpeed)][int(posY)] == false) posX += dirX * moveSpeed;
-      if(worldMap[int(posX)][int(posY + dirY * moveSpeed)] == false) posY += dirY * moveSpeed;
-    }
-    //move backwards if no wall behind you
-    if(keyDown(SDLK_DOWN))
-    {
-      if(worldMap[int(posX - dirX * moveSpeed)][int(posY)] == false) posX -= dirX * moveSpeed;
-      if(worldMap[int(posX)][int(posY - dirY * moveSpeed)] == false) posY -= dirY * moveSpeed;
-    }
-    //rotate to the right
-    if(keyDown(SDLK_RIGHT))
-    {
-      //both camera direction and camera plane must be rotated
-      double oldDirX = dirX;
-      dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
-      dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
-      double oldPlaneX = planeX;
-      planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
-      planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
+		readKeys();
+		//move forward if no wall in front of you
+		if (keyDown(SDLK_UP))
+		{
+			// x_direction_player, y_direction_playerが正規化されたベクトル（長さが１）であることを前提としている。
+			if(world_map[int(x_position_vector_player + x_direction_player * move_speed)][int(y_position_vector_player)] == false)
+			{
+				x_position_vector_player += x_direction_player * move_speed;
+			}
+			if(worldMap[int(x_position_vector_player)][int(y_position_vector_player + y_direction_player * move_speed)] == false)
+			{
+				y_position_vector_player += y_direction_player * move_speed;
+			}
+		}
+		// move backwards if no wall behind you
+		if (keyDown(SDLK_DOWN))
+		{
+			if (world_map[int(x_posistion_vector_player - x_direction_player * move_speed)][int(y_position_vector_player)] == false)
+			{
+				x_position_vector_player -= x_direction_player * move_speed;
+			}
+			if (world_map[int(x_position_vector_player)][int(y_position_vector_player - y_direction_player * move_speed)] == false)
+			{
+				y_position_vector -= y_direction_player * move_speed;
+			}
+		}
+		// rotate to the right
+		if (keyDown(SDLK_RIGHT))
+		{
+			//both camera direction and camera plane must be rotated
+			double	oldDirX = dirX;
+      	dirX = dirX * cos(-rotSpeed) - dirY * sin(-rotSpeed);
+      	dirY = oldDirX * sin(-rotSpeed) + dirY * cos(-rotSpeed);
+      	double oldPlaneX = planeX;
+      	planeX = planeX * cos(-rotSpeed) - planeY * sin(-rotSpeed);
+      	planeY = oldPlaneX * sin(-rotSpeed) + planeY * cos(-rotSpeed);
     }
     //rotate to the left
     if(keyDown(SDLK_LEFT))

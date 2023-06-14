@@ -10,6 +10,8 @@ WINDOW_DIR = $(SOURCES_DIR)/window
 PLAYER_DIR = $(SOURCES_DIR)/player
 MINIMAP_DIR = $(SOURCES_DIR)/minimap
 
+# SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
+
 SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
