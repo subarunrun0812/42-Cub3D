@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 15:53:02 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:44:25 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,5 +54,5 @@ int	main(int argc, char **argv)
 	// mlx_hook(vars.win, 2, 1L << 0, &ft_key_hook, &info);
 	// mlx_hook(vars.win, ON_DESTROY, 1L << 2, &close_window, &vars);
 	
-	// mlx_loop(vars.mlx);
+	mlx_loop(vars.mlx);
 }
