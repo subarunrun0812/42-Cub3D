@@ -1,5 +1,6 @@
 #include "sample.h"
 
+//RGBカラーコードを16進数に変換します。
 int rgbToHex(int red, int green, int blue) {
     int hexCode = (red << 16) | (green << 8) | blue;
     return hexCode;
@@ -11,11 +12,6 @@ int worldMap[mapWidth][mapHeight]=
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
-  {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
@@ -23,27 +19,57 @@ int worldMap[mapWidth][mapHeight]=
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-  {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+  // {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,2,2,2,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+  // {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,3,0,0,0,3,0,0,0,1},
+  // {1,0,0,0,0,0,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,2,2,0,2,2,0,0,0,0,3,0,3,0,3,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,0,0,0,0,5,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,0,4,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,0,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,4,4,4,4,4,4,4,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  // {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-double posX = 22, posY = 12;  //x and y start position
+double posX = 2, posY = 2;  //x and y start position
 double dirX = -1, dirY = 0; //initial direction vector
 double planeX = 0, planeY = 0.66; //the 2d raycaster version of camera plane
 double time = 0; //time of current frame
 double oldTime = 0; //time of previous frame
 
+
 int	key_handle(int keycode, t_vars *vars)
 {
     (void)vars;
 	printf("%d\n", keycode);
-	if (keycode == LEFT_KEY || keycode == LEFT_KEY_M1)
+	if (keycode == LEFT_KEY || keycode == LEFT_KEY_M1 || keycode == A_KEY)
     {
       double oldDirX = dirX;
       dirX = dirX * cos(ROT_SPEED) - dirY * sin(ROT_SPEED);
@@ -52,7 +78,7 @@ int	key_handle(int keycode, t_vars *vars)
       planeX = planeX * cos(ROT_SPEED) - planeY * sin(ROT_SPEED);
       planeY = oldPlaneX * sin(ROT_SPEED) + planeY * cos(ROT_SPEED);
     }
-	else if (keycode == RIGHT_KEY || keycode == RIGHT_KEY_M1)
+	else if (keycode == RIGHT_KEY || keycode == RIGHT_KEY_M1 || keycode == D_KEY)
 	{
       double oldDirX = dirX;
       dirX = dirX * cos(-ROT_SPEED) - dirY * sin(-ROT_SPEED);
@@ -61,12 +87,12 @@ int	key_handle(int keycode, t_vars *vars)
       planeX = planeX * cos(-ROT_SPEED) - planeY * sin(-ROT_SPEED);
       planeY = oldPlaneX * sin(-ROT_SPEED) + planeY * cos(-ROT_SPEED);
     }
-	else if (keycode == DOWN_KEY || keycode == DOWN_KEY_M1)
+	else if (keycode == DOWN_KEY || keycode == DOWN_KEY_M1 || keycode == S_KEY)
 	{
         posX -= dirX * MOVE_SPEED;
         posY -= dirY * MOVE_SPEED;
     }
-	else if (keycode == UP_KEY || keycode == UP_KEY_M1)
+	else if (keycode == UP_KEY || keycode == UP_KEY_M1 || keycode == W_KEY)
 	{
         if(worldMap[(int)(posX + dirX * MOVE_SPEED)][(int)posY] == 0)
             posX += dirX * MOVE_SPEED;
@@ -76,6 +102,7 @@ int	key_handle(int keycode, t_vars *vars)
 	return (0);
 }
 
+// 描画の処理を開始
 void raycasting(t_vars *vars)
 {
     int w = screenWidth;
@@ -105,6 +132,7 @@ void raycasting(t_vars *vars)
       //stepping further below works. So the values can be computed as below.
       // Division through zero is prevented, even though technically that's not
       // needed in C++ with IEEE 754 floating point values.
+      // 光線が次のxまたはyの壁に当たるまでの距離を計算します。
       double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
       double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
 
@@ -116,6 +144,7 @@ void raycasting(t_vars *vars)
 
       int hit = 0; //was there a wall hit?
       int side; //was a NS or a EW wall hit?
+      //DDA(デジタル差分解析)アルゴリズムで使用される
       //calculate step and initial sideDist
       if(rayDirX < 0)
       {
@@ -163,13 +192,16 @@ void raycasting(t_vars *vars)
       //for size == 1, but can be simplified to the code below thanks to how sideDist and deltaDist are computed:
       //because they were left scaled to |rayDir|. sideDist is the entire length of the ray above after the multiple
       //steps, but we subtract deltaDist once because one step more into the wall was taken above.
+      // 壁に当たったら、カメラ平面上での壁までの距離を計算します、
       if(side == 0) perpWallDist = (sideDistX - deltaDistX);
       else          perpWallDist = (sideDistY - deltaDistY);
 
       //Calculate height of line to draw on screen
+      // スクリーン上で描画する壁の高さ
       int lineHeight = (int)(h / perpWallDist);
 
       //calculate lowest and highest pixel to fill in current stripe
+      // 壁を描画するためのピクセルの範囲を決定する。
       int drawStart = -lineHeight / 2 + h / 2;
       if(drawStart < 0) drawStart = 0;
       int drawEnd = lineHeight / 2 + h / 2;
@@ -177,13 +209,14 @@ void raycasting(t_vars *vars)
 
       //choose wall color
       int color;
+      //Rayが当たった壁の座標
       switch(worldMap[mapX][mapY])
       {
         case 1:  color = rgbToHex(255, 0, 0);    break; //red
         case 2:  color = rgbToHex(0, 255, 0);  break; //green
         case 3:  color = rgbToHex(0, 0, 255);   break; //blue
-        case 4:  color = rgbToHex(0, 255, 0);  break; //white
-        default: color = rgbToHex(0, 0, 0); break; //yellow
+        case 4:  color = rgbToHex(0, 255, 0);  break; //yellow
+        default: color = rgbToHex(0, 0, 0); break; //white
       }
 
       //give x and y sides different brightness
