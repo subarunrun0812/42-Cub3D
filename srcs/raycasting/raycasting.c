@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 16:47:03 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:00:39 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -333,7 +333,6 @@ int	raycasting(t_info *info)
 {
 	g_info = info;
 	initialize_vars(info->vars,info);
-	printf("raycasting\n");
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
 	minimap(g_info, g_info->data);
 	mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info->vars);
