@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/14 16:02:47 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/16 14:52:18 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,67 +45,94 @@ Uint32 buffer[WIN_HEIGHT][WIN_WIDTH];
 
 int main(int /*argc*/, char */*argv*/[])
 {
-  double posX = 22.0, posY = 11.5;  //x and y start position
-  double dirX = -1.0, dirY = 0.0; //initial direction vector
-  double planeX = 0.0, planeY = 0.66; //the 2d raycaster version of camera plane
+	double posX = 22.0, posY = 11.5;  //x and y start position
+	double dirX = -1.0, dirY = 0.0; //initial direction vector
+	double planeX = 0.0, planeY = 0.66; //the 2d raycaster version of camera plane
+	
+	double time = 0; //time of current frame
+	double oldTime = 0; //time of previous frame
 
-  double time = 0; //time of current frame
-  double oldTime = 0; //time of previous frame
-
-  // 64 * 64のテクスチャ配列[8][4096]
-  std::vector<Uint32> texture[8];
-  for(int i = 0; i < 8; i++)
-  {
-	  texture[i].resize(texture_width * texture_height);
-  }
-
-  screen(screenWidth,screenHeight, 0, "Raycaster");
-
-  // テクスチャの生成を行う。
-  //generate some textures
+	// 64 * 64のテクスチャ配列[8][4096]
+	// std::vector<Uint32> texture[8];
+	// for(int i = 0; i < 8; i++)
+	// {
+	//	texture[i].resize(texture_width * texture_height);
+	// }
+	// screen(screenWidth,screenHeight, 0, "Raycaster");
+	
+	// テクスチャの生成を行う。//generate some textures
 #if 0
-  int	x;
-  int	y;
-  
-  x = 0;
-  y = 0;
-  while (x < texture_width)
-  {
-	  while(y < texture_height)
-	  {
-		  int	xor_color;
-		  // int	x_color;
-    	  int	y_color;
-    	  int	x_y_color;
+	unsigned int	texture_list[8][texutre_width * texture_height];
+	int				x;
+	int				y;
+	
+	x = 0;
+	y = 0;
+	while (x < texture_width)
+	{
+		while (y < texture_height)
+		{
+			int	xor_color;
+			// int	x_color;
+			int	y_color;
+			int	x_y_color;
+			
+			xor_color = (x * 256 / texture_width) ^ (y * 256 / texture_height);
+			// x_color = x * 256 / texture_width;
+			y_color = y * 256 / texture_height;
+			x_y_color = y * 128 / texture_height + x * 128 / texture_width;
+ 
+			//flat red texture with black cross
+			texture_list[0][texture_width * y + x] = 65536 * 254 * (x != y && x != texture_width - y);
 
-		  xor_color = (x * 256 / texture_width) ^ (y * 256 / texture_height);
-		  // x_color = x * 256 / texture_width;
-    	  y_color = y * 256 / texture_height;
-    	  x_y_color = y * 128 / texture_height + x * 128 / texture_width;
-    	  texture[0][texWidth * y + x] = 65536 * 254 * (x != y && x != texWidth - y); //flat red texture with black cross
-    	  texture[1][texWidth * y + x] = xycolor + 256 * xycolor + 65536 * xycolor; //sloped greyscale
-    	  texture[2][texWidth * y + x] = 256 * xycolor + 65536 * xycolor; //sloped yellow gradient
-    	  texture[3][texWidth * y + x] = xorcolor + 256 * xorcolor + 65536 * xorcolor; //xor greyscale
-    	  texture[4][texWidth * y + x] = 256 * xorcolor; //xor green
-    	  texture[5][texWidth * y + x] = 65536 * 192 * (x % 16 && y % 16); //red bricks
-    	  texture[6][texWidth * y + x] = 65536 * ycolor; //red gradient
-    	  texture[7][texWidth * y + x] = 128 + 256 * 128 + 65536 * 128; //flat grey texture
-		  y += 1;
-	  }
-	  y = 0;
-	  x += 1;
+			//sloped greyscale
+			texture_list[1][texture_width * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color;
+
+			//sloped yellow gradient
+			texture_list[2][texture_width * y + x] = 256 * x_y_color + 65536 * x_y_color;
+
+			//xor greyscale
+			texture_list[3][texture_width * y + x] = xor_color + 256 * xor_color + 65536 * xor_color;
+
+			//xor green
+			texture_list[4][texture_width * y + x] = 256 * xor_color;
+
+			//red bricks
+			texture_list[5][texture_width * y + x] = 65536 * 192 * (x % 16 && y % 16);
+
+			//red gradient
+			texture_list[6][texture_width * y + x] = 65536 * y_color;
+
+			//flat grey texture
+			texture_list[7][texture_width * y + x] = 128 + 256 * 128 + 65536 * 128;
+			y += 1;
+		}
+		y = 0;
+		x += 1;
   }
 #else
- //generate some textures
-  unsigned long tw, th;
-  loadImage(texture[0], tw, th, "pics/eagle.png");
-  loadImage(texture[1], tw, th, "pics/redbrick.png");
-  loadImage(texture[2], tw, th, "pics/purplestone.png");
-  loadImage(texture[3], tw, th, "pics/greystone.png");
-  loadImage(texture[4], tw, th, "pics/bluestone.png");
-  loadImage(texture[5], tw, th, "pics/mossy.png");
-  loadImage(texture[6], tw, th, "pics/wood.png");
-  loadImage(texture[7], tw, th, "pics/colorstone.png");
+	// generate some textures
+	void		*texture_list[8];
+	static char	*texture_path_list[8] = {
+		"./images/nature.xpm",
+	int			texture_width[8];
+	int			texture_height[8];
+	int			i;
+
+	i = 0;
+	while (i < TEXTURE_LIST_SIZE)
+	{
+		texture_list[i] = mlx_xpm_file_to_image(vars.mlx, texture_path_list[i], &texture_width[i], &texture_height[i]);
+		i += 1;
+	}
+	// loadImage(texture[0], tw, th, "pics/eagle.png");
+	// loadImage(texture[1], tw, th, "pics/redbrick.png");
+	// loadImage(texture[2], tw, th, "pics/purplestone.png");
+	// loadImage(texture[3], tw, th, "pics/greystone.png");
+	// loadImage(texture[4], tw, th, "pics/bluestone.png");
+	// loadImage(texture[5], tw, th, "pics/mossy.png");
+	// loadImage(texture[6], tw, th, "pics/wood.png");
+	// loadImage(texture[7], tw, th, "pics/colorstone.png");
 #endif
 
   //start the main loop
