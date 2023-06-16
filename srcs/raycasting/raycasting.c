@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 18:00:39 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:56:01 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -290,6 +290,7 @@ int	key_action(int keycode, t_vars *vars)
 	}
 	if (keycode == ESC_KEY)
 		close_window(g_info->vars);
+	printf("player = %f,%f",vars->x_position_vector,vars->y_position_vector);
 	updata_map(vars);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
