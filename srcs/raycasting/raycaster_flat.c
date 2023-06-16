@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/14 17:59:24 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:17:54 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,6 +203,9 @@ int	draw_image(t_vars *vars)
 	return (0);
 }
 
+
+
+
 int	key_action(int keycode, t_vars *vars)
 {
 	if (keycode == W_KEY)
@@ -257,6 +260,8 @@ int	key_action(int keycode, t_vars *vars)
 	{
 		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
 	}
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
+
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	return (0);

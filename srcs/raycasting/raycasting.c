@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 15:55:25 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 16:41:29 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,9 +288,11 @@ int	key_action(int keycode, t_vars *vars)
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
 		printf("press_key[A_KEY]\n");
 	}
-	
+	if (keycode == ESC_KEY)
+		close_window(g_info->vars);
 	updata_map(vars);
-
+	//minimapの再描画
+	range_to_display_with_player(g_info,g_info->data);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
 		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
@@ -332,8 +334,9 @@ int	raycasting(t_info *info)
 	g_info = info;
 	initialize_vars(info->vars,info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
+	mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info->vars);
 	mlx_key_hook(info->vars->win, key_action, info->vars);
-	mlx_loop_hook(info->vars->mlx, draw_image, info->vars);
+	// mlx_loop_hook(info->vars->mlx, draw_image, info->vars);
 	mlx_loop(info->vars->mlx);
 	return (0);
 }
