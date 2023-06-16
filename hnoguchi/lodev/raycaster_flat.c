@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/14 14:38:44 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:36:19 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,10 @@ int	calculate_draw_start(int screen_height, int line_height)
 {
 	int start;
 
-	start = (-line_height / 2) + (screen_height / 2);
+	// raycaster_flat.c
+	// start = (-line_height / 2) + (screen_height / 2);
+	// raycaster_textured.c
+    start = (-line_height / 2) + (screen_height / 2) + pitch;
 	if(start < 0)
 	{
 		return (0);
@@ -151,7 +154,10 @@ int	calculate_draw_end(int screen_height, int line_height)
 {
 	int	end;
 
-	end = line_height / 2 + screen_height / 2;
+	// raycaster_flat.c
+	// end = line_height / 2 + screen_height / 2;
+	// raycaster_textured.c
+    end = (line_height / 2) + (h / 2) + pitch;
 	if (screen_height <= end)
 	{
 		return (screen_height - 1);
@@ -171,7 +177,11 @@ void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
 	line_height = (int)(vars->screen_height / wall_distance);
 	draw_start = calculate_draw_start(vars->screen_height, line_height);
 	draw_end = calculate_draw_end(vars->screen_height, line_height);
-	color = decide_color(ray, side);
+	// raycaster_flat.c
+	// color = decide_color(ray, side);
+	// raycaster_textured.c
+	// TODO:
+	
 	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
 }
 
