@@ -6,12 +6,15 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 14:10:26 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 15:55:25 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
 # include "raycasting.h"
+
+t_info *g_info;
+
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {
@@ -49,7 +52,11 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 // bool	calculate_nearest_axis(t_ray *ray, t_vars *vars);
 static bool	is_hit_wall(t_ray *ray)
 {
-	if (0 < world_map[ray->current_x_in_map][ray->current_y_in_map])
+	// 壁に衝突した場合にtrueを返す
+	// printf("world_map = %d\n",world_map[ray->current_x_in_map][ray->current_y_in_map]);
+	// printf("map_data = %d\n",g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map]);
+	if ('0' < g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] &&
+	g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] < '9')
 	{
 		return (true);
 	}
@@ -112,24 +119,30 @@ int	decide_color(t_ray *ray, bool side)
 	int	color;
 
 	color = BLACK;
-	if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 1)
+	if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '1')
 	{
 		color = RED;
 	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 2)
+	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '2')
 	{
 		color = GREEN;
 	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 3)
+	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '3')
 	{
 		color = BLUE;
 	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 4)
+	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '4')
 	{
 		color = WHITE;
 	}
+	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == 'N')
+	{
+		;
+	}
 	else
+	{
 		color = YELLOW;
+	}
 	//give x and y sides different brightness
 	if (side == Y_AXIS)
 		color = color / 2;
@@ -204,6 +217,25 @@ int	draw_image(t_vars *vars)
 	return (0);
 }
 
+void updata_map(t_vars *vars)
+{
+	//map情報を更新
+	// printf("\x1b[32x=%f,y=%f\x1b[0m\n",vars->x_position_vector,vars->x_position_vector);
+	if (g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '0')
+    {
+        g_info->map->map_data[(int)(vars->x_position_vector - (vars->x_direction * MOVE_DISTANCE))][(int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))] = '0';
+        g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] = 'N';
+    }
+    else if (g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '1')
+    {
+        vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
+        vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
+    }
+	debug_print_mapdata(g_info);
+	
+}
+
+
 int	key_action(int keycode, t_vars *vars)
 {
 	if (keycode == W_KEY)
@@ -223,12 +255,14 @@ int	key_action(int keycode, t_vars *vars)
 	{
 		if((0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
 		{
-			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
+			vars->x_direction *= -1;
+			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 			printf("press_key[S_KEY_1]\n");
 		}
 		if((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE)) && (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT)))
 		{
-			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
+			vars->y_direction *= -1;
+			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 			printf("press_key[S_KEY_2]\n");
 		}
 	}
@@ -254,6 +288,9 @@ int	key_action(int keycode, t_vars *vars)
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
 		printf("press_key[A_KEY]\n");
 	}
+	
+	updata_map(vars);
+
 	for(int x = 0; x < vars->screen_width; x++)
 	{
 		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
@@ -263,13 +300,17 @@ int	key_action(int keycode, t_vars *vars)
 	return (0);
 }
 
-void	initialize_vars(t_vars *vars)
+void	initialize_vars(t_vars *vars,t_info *info)
 {
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	vars->x_position_vector = 22;
-	vars->y_position_vector = 12;
+	// printf("info->player->pos_x=%f\n",info->player->pos_x);
+	// printf("info->player->pos_y=%f\n",info->player->pos_y);
+	vars->x_position_vector = info->player->pos_x;
+	vars->y_position_vector = info->player->pos_y;
+	printf("vars->x_position_vector=%f\n",vars->x_position_vector);
+	printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
@@ -288,10 +329,11 @@ void	initialize_vars(t_vars *vars)
 
 int	raycasting(t_info *info)
 {
-	initialize_vars(info->vars);
+	g_info = info;
+	initialize_vars(info->vars,info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
 	mlx_key_hook(info->vars->win, key_action, info->vars);
-	// mlx_loop_hook(vars.mlx, draw_image, &vars);
+	mlx_loop_hook(info->vars->mlx, draw_image, info->vars);
 	mlx_loop(info->vars->mlx);
 	return (0);
 }

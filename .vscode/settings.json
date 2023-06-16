@@ -1,6 +1,11 @@
 {
     "files.associations": {
         "__tree": "c",
-        "map": "c"
+        "map": "c",
+        "__bit_reference": "c",
+        "algorithm": "c",
+        "bitset": "c",
+        "chrono": "c",
+        "unordered_map": "c"
     }
 }

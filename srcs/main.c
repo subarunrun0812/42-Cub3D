@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 14:31:59 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 15:53:02 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,18 @@
 
 void	debug_print_mapdata(t_info *info)
 {
-	int	i;
-
-	i = 0;
-	while (i < info->map->height)
+	for (int i = 0; i < info->map->height; i++)
 	{
-		printf("%s", info->map->map_data[i]);
-		i++;
+		for (int j = 0; j < mapdata_width_length(info->map->map_data[i]); j++)
+		{
+			if (info->map->map_data[i][j] == 'N')
+				printf("\x1b[32m%c\x1b[0m", info->map->map_data[i][j]);
+			else
+				printf("%c", info->map->map_data[i][j]);
+		}
+		printf("\n");
 	}
+	
 	return ;
 }
 
@@ -44,7 +48,7 @@ int	main(int argc, char **argv)
 	// info.plane = &plane;
 	read_map(argv[1], &info);
 	init_player_coordinate(&player, &map);
-	// new_window(&vars);
+	new_window(&vars);
 	raycasting(&info);
 	// minimap(&info, &data);
 	// mlx_hook(vars.win, 2, 1L << 0, &ft_key_hook, &info);

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/14 17:48:44 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 15:01:57 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,14 @@ struct s_vars
 };
 
 struct s_ray {
+	// rayの方向
 	double	x_direction;
 	double	y_direction;
+	// rayが現在地図上のどの位置にあるか
+	// rayが伸びる事に更新されていく。
 	int		current_x_in_map;
 	int		current_y_in_map;
+	// rayが次にx,y方向の次の
 	double	x_side_distance;
 	double	y_side_distance;
 	double	x_delta_distance;
