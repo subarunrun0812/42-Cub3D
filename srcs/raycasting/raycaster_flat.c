@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster_flat.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
 /*   Updated: 2023/06/16 18:59:28 by hnoguchi         ###   ########.fr       */
@@ -203,6 +203,9 @@ int	draw_image(t_vars *vars)
 	return (0);
 }
 
+
+
+
 int	key_action(int keycode, t_vars *vars)
 {
 	if (keycode == W_KEY)
@@ -257,6 +260,8 @@ int	key_action(int keycode, t_vars *vars)
 	{
 		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
 	}
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
+
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	return (0);
@@ -288,7 +293,7 @@ void	initialize_vars(t_vars *vars)
 int	main(void)
 {
 	t_vars	vars;
-
+	
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);

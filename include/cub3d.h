@@ -32,8 +32,8 @@
 # define PINK 0x00FFDBED
 # define WHEAT 0x00F5DEB3
 
-# define BLOCK_SIZE 15
-# define DISPLAY_RADIUS 70
+# define BLOCK_SIZE 12
+# define DISPLAY_RADIUS 60
 
 # define W_KEY 13
 # define A_KEY 0
@@ -65,11 +65,6 @@ typedef struct s_plane
 	double 	y;
 }			t_plane;
 
-typedef struct s_vars
-{
-	void	*mlx;
-	void	*win;
-}			t_vars;
 
 typedef struct s_data
 {
@@ -79,6 +74,21 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }			t_data;
+typedef struct s_vars
+{
+	void	*mlx;
+	void	*win;
+	// key_action
+	double	x_position_vector; // posX
+	double	y_position_vector; // posY
+	double	x_direction; // dirX
+	double	y_direction; // dirY
+	double	x_camera_plane; // planeX
+	double	y_camera_plane; // planeY
+	int		screen_width; // width of the screen
+	int		screen_height; // height of the screen
+	t_data	*image;
+}			t_vars;
 
 typedef struct s_info
 {
@@ -87,8 +97,6 @@ typedef struct s_info
 	t_player	*player;
 	t_data		*data;
 	t_plane		*plane;
-	double		time;
-	double		old_time;
 }			t_info;
 
 //init
@@ -126,6 +134,13 @@ int			ft_key_hook(int keycode, t_info *info);
 int			player_coordinate(t_info *info);
 void		init_player_coordinate(t_player *player, t_map *map);
 void		player_move(t_info *info, int keycode);
+
+// ------------------------------------------------
+// RAYCASTING
+// ------------------------------------------------
+
+int	raycasting(t_info *info);
+
 
 // ------------------------------------------------
 // WINDOW
