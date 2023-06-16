@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycaster_flat.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/13 19:10:17 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/14 17:59:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +288,7 @@ void	initialize_vars(t_vars *vars)
 int	main(void)
 {
 	t_vars	vars;
-
+	
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);
