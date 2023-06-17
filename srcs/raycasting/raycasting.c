@@ -6,15 +6,12 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/17 15:33:39 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:33:56 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
 # include "raycasting.h"
-
-t_info *g_info;
-
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {
@@ -50,13 +47,13 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 }
 
 // bool	calculate_nearest_axis(t_ray *ray, t_vars *vars);
-static bool	is_hit_wall(t_ray *ray)
+static bool	is_hit_wall(t_ray *ray,t_info *info)
 {
 	// 壁に衝突した場合にtrueを返す
 	// printf("world_map = %d\n",world_map[ray->current_x_in_map][ray->current_y_in_map]);
 	// printf("map_data = %d\n",g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map]);
-	if ('0' < g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] &&
-	g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] < '9')
+	if ('0' < info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] &&
+	info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] < '9')
 	{
 		return (true);
 	}
@@ -86,7 +83,7 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 }
 
 //perform DDA
-bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
+bool	calculate_nearest_axis(t_ray *ray, t_vars *vars,t_info *info)
 {
 	int		step_x;
 	int		step_y;
@@ -108,34 +105,34 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 			ray->current_y_in_map += step_y;
 			axis = Y_AXIS;
 		}
-		if (is_hit_wall(ray))
+		if (is_hit_wall(ray, info))
 			break ;
 	}
 	return (axis);
 }
 
-int	decide_color(t_ray *ray, bool side)
+int	decide_color(t_ray *ray, bool side,t_info *info)
 {
 	int	color;
 
 	color = BLACK;
-	if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '1')
+	if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '1')
 	{
 		color = RED;
 	}
-	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '2')
+	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '2')
 	{
 		color = GREEN;
 	}
-	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '3')
+	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '3')
 	{
 		color = BLUE;
 	}
-	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '4')
+	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '4')
 	{
 		color = WHITE;
 	}
-	else if (g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == 'N')
+	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == 'N')
 	{
 		;
 	}
@@ -173,7 +170,7 @@ int	calculate_draw_end(int screen_height, int line_height)
 	return (end);
 }
 
-void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
+void	draw_line(t_ray *ray, t_info *info, int x, double wall_distance, bool side)
 {
 	// Calculate height of line to draw on screen
 	int	line_height;
@@ -182,14 +179,14 @@ void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
 	int draw_end;
 	int	color;
 
-	line_height = (int)(vars->screen_height / wall_distance);
-	draw_start = calculate_draw_start(vars->screen_height, line_height);
-	draw_end = calculate_draw_end(vars->screen_height, line_height);
-	color = decide_color(ray, side);
-	my_mlx_pixel_put_line(vars->image, x, draw_start, draw_end, color);
+	line_height = (int)(info->vars->screen_height / wall_distance);
+	draw_start = calculate_draw_start(info->vars->screen_height, line_height);
+	draw_end = calculate_draw_end(info->vars->screen_height, line_height);
+	color = decide_color(ray, side,info);
+	my_mlx_pixel_put_line(info->vars->image, x, draw_start, draw_end, color);
 }
 
-int	draw_image(t_vars *vars)
+int	draw_image(t_vars *vars,t_info *info)
 {
 	int		x_axis;
 	bool	side;
@@ -202,7 +199,7 @@ int	draw_image(t_vars *vars)
 	while (x_axis < vars->screen_width)
 	{
 		set_ray_data(&ray, vars, x_axis);
-		side = calculate_nearest_axis(&ray, vars);
+		side = calculate_nearest_axis(&ray, vars,info);
 		if (side == X_AXIS)
 		{
 			perpendicular_wall_distance = ray.x_side_distance - ray.x_delta_distance;
@@ -211,33 +208,35 @@ int	draw_image(t_vars *vars)
 		{
 			perpendicular_wall_distance = ray.y_side_distance - ray.y_delta_distance;
 		}
-		draw_line(&ray, vars, x_axis, perpendicular_wall_distance, side);
+		draw_line(&ray, info, x_axis, perpendicular_wall_distance, side);
 		x_axis += 1;
 	}
 	return (0);
 }
 
-void updata_map(t_vars *vars)
+void updata_map(t_vars *vars,t_info *info)
 {
 	//map情報を更新
 	// printf("\x1b[32x=%f,y=%f\x1b[0m\n",vars->x_position_vector,vars->x_position_vector);
-	if (g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '0')
+	if (info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '0')
     {
-        g_info->map->map_data[(int)(vars->x_position_vector - (vars->x_direction * MOVE_DISTANCE))][(int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))] = '0';
-        g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] = 'N';
+        info->map->map_data[(int)(vars->x_position_vector - (vars->x_direction * MOVE_DISTANCE))][(int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))] = '0';
+        info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] = 'N';
     }
-    else if (g_info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '1')
+    else if (info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '1')
     {
         vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
         vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
     }
-	// debug_print_mapdata(g_info);
+	// debug_print_mapdata(info);
 	
 }
 
 
-int	key_action(int keycode, t_vars *vars)
+int	key_action(int keycode, t_info *info)
 {
+	t_vars *vars;
+	vars = info->vars;
 	printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
@@ -290,17 +289,17 @@ int	key_action(int keycode, t_vars *vars)
 		printf("press_key[A_KEY]\n");
 	}
 	if (keycode == ESC_KEY)
-		close_window(g_info->vars);
+		close_window(info->vars);
 	printf("player = %f,%f",vars->x_position_vector,vars->y_position_vector);
-	updata_map(vars);
+	updata_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
 		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
 	}
-	draw_image(vars);
+	draw_image(vars, info);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image->img, 0, 0);
 	//minimapの再描画
-	minimap(g_info, g_info->data);
+	minimap(info, info->data);
 	return (0);
 }
 
@@ -328,17 +327,16 @@ void	initialize_vars(t_vars *vars,t_info *info)
 
 	vars->image->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	vars->image->addr = mlx_get_data_addr(vars->image->img, &vars->image->bits_per_pixel, &vars->image->line_length, &vars->image->endian);
-	draw_image(vars);
+	draw_image(vars, info);
 }
 
 int	raycasting(t_info *info)
 {
-	g_info = info;
 	initialize_vars(info->vars,info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
-	minimap(g_info, g_info->data);
+	minimap(info, info->data);
 	mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info->vars);
-	mlx_key_hook(info->vars->win, key_action, info->vars);
+	mlx_key_hook(info->vars->win, key_action, info);
 	// mlx_loop_hook(info->vars->mlx, draw_image, info->vars);
 	mlx_loop(info->vars->mlx);
 	return (0);
