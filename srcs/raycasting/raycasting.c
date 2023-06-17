@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 18:56:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:33:39 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,8 @@ void updata_map(t_vars *vars)
 
 int	key_action(int keycode, t_vars *vars)
 {
-	if (keycode == W_KEY)
+	printf("keycode = %d\n",keycode);
+	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
 		{
@@ -251,7 +252,7 @@ int	key_action(int keycode, t_vars *vars)
 			printf("press_key[W_KEY_2]\n");
 		}
 	}
-	else if (keycode == S_KEY)
+	else if (keycode == S_KEY || keycode == DOWN_KEY)
 	{
 		if((0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
 		{
@@ -266,7 +267,7 @@ int	key_action(int keycode, t_vars *vars)
 			printf("press_key[S_KEY_2]\n");
 		}
 	}
-	else if(keycode == D_KEY)
+	else if(keycode == D_KEY || keycode == RIGHT_KEY)
 	{
 		//both camera direction and camera plane must be rotated
 		double	x_old_direction = vars->x_direction;
@@ -277,7 +278,7 @@ int	key_action(int keycode, t_vars *vars)
 		vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE) + vars->y_camera_plane * cos(-MOVE_DISTANCE);
 		printf("press_key[D_KEY]\n");
 	}
-	else if(keycode == A_KEY)
+	else if(keycode == A_KEY || keycode == LEFT_KEY)
 	{
 		//both camera direction and camera plane must be rotated
 		double	x_old_direction = vars->x_direction;

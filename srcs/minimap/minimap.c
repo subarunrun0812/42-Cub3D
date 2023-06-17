@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/16 18:56:00 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/17 15:25:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,10 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 	int	y;
 
 	x = (draw_x * BLOCK_SIZE);
-	// TODO:-1を削除する (完成の時に削除する)
-	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE - 1))
+	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE))
 	{
 		y = (draw_y * BLOCK_SIZE);
-		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE - 1))
+		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
 		{
 			my_mlx_pixel_put(data, x, y, color);
 			y++;

@@ -23,13 +23,13 @@
 //キーを押した時の移動距離
 # define MOVE_DISTANCE 0.5
 
-# define WHITE 0x00FFFFFF
+# define WHITE 0x64FFFFFF
 # define BLACK 0x00000000
-# define GREEN 0x00008000
+# define GREEN 0x64008000
 # define RED 0x00FF0000
 # define BLUE 0x000000FF
 # define YELLOW 0x00FFFF00
-# define PINK 0x00FFDBED
+# define PINK 0x64FFDBED
 # define WHEAT 0x00F5DEB3
 
 # define BLOCK_SIZE 12
@@ -41,6 +41,11 @@
 # define D_KEY 2
 # define ON_DESTROY 17
 # define ESC_KEY 53
+# define LEFT_KEY 123
+# define RIGHT_KEY 124
+# define DOWN_KEY 125
+# define UP_KEY 126
+
 
 typedef struct s_map
 {
