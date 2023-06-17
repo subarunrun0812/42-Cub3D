@@ -6,3 +6,4 @@ cub3D
 cub3D
 srcs/libft/libft.a
 *.a
+.vscode

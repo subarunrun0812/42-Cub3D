@@ -5,23 +5,28 @@
 # include "../srcs/libft/libft.h"
 # include <fcntl.h>
 # include <mlx.h>
+# include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <stdbool.h>
 # include <string.h>
 # include <sys/stat.h>
+# include <sys/time.h>
 # include <sys/types.h>
 # include <unistd.h>
 
-# define TRUE 0
-# define FALSE 1
 
+//------------------------------
+//			WINDOW
+//------------------------------
 # define WIN_WIDTH 960
 # define WIN_HEIGHT 540
+# define MAP_WIDTH 24
+# define MAP_HEIGHT 24
 
-# define FOV 40
-
-//キーを押した時の移動距離
-# define MOVE_DISTANCE 0.5
+//------------------------------
+//			COLODR
+//------------------------------
 
 # define WHITE 0x64FFFFFF
 # define BLACK 0x00000000
@@ -32,8 +37,9 @@
 # define PINK 0x64FFDBED
 # define WHEAT 0x00F5DEB3
 
-# define BLOCK_SIZE 12
-# define DISPLAY_RADIUS 60
+//------------------------------
+//			KEYCODE
+//------------------------------
 
 # define W_KEY 13
 # define A_KEY 0
@@ -45,6 +51,32 @@
 # define RIGHT_KEY 124
 # define DOWN_KEY 125
 # define UP_KEY 126
+
+//------------------------------
+//			RAYCASTING
+//------------------------------
+
+# define X_AXIS true
+# define Y_AXIS false
+
+//キーを押した時の移動距離
+# define MOVE_DISTANCE 0.5
+# define ABS(a) ((a) < 0 ? -(a) : (a))
+# define FOV 40
+
+//------------------------------
+//			MINIMAP
+//------------------------------
+
+# define BLOCK_SIZE 12
+# define DISPLAY_RADIUS 60
+
+//------------------------------
+//			OTHER
+//------------------------------
+
+# define TRUE 0
+# define FALSE 1
 
 
 typedef struct s_map
@@ -103,6 +135,17 @@ typedef struct s_info
 	t_data		*data;
 	t_plane		*plane;
 }			t_info;
+
+typedef struct s_ray {
+	double	x_direction;
+	double	y_direction;
+	int		current_x_in_map;
+	int		current_y_in_map;
+	double	x_side_distance;
+	double	y_side_distance;
+	double	x_delta_distance;
+	double	y_delta_distance;
+} 				t_ray;
 
 //init
 void		init(t_info *info, t_map *map, t_player *player, t_vars *vars);

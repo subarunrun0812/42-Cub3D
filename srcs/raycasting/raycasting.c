@@ -6,12 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:33:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/17 16:44:13 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
-# include "raycasting.h"
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {
@@ -237,7 +236,7 @@ int	key_action(int keycode, t_info *info)
 {
 	t_vars *vars;
 	vars = info->vars;
-	printf("keycode = %d\n",keycode);
+	
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
