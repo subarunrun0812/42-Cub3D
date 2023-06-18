@@ -6,13 +6,13 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/16 14:52:18 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:15:17 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #define texture_width 64
 #define texture_height 64
-
+#define TEXTURE_LIST_SIZE 10;
 int	world_map[MAP_WIDTH][MAP_HEIGHT]=
 {
   {4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,7,7,7,7,7,7,7,7},
@@ -112,11 +112,21 @@ int main(int /*argc*/, char */*argv*/[])
   }
 #else
 	// generate some textures
-	void		*texture_list[8];
-	static char	*texture_path_list[8] = {
-		"./images/nature.xpm",
-	int			texture_width[8];
-	int			texture_height[8];
+	void		*texture_list[TEXTURE_LIST_SIZE];
+	static char	*texture_path_list[TEXTURE_LIST_SIZE] = {
+		"./xpm/nature.xpm",
+		"./xpm/bluestone.xpm",
+		"./xpm/colorstone.xpm",
+		"./xpm/eagle.xpm",
+     	"./xpm/greenlight.xpm",
+     	"./xpm/greystone.xpm",
+     	"./xpm/mossy.xpm",
+     	"./xpm/pillar.xpm",
+     	"./xpm/redbrick.xpm",
+     	"./xpm/wood.xpm
+	};
+	int			texture_width[TEXTURE_LIST_SIZE];
+	int			texture_height[TEXTURE_LIST_SIZE];
 	int			i;
 
 	i = 0;
@@ -213,54 +223,106 @@ int main(int /*argc*/, char */*argv*/[])
       //Calculate height of line to draw on screen
       int lineHeight = (int)(h / perpWallDist);
 
-
-      int pitch = 100;
+	 
+	  // TODO: START difference.
+	  int pitch = 100;
 
       //calculate lowest and highest pixel to fill in current stripe
-      int drawStart = -lineHeight / 2 + h / 2 + pitch;
-      if(drawStart < 0) drawStart = 0;
-      int drawEnd = lineHeight / 2 + h / 2 + pitch;
-      if(drawEnd >= h) drawEnd = h - 1;
+	  // draw_line();
+      int	draw_start;
+      int	draw_end;
 
-      //texturing calculations
-      int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+      draw_start = (-line_height / 2) + (screen_height / 2) + pitch;
+      if(draw_start < 0)
+	  {
+		  draw_start = 0;
+	  }
+      draw_end = (line_height / 2) + (h / 2) + pitch;
+      if(h <= draw_end)
+	  {
+		  draw_end = h - 1;
+	  }
+	  // texturing calculations
+	  // 1 subtracted from it so that texture 0 can be used!
+	  // int texNum = worldMap[mapX][mapY] - 1;
+	  int texture_number = world_map[ray->current_x_in_map][ray->current_y_in_map] - 1;
 
-      //calculate value of wallX
-      double wallX; //where exactly the wall was hit
-      if(side == 0) wallX = posY + perpWallDist * rayDirY;
-      else          wallX = posX + perpWallDist * rayDirX;
-      wallX -= floor((wallX));
+      //calculate value of wallX wall_x
+      // double wallX; //where exactly the wall was hit
+      double	wall_x; //where exactly the wall was hit
+	  if(side == 0) 
+	  {
+		  // wallX = posY + perpWallDist * rayDirY;
+		  wall_x = vars->y_position_vector + perpendicular_wall_distance * ray->y_direction;
+	  }
+	  else
+	  {
+		  // wallX = posX + perpWallDist * rayDirX;
+		  wall_x = vars->x_position_vector + perpendicular_wall_distance * ray->x_direction;
+	  }
+	  // double	floor(double x);
+	  // ¸引数x以下で最大の整数値を得る
+      // wallX -= floor((wallX));
+      wall_x = floor((wallX));
 
       //x coordinate on the texture
-      int texX = int(wallX * double(texWidth));
-      if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
-      if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
+      // int texX = int(wallX * double(texWidth));
+      int texture_x;
 
+      texture_x = (int)(wall_x * (double)texture_width);
+      // if(side == 0 && rayDirX > 0) texX = texWidth - texX - 1;
+      // if(side == 1 && rayDirY < 0) texX = texWidth - texX - 1;
+      if (side == 0 && 0 < ray->x_direction)
+	  {
+		  texture_x = texture_width - texture_x - 1;
+	  }
+	  if (side == 1 && ray->y_direction < 0)
+	  {
+		  texture_x = texture_width - texture_x - 1;
+	  }
       // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
       // How much to increase the texture coordinate per screen pixel
-      double step = 1.0 * texHeight / lineHeight;
-      // Starting texture coordinate
-      double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
-      for(int y = drawStart; y < drawEnd; y++)
-      {
-        // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-        int texY = (int)texPos & (texHeight - 1);
-        texPos += step;
-        Uint32 color = texture[texNum][texHeight * texY + texX];
-        //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-		/*
-		 * Because of this, the last bit of one byte will become the first bit of the next byte,
-		 * and that screws up the color values!
-		 * So after the bitshift, the first bit of every byte has to be set to zero,
-		 * and that can be done by binary "AND-ing" the value with the binary value 011111110111111101111111,
-		 * which is 8355711 in decimal.
-		 * So the result of this is indeed a darker color.
-		 */
-        if(side == 1) color = (color >> 1) & 8355711;
-        buffer[y][x] = color;
-      }
-    }
+      // double step = 1.0 * texHeight / lineHeight;
+      double	step;
 
+      step = (1.0 * texture_height) / line_height;
+      // Starting texture coordinate
+      // double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
+      double	texture_position;
+
+      texture_position = (draw_start - pitch - h / 2 + line_height / 2) * step;
+	  int	y;
+
+	  y = draw_start;
+      while (y < draw_end)
+	  {
+		  // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+		  // int texY = (int)texPos & (texHeight - 1);
+		  int	texture_y;
+
+		  texture_y = (int)texture_position & (texture_height - 1);
+		  texture_position += step;
+		  // Uint32 color = texture[texNum][texHeight * texY + texX];
+		  unsigned int	color;
+
+		  color = texture_list[texture_number][texture_height * texture_y + texture_x];
+		  //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+		  /*
+		   * Because of this, the last bit of one byte will become the first bit of the next byte,
+		   * and that screws up the color values!
+		   * So after the bitshift, the first bit of every byte has to be set to zero,
+		   * and that can be done by binary "AND-ing" the value with the binary value 011111110111111101111111,
+		   * which is 8355711 in decimal.
+		   * So the result of this is indeed a darker color.
+		   */
+		  if (side == 1)
+		  {
+			  color = (color >> 1) & 8355711;
+		  }
+		  buffer[y][x] = color;
+		  y += 1;
+	  }
+	}
     drawBuffer(buffer[0]);
     for(int y = 0; y < h; y++)
 	{
