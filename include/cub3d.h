@@ -21,20 +21,24 @@
 //------------------------------
 # define WIN_WIDTH 960
 # define WIN_HEIGHT 540
-# define MAP_WIDTH 24
-# define MAP_HEIGHT 24
+# define MAP_WIDTH 999
+# define MAP_HEIGHT 999
 
 //------------------------------
 //			COLODR
 //------------------------------
 
-# define WHITE 0x64FFFFFF
+# define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
-# define GREEN 0x64008000
+# define GREEN 0x00008000
 # define RED 0x00FF0000
 # define BLUE 0x000000FF
 # define YELLOW 0x00FFFF00
-# define PINK 0x64FFDBED
+# define PINK 0x00FFDBED
+# define MAP_GREEN 0x64008000
+# define MAP_WHITE 0x64FFFFFF
+# define MAP_PINK 0x64FFDBED
+# define MAP_RED 0x64FF0000
 # define WHEAT 0x00F5DEB3
 
 //------------------------------
@@ -111,6 +115,7 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }			t_data;
+
 typedef struct s_vars
 {
 	void	*mlx;

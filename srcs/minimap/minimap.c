@@ -63,17 +63,17 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 				j < 0 || j > mapdata_width_length(info->map->map_data[i])
 				 || info->map->map_data[i][j] == ' ')
 			{
-				draw_one_block(data, j - start_j, i - start_i, PINK);
+				draw_one_block(data, j - start_j, i - start_i, MAP_PINK);
 			}
 			else if (info->map->map_data[i][j] == '1'
 			|| info->map->map_data[i][j] == '2' || info->map->map_data[i][j] == '3'
 			|| info->map->map_data[i][j] == '4')
 			{
-				draw_one_block(data, j - start_j, i - start_i, GREEN);
+				draw_one_block(data, j - start_j, i - start_i, MAP_GREEN);
 			}
 			else if (info->map->map_data[i][j] == '0')
 			{
-				draw_one_block(data, j - start_j, i - start_i, WHITE);
+				draw_one_block(data, j - start_j, i - start_i, MAP_WHITE);
 			}
 			else if (info->map->map_data[i][j] == 'N'
 					|| info->map->map_data[i][j] == 'S'
@@ -81,7 +81,7 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'W')
 				draw_one_block(data, j - start_j, i - start_i, BLUE);
 			else
-				draw_one_block(data, j - start_j, i - start_i, RED);
+				draw_one_block(data, j - start_j, i - start_i, MAP_RED);
 			j++;
 		}
 		i++;
