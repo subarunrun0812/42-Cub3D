@@ -6,11 +6,30 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 16:41:14 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:15:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
+
+static void	central_draw_one_block(t_data *data, int draw_x, int draw_y, int color)
+{
+	int	x;
+	int	y;
+
+	x = draw_x;
+	while (x < draw_x + BLOCK_SIZE)
+	{
+		y = draw_y;
+		while (y < (draw_y + BLOCK_SIZE))
+		{
+			my_mlx_pixel_put(data, x, y, color);
+			y++;
+		}
+		x++;
+	}
+}
+
 
 void central_map(t_info *info)
 {
@@ -28,23 +47,23 @@ void central_map(t_info *info)
     int end_y;
     
     //描画開始地点を求める
-    start_x = ((mapdata_maxwidth_length(info->map) * BLOCK_SIZE) - (WIN_WIDTH / 2));
-    start_y = ((info->map->height * BLOCK_SIZE) + (WIN_HEIGHT / 2));
+    start_x = (WIN_WIDTH / 2) - (mapdata_maxwidth_length(info->map) * BLOCK_SIZE / 2);
+    start_y = (WIN_HEIGHT / 2) - (((info->map->height) * BLOCK_SIZE) / 2);
     end_y = info->map->height;
     y = 0;
     
-    printf("start_x = %d\n",start_x);
-    printf("start_y = %d\n",start_y);
-    printf("end_y = %d\n",end_y);
+    // printf("start_x = %d\n",start_x);
+    // printf("start_y = %d\n",start_y);
+    // printf("end_y = %d\n",end_y);
     while (y < end_y)
     {
         x = 0;
         end_x = mapdata_width_length(info->map->map_data[y]);
         // printf("x = %d\n",x);
-        printf("end_x = %d\n",end_x);
-        while (x < end_x)
+        // printf("end_x = %d\n",end_x);
+        while (x < end_x + 1)
         {
-            printf("xy = [%d][%d]\n",x,y);
+            // printf("xy = [%d][%d]\n",x,y);
 			if (info->map->map_data[y][x] == ' ')
 			{
 				;
@@ -53,19 +72,19 @@ void central_map(t_info *info)
 			|| info->map->map_data[y][x] == '2' || info->map->map_data[y][x] == '3'
 			|| info->map->map_data[y][x] == '4')
 			{
-				draw_one_block(info->data, start_y - (y * BLOCK_SIZE), start_x + (x * BLOCK_SIZE), MAP_GREEN);
+				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE), start_y + (y * BLOCK_SIZE), MAP_GREEN);
 			}
 			else if (info->map->map_data[y][x] == '0')
 			{
-				draw_one_block(info->data, start_y - (y * BLOCK_SIZE), start_x + (x * BLOCK_SIZE), MAP_WHITE);
+				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE), start_y + (y * BLOCK_SIZE), MAP_WHITE);
 			}
 			else if (info->map->map_data[y][x] == 'N'
 					|| info->map->map_data[y][x] == 'S'
 					|| info->map->map_data[y][x] == 'E'
 					|| info->map->map_data[y][x] == 'W')
-				draw_one_block(info->data, start_y - (y * BLOCK_SIZE), start_x + (x * BLOCK_SIZE), BLUE);
+				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE), start_y + (y * BLOCK_SIZE), BLUE);
 			else
-				draw_one_block(info->data, start_y - (y * BLOCK_SIZE), start_x + (x * BLOCK_SIZE), MAP_RED);
+				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE), start_y + (y * BLOCK_SIZE), MAP_RED);
 			x++;
 		}
 		y++;

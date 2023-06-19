@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 15:04:37 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:12:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ int	key_action(int keycode, t_info *info)
 {
 	t_vars *vars;
 	vars = info->vars;
-	
+	printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		// 壁衝突の検知
@@ -302,8 +302,10 @@ int	key_action(int keycode, t_info *info)
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
 		printf("press_key[A_KEY]\n");
 	}
-	if (keycode == ESC_KEY)
+	else if (keycode == ESC_KEY)
 		close_window(info->vars);
+	else if (keycode == M_KEY)
+		info->flag->map *= -1;
 	printf("player = %f,%f\n",vars->x_position_vector,vars->y_position_vector);
 	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
