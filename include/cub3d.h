@@ -19,8 +19,8 @@
 //------------------------------
 //			WINDOW
 //------------------------------
-# define WIN_WIDTH 960
-# define WIN_HEIGHT 540
+# define WIN_WIDTH 1000
+# define WIN_HEIGHT 500
 # define MAP_WIDTH 999
 # define MAP_HEIGHT 999
 
@@ -49,6 +49,7 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define M_KEY 46
 # define ON_DESTROY 17
 # define ESC_KEY 53
 # define LEFT_KEY 123
@@ -81,7 +82,8 @@
 
 # define TRUE 0
 # define FALSE 1
-
+# define CORNER 1
+# define CENTRAL -1
 
 typedef struct s_map
 {
@@ -132,6 +134,11 @@ typedef struct s_vars
 	t_data	*image;
 }			t_vars;
 
+typedef struct s_flag
+{
+	int		map;
+}				t_flag;
+
 typedef struct s_info
 {
 	t_map		*map;
@@ -139,6 +146,7 @@ typedef struct s_info
 	t_player	*player;
 	t_data		*data;
 	t_plane		*plane;
+	t_flag		*flag;
 }			t_info;
 
 typedef struct s_ray {
@@ -165,9 +173,11 @@ void		get_map_data(int fd, t_info *info);
 void		check_map_wall(t_info *info);
 void		check_only_one_nswe(t_map *map);
 int			minimap(t_info *info, t_data *data);
+void 		central_map(t_info *info);
 void		range_to_display_with_player(t_info *info, t_data *data);
 void		draw_one_block(t_data *data, int draw_x, int draw_y, int color);
 int			mapdata_width_length(char *width);
+int			mapdata_maxwidth_length(t_map *map);
 
 // ------------------------------------------------
 // ERROR

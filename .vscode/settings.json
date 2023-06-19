@@ -12,5 +12,5 @@
         "string_view": "c",
         "vector": "c",
         "raycasting.h": "c"
-    }
+    },
 }

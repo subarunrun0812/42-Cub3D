@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/17 17:23:20 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:16:19 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv)
 	t_player player;
 	t_vars vars;
 	t_data data;
+	t_flag flag;
 	// t_plane plane;
 	if (argc != 2)
 	{
@@ -43,6 +44,8 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	info.data = &data;
+	flag.map = -1;
+	info.flag = &flag;
 	init(&info, &map, &player, &vars);
 	info.vars->image = &data;
 	// info.plane = &plane;

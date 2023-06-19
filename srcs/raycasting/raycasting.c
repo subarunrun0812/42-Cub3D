@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/17 16:44:13 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/19 22:12:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ int	draw_image(t_vars *vars,t_info *info)
 	return (0);
 }
 
-void updata_map(t_vars *vars,t_info *info)
+void updata_pos_map(t_vars *vars,t_info *info)
 {
 	//map情報を更新
 	// printf("\x1b[32x=%f,y=%f\x1b[0m\n",vars->x_position_vector,vars->x_position_vector);
@@ -236,18 +236,33 @@ int	key_action(int keycode, t_info *info)
 {
 	t_vars *vars;
 	vars = info->vars;
-	
+	printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
-		if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+		// 壁衝突の検知
+		if (info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
+		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '1' ||
+		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
+		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '2' ||
+		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
+		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '3' ||
+		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
+		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '4')
 		{
-			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-			printf("press_key[W_KEY_1]\n");
+			printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
 		}
-		if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) && (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT))
+		else
 		{
-			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-			printf("press_key[W_KEY_2]\n");
+			if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+			{
+				vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
+				printf("press_key[W_KEY_1]\n");
+			}
+			if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) && (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT))
+			{
+				vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
+				printf("press_key[W_KEY_2]\n");
+			}
 		}
 	}
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
@@ -287,10 +302,12 @@ int	key_action(int keycode, t_info *info)
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
 		printf("press_key[A_KEY]\n");
 	}
-	if (keycode == ESC_KEY)
+	else if (keycode == ESC_KEY)
 		close_window(info->vars);
-	printf("player = %f,%f",vars->x_position_vector,vars->y_position_vector);
-	updata_map(vars, info);
+	else if (keycode == M_KEY)
+		info->flag->map *= -1;
+	printf("player = %f,%f\n",vars->x_position_vector,vars->y_position_vector);
+	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
 		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
@@ -311,8 +328,8 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	// printf("info->player->pos_y=%f\n",info->player->pos_y);
 	vars->x_position_vector = info->player->pos_x;
 	vars->y_position_vector = info->player->pos_y;
-	printf("vars->x_position_vector=%f\n",vars->x_position_vector);
-	printf("vars->y_position_vector=%f\n",vars->y_position_vector);
+	// printf("vars->x_position_vector=%f\n",vars->x_position_vector);
+	// printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
