@@ -19,6 +19,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/check_map_wall.c\
           $(MAPS_DIR)/check_only_one_nswe.c\
           $(MINIMAP_DIR)/minimap.c\
+          $(MINIMAP_DIR)/central_map.c\
           $(PLAYER_DIR)/coordinates.c\
           $(PLAYER_DIR)/key_hook.c\
           $(PLAYER_DIR)/player_move.c\

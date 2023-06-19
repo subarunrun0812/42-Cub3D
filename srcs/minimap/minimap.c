@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/17 15:25:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/19 16:39:36 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 	int	y;
 
 	x = (draw_x * BLOCK_SIZE);
+	printf("描画y[%d]\n",x);
 	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE))
 	{
 		y = (draw_y * BLOCK_SIZE);
@@ -53,6 +54,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
     	end_j++;
 	i = start_i;
 	j = start_j;
+	 printf("start_i = %d\n",start_i);
+	 printf("end_i = %d\n",end_i);
+    printf("start_j = %d\n",start_j);
+    printf("end_j = %d\n",end_j);
 	while (i < end_i)
 	{
 		j = start_j;
@@ -86,6 +91,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		}
 		i++;
 	}
+	// playerからrayを飛ばす処理
+	// printf("vars->x_direction = %f\nvars->y_direction = %f\n",
+	// info->vars->x_direction,info->vars->y_direction);
 }
 
 // printf("info->pos->x = %d\n", (int)info->pos->x);
@@ -108,7 +116,10 @@ int	minimap(t_info *info, t_data *data)
 	// data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
-	range_to_display_with_player(info, data);
+	//画面左上のminimap
+	// range_to_display_with_player(info, data);
+	//画面全体に乗せるmap
+	central_map(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, data->img, 0, 0);
 	return (0);
 }
