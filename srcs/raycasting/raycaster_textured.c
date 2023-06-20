@@ -6,119 +6,11 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/18 19:04:34 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:51:06 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycaster_textured.h"
-
-// TODO: START difference.
-// int pitch = 100;
-//
-// //calculate lowest and highest pixel to fill in current stripe
-// int	draw_start;
-// int	draw_end;
-// 
-// draw_start = (-line_height / 2) + (screen_height / 2) + pitch;
-// if(draw_start < 0)
-// {
-// draw_start = 0;
-// }
-// draw_end = (line_height / 2) + (h / 2) + pitch;
-// if(h <= draw_end)
-// {
-//	draw_end = h - 1;
-// }
-
-
-// texturing calculations
-// 1 subtracted from it so that texture 0 can be used!
-int texture_number;
-
-texture_number = world_map[ray->current_x_in_map][ray->current_y_in_map] - 1;
-
-// calculate value of wall_x
-// where exactly the wall was hit
-double	wall_x;
-
-if(side == 0) 
-{
-    wall_x = vars->y_position_vector + perpendicular_wall_distance * ray->y_direction;
-}
-else
-{
-    wall_x = vars->x_position_vector + perpendicular_wall_distance * ray->x_direction;
-}
-
-// double	floor(double x);
-// 引数x以下で最大の整数値を得る
-wall_x -= floor((wallX));
-
-// x coordinate on the texture
-int texture_x;
-
-texture_x = (int)(wall_x * (double)texture_width);
-if (side == 0 && 0 < ray->x_direction)
-{
-    texture_x = texture_width - texture_x - 1;
-}
-if (side == 1 && ray->y_direction < 0)
-{
-    texture_x = texture_width - texture_x - 1;
-}
-
-
-// 
-//       // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
-//       // How much to increase the texture coordinate per screen pixel
-//       // double step = 1.0 * texHeight / lineHeight;
-//       double	step;
-//       double	texture_position;
-// 	  int		y;
-// 
-//       step = (1.0 * texture_height) / line_height;
-//       // Starting texture coordinate
-//       // double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
-//       texture_position = (draw_start - pitch - h / 2 + line_height / 2) * step;
-// 	  y = draw_start;
-//       while (y < draw_end)
-// 	  {
-// 		  // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-// 		  // int texY = (int)texPos & (texHeight - 1);
-// 		  int			texture_y;
-// 		  unsigned int	color;
-// 
-// 		  texture_y = (int)texture_position & (texture_height - 1);
-// 		  texture_position += step;
-// 		  // Uint32 color = texture[texNum][texHeight * texY + texX];
-// 		  color = texture_list[texture_number][texture_height * texture_y + texture_x];
-// 		  //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-// 		  /*
-// 		   * Because of this, the last bit of one byte will become the first bit of the next byte,
-// 		   * and that screws up the color values!
-// 		   * So after the bitshift, the first bit of every byte has to be set to zero,
-// 		   * and that can be done by binary "AND-ing" the value with the binary value 011111110111111101111111,
-// 		   * which is 8355711 in decimal.
-// 		   * So the result of this is indeed a darker color.
-// 		   */
-// 		  if (side == 1)
-// 		  {
-// 			  color = (color >> 1) & 8355711;
-// 		  }
-// 		  buffer[y][x] = color;
-// 		  y += 1;
-// 	  }
-// 	}
-//     // drawBuffer(buffer[0]);
-//     for(int y = 0; y < h; y++)
-// 	{
-// 		for(int x = 0; x < w; x++)
-// 		{
-// 			buffer[y][x] = 0; //clear the buffer instead of cls()
-// 		}
-// 	}
-//   }
-// }
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {
@@ -213,35 +105,6 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 	return (axis);
 }
 
-int	decide_color(t_ray *ray, bool side)
-{
-	int	color;
-
-	color = BLACK;
-	if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 1)
-	{
-		color = RED;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 2)
-	{
-		color = GREEN;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 3)
-	{
-		color = BLUE;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 4)
-	{
-		color = WHITE;
-	}
-	else
-		color = YELLOW;
-	//give x and y sides different brightness
-	if (side == Y_AXIS)
-		color = color / 2;
-	return (color);
-}
-
 int	calculate_draw_start(int screen_height, int line_height)
 {
 	int start;
@@ -270,21 +133,21 @@ int	calculate_draw_end(int screen_height, int line_height)
 	return (end);
 }
 
-void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
-{
-	// Calculate height of line to draw on screen
-	int	line_height;
-	// calculate lowest and highest pixel to fill in current stripe
-	int	draw_start;
-	int draw_end;
-	int	color;
-
-	line_height = (int)(vars->screen_height / wall_distance);
-	draw_start = calculate_draw_start(vars->screen_height, line_height);
-	draw_end = calculate_draw_end(vars->screen_height, line_height);
-	color = decide_color(ray, side);
-	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
-}
+// void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
+// {
+// 	// Calculate height of line to draw on screen
+// 	int	line_height;
+// 	// calculate lowest and highest pixel to fill in current stripe
+// 	int	draw_start;
+// 	int draw_end;
+// 	int	color;
+// 
+// 	line_height = (int)(vars->screen_height / wall_distance);
+// 	draw_start = calculate_draw_start(vars->screen_height, line_height);
+// 	draw_end = calculate_draw_end(vars->screen_height, line_height);
+// 	color = decide_color(ray, side);
+// 	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
+// }
 
 int	draw_image(t_vars *vars)
 {
@@ -293,6 +156,38 @@ int	draw_image(t_vars *vars)
 	double	perpendicular_wall_distance;
 	t_ray	ray;
 
+	// temp texture
+	unsigned int	texture_list[8][TEXTURE_WIDTH * TEXTURE_HEIGHT];
+	int				x;
+	int				y;
+	
+	x = 0;
+	y = 0;
+	while (x < TEXTURE_WIDTH)
+	{
+		while (y < TEXTURE_HEIGHT)
+		{
+			int	xor_color;
+			int	y_color;
+			int	x_y_color;
+			
+			xor_color = (x * 256 / TEXTURE_WIDTH) ^ (y * 256 / TEXTURE_HEIGHT);
+			y_color = y * 256 / TEXTURE_HEIGHT;
+			x_y_color = y * 128 / TEXTURE_HEIGHT + x * 128 / TEXTURE_WIDTH;
+			texture_list[0][TEXTURE_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEXTURE_WIDTH - y); // flat red texture with black cross
+			texture_list[1][TEXTURE_WIDTH * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color; // sloped greyscale
+			texture_list[2][TEXTURE_WIDTH * y + x] = 256 * x_y_color + 65536 * x_y_color; // sloped yellow gradient
+			texture_list[3][TEXTURE_WIDTH * y + x] = xor_color + 256 * xor_color + 65536 * xor_color; // xor greyscale
+			texture_list[4][TEXTURE_WIDTH * y + x] = 256 * xor_color; // xor green
+			texture_list[5][TEXTURE_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
+			texture_list[6][TEXTURE_WIDTH * y + x] = 65536 * y_color; // red gradient
+			texture_list[7][TEXTURE_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
+			y += 1;
+		}
+		y = 0;
+		x += 1;
+	}
+	// -----------
 	x_axis = 0;
 	side = X_AXIS;
 	perpendicular_wall_distance = 0;
@@ -308,7 +203,91 @@ int	draw_image(t_vars *vars)
 		{
 			perpendicular_wall_distance = ray.y_side_distance - ray.y_delta_distance;
 		}
-		draw_line(&ray, vars, x_axis, perpendicular_wall_distance, side);
+		// Calculate height of line to draw on screen
+		int	line_height;
+		// calculate lowest and highest pixel to fill in current stripe
+		int	draw_start;
+		int draw_end;
+		
+		line_height = (int)(vars->screen_height / perpendicular_wall_distance);
+		draw_start = calculate_draw_start(vars->screen_height, line_height);
+		draw_end = calculate_draw_end(vars->screen_height, line_height);
+
+		int		texture_number;
+
+		texture_number = world_map[ray.current_x_in_map][ray.current_y_in_map] - 1;
+		// calculate value of wall_x where exactly the wall was hit
+		double	wall_x;
+
+		if (side == X_AXIS)
+		{
+			wall_x = vars->y_position_vector + perpendicular_wall_distance * ray.y_direction;
+		}
+		else
+		{
+			wall_x = vars->x_position_vector + perpendicular_wall_distance * ray.x_direction;
+		}
+		wall_x -= floor((wall_x));
+		// x coordinate on the texture
+		int texture_x;
+
+		texture_x = (int)(wall_x * (double)TEXTURE_WIDTH);
+		if (side == 0 && 0 < ray.x_direction)
+		{
+			texture_x = TEXTURE_WIDTH - texture_x - 1;
+		}
+		if (side == 1 && ray.y_direction < 0)
+		{
+			texture_x = TEXTURE_WIDTH - texture_x - 1;
+		}
+		double	step;
+		double	texture_position;
+		int		y;
+		unsigned int	add;
+		
+		step = (1.0 * TEXTURE_HEIGHT) / line_height;
+		add = (unsigned int)vars->image.bits_per_pixel / 8;
+		// Starting texture coordinate
+		int	pitch;
+
+		pitch = 100;
+		texture_position = (draw_start - pitch - (vars->screen_height / 2) + (line_height / 2)) * step;
+		y = draw_start;
+
+		char			*dst;
+		while (y < draw_end)
+		{
+			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+			int				texture_y;
+			
+			texture_y = (int)texture_position & (TEXTURE_HEIGHT - 1);
+			texture_position += step;
+
+			unsigned int	color;
+			
+			color = texture_list[texture_number][TEXTURE_HEIGHT * texture_y + texture_x];
+			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+			if (side == Y_AXIS)
+			{
+				color = (color >> 1) & 8355711;
+			}
+			// buffer[y][x] = color;
+			// mlx_pixel_put(vars->mlx, vars->win, x_axis, y, color);
+			dst = vars->image.addr + (y * vars->image.line_length + x_axis * (vars->image.bits_per_pixel / 8));
+			*(unsigned int *)dst = color;
+			dst += add;
+			y += 1;
+		}
+		// 	}
+		// drawBuffer(buffer[0]);
+		// for(int y = 0; y < h; y++)
+		// {
+		//	for(int x = 0; x < w; x++)
+		//	{
+		//		buffer[y][x] = 0; //clear the buffer instead of cls()
+		//	}
+		// }
+		//}
 		x_axis += 1;
 	}
 	return (0);
@@ -395,36 +374,6 @@ void	initialize_vars(t_vars *vars)
 int	main(void)
 {
 	t_vars			vars;
-	unsigned int	texture_list[8][TEXTURE_WIDTH * TEXTURE_HEIGHT];
-	int				x;
-	int				y;
-	
-	x = 0;
-	y = 0;
-	while (x < TEXTURE_WIDTH)
-	{
-		while (y < TEXTURE_HEIGHT)
-		{
-			int	xor_color;
-			int	y_color;
-			int	x_y_color;
-			
-			xor_color = (x * 256 / TEXTURE_WIDTH) ^ (y * 256 / TEXTURE_HEIGHT);
-			y_color = y * 256 / TEXTURE_HEIGHT;
-			x_y_color = y * 128 / TEXTURE_HEIGHT + x * 128 / TEXTURE_WIDTH;
-			texture_list[0][TEXTURE_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEXTURE_WIDTH - y); // flat red texture with black cross
-			texture_list[1][TEXTURE_WIDTH * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color; // sloped greyscale
-			texture_list[2][TEXTURE_WIDTH * y + x] = 256 * x_y_color + 65536 * x_y_color; // sloped yellow gradient
-			texture_list[3][TEXTURE_WIDTH * y + x] = xor_color + 256 * xor_color + 65536 * xor_color; // xor greyscale
-			texture_list[4][TEXTURE_WIDTH * y + x] = 256 * xor_color; // xor green
-			texture_list[5][TEXTURE_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
-			texture_list[6][TEXTURE_WIDTH * y + x] = 65536 * y_color; // red gradient
-			texture_list[7][TEXTURE_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
-			y += 1;
-		}
-		y = 0;
-		x += 1;
-	}
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);
