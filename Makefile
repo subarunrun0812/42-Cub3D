@@ -12,6 +12,7 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 
 # SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
 # SOURCES = $(RAYCASTING_DIR)/xpm_image.c
+# SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
 
 SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
@@ -30,7 +31,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
           $(GNL_DIR)/get_next_line.c\
-          $(GNL_DIR)/get_next_line_utils.c\
+          $(GNL_DIR)/get_next_line_utils.c
 
 GNL_DIR = ./srcs/get_next_line
 GNL = $(GNL_DIR)/get_next_line.a

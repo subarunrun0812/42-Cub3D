@@ -22,6 +22,7 @@ struct	s_vars {
 int	main(void)
 {
 	t_vars	vars;
+	t_data	image;
 
 	vars.mlx = mlx_init();
 	vars.win = mlx_new_window(vars.mlx, 640, 480, "xpm image");
@@ -30,10 +31,9 @@ int	main(void)
 	int		img_width00;
 	int		img_height00;
 
-	vars.data.img = mlx_xpm_file_to_image(vars.mlx, img_path00, &img_width00, &img_height00);
-
-	vars.data.addr = mlx_get_data_addr(vars.data.img, &vars.data.bits_per_pixel, &vars.data.line_length, &vars.data.endian);
-	mlx_put_image_to_window(vars.mlx, vars.win, vars.data.img, 0, 0);
+	image.img = mlx_xpm_file_to_image(vars.mlx, img_path00, &img_width00, &img_height00);
+	image.addr = mlx_get_data_addr(image.img, &image.bits_per_pixel, &image.line_length, &image.endian);
+	mlx_put_image_to_window(vars.mlx, vars.win, image.img, 0, 0);
 	mlx_loop(vars.mlx);
 	return (0);
 }
