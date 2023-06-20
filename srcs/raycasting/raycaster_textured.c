@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/20 16:51:06 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:46:12 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,22 +133,6 @@ int	calculate_draw_end(int screen_height, int line_height)
 	return (end);
 }
 
-// void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
-// {
-// 	// Calculate height of line to draw on screen
-// 	int	line_height;
-// 	// calculate lowest and highest pixel to fill in current stripe
-// 	int	draw_start;
-// 	int draw_end;
-// 	int	color;
-// 
-// 	line_height = (int)(vars->screen_height / wall_distance);
-// 	draw_start = calculate_draw_start(vars->screen_height, line_height);
-// 	draw_end = calculate_draw_end(vars->screen_height, line_height);
-// 	color = decide_color(ray, side);
-// 	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
-// }
-
 int	draw_image(t_vars *vars)
 {
 	int		x_axis;
@@ -157,36 +141,36 @@ int	draw_image(t_vars *vars)
 	t_ray	ray;
 
 	// temp texture
-	unsigned int	texture_list[8][TEXTURE_WIDTH * TEXTURE_HEIGHT];
-	int				x;
-	int				y;
-	
-	x = 0;
-	y = 0;
-	while (x < TEXTURE_WIDTH)
-	{
-		while (y < TEXTURE_HEIGHT)
-		{
-			int	xor_color;
-			int	y_color;
-			int	x_y_color;
-			
-			xor_color = (x * 256 / TEXTURE_WIDTH) ^ (y * 256 / TEXTURE_HEIGHT);
-			y_color = y * 256 / TEXTURE_HEIGHT;
-			x_y_color = y * 128 / TEXTURE_HEIGHT + x * 128 / TEXTURE_WIDTH;
-			texture_list[0][TEXTURE_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEXTURE_WIDTH - y); // flat red texture with black cross
-			texture_list[1][TEXTURE_WIDTH * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color; // sloped greyscale
-			texture_list[2][TEXTURE_WIDTH * y + x] = 256 * x_y_color + 65536 * x_y_color; // sloped yellow gradient
-			texture_list[3][TEXTURE_WIDTH * y + x] = xor_color + 256 * xor_color + 65536 * xor_color; // xor greyscale
-			texture_list[4][TEXTURE_WIDTH * y + x] = 256 * xor_color; // xor green
-			texture_list[5][TEXTURE_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
-			texture_list[6][TEXTURE_WIDTH * y + x] = 65536 * y_color; // red gradient
-			texture_list[7][TEXTURE_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
-			y += 1;
-		}
-		y = 0;
-		x += 1;
-	}
+	// unsigned int	texture_list[8][TEXTURE_WIDTH * TEXTURE_HEIGHT];
+	// int				x;
+	// int				y;
+	// 
+	// x = 0;
+	// y = 0;
+	// while (x < TEXTURE_WIDTH)
+	// {
+	// 	while (y < TEXTURE_HEIGHT)
+	// 	{
+	// 		int	xor_color;
+	// 		int	y_color;
+	// 		int	x_y_color;
+	// 		
+	// 		xor_color = (x * 256 / TEXTURE_WIDTH) ^ (y * 256 / TEXTURE_HEIGHT);
+	// 		y_color = y * 256 / TEXTURE_HEIGHT;
+	// 		x_y_color = y * 128 / TEXTURE_HEIGHT + x * 128 / TEXTURE_WIDTH;
+	// 		texture_list[0][TEXTURE_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEXTURE_WIDTH - y); // flat red texture with black cross
+	// 		texture_list[1][TEXTURE_WIDTH * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color; // sloped greyscale
+	// 		texture_list[2][TEXTURE_WIDTH * y + x] = 256 * x_y_color + 65536 * x_y_color; // sloped yellow gradient
+	// 		texture_list[3][TEXTURE_WIDTH * y + x] = xor_color + 256 * xor_color + 65536 * xor_color; // xor greyscale
+	// 		texture_list[4][TEXTURE_WIDTH * y + x] = 256 * xor_color; // xor green
+	// 		texture_list[5][TEXTURE_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
+	// 		texture_list[6][TEXTURE_WIDTH * y + x] = 65536 * y_color; // red gradient
+	// 		texture_list[7][TEXTURE_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
+	// 		y += 1;
+	// 	}
+	// 	y = 0;
+	// 	x += 1;
+	// }
 	// -----------
 	x_axis = 0;
 	side = X_AXIS;
@@ -278,16 +262,6 @@ int	draw_image(t_vars *vars)
 			dst += add;
 			y += 1;
 		}
-		// 	}
-		// drawBuffer(buffer[0]);
-		// for(int y = 0; y < h; y++)
-		// {
-		//	for(int x = 0; x < w; x++)
-		//	{
-		//		buffer[y][x] = 0; //clear the buffer instead of cls()
-		//	}
-		// }
-		//}
 		x_axis += 1;
 	}
 	return (0);
@@ -357,8 +331,8 @@ void	initialize_vars(t_vars *vars)
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	vars->x_position_vector = 22;
-	vars->y_position_vector = 12;
+	vars->x_position_vector = 22.0;
+	vars->y_position_vector = 11.5;
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 	vars->x_camera_plane = 0;
