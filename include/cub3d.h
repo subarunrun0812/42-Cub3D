@@ -21,8 +21,6 @@
 //------------------------------
 # define WIN_WIDTH 1000
 # define WIN_HEIGHT 500
-# define MAP_WIDTH 999
-# define MAP_HEIGHT 999
 
 //------------------------------
 //			COLODR
@@ -150,12 +148,17 @@ typedef struct s_info
 }			t_info;
 
 typedef struct s_ray {
+	//rayベクトルのx,y成分
 	double	x_direction;
 	double	y_direction;
+	//rayのマップ上の現在のブロックのx,y座標
 	int		current_x_in_map;
 	int		current_y_in_map;
+	//rayが壁にぶつかるまでのx,y距離
 	double	x_side_distance;
 	double	y_side_distance;
+	//rayが次のx,y方向のブロックの境界に到達するたびに
+	//side_distanceに加えるべき距離を表します。
 	double	x_delta_distance;
 	double	y_delta_distance;
 } 				t_ray;

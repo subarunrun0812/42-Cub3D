@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 22:12:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:50:07 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -236,7 +236,7 @@ int	key_action(int keycode, t_info *info)
 {
 	t_vars *vars;
 	vars = info->vars;
-	printf("keycode = %d\n",keycode);
+	// printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		// 壁衝突の検知
@@ -253,31 +253,31 @@ int	key_action(int keycode, t_info *info)
 		}
 		else
 		{
-			if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+			if (0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE))
 			{
 				vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-				printf("press_key[W_KEY_1]\n");
+				// printf("press_key[W_KEY_1]\n");
 			}
-			if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) && (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT))
+			if (0 < (int)(vars->x_position_vector) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)))
 			{
 				vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-				printf("press_key[W_KEY_2]\n");
+				// printf("press_key[W_KEY_2]\n");
 			}
 		}
 	}
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
 	{
-		if((0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+		if(0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE))
 		{
 			vars->x_direction *= -1;
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-			printf("press_key[S_KEY_1]\n");
+			// printf("press_key[S_KEY_1]\n");
 		}
-		if((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE)) && (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT)))
+		if(0 < (int)(vars->x_position_vector) && (0 < (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))))
 		{
 			vars->y_direction *= -1;
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-			printf("press_key[S_KEY_2]\n");
+			// printf("press_key[S_KEY_2]\n");
 		}
 	}
 	else if(keycode == D_KEY || keycode == RIGHT_KEY)
@@ -289,7 +289,7 @@ int	key_action(int keycode, t_info *info)
 		double	x_old_plane = vars->x_camera_plane;
 		vars->x_camera_plane = vars->x_camera_plane * cos(-MOVE_DISTANCE) - vars->y_camera_plane * sin(-MOVE_DISTANCE);
 		vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE) + vars->y_camera_plane * cos(-MOVE_DISTANCE);
-		printf("press_key[D_KEY]\n");
+		// printf("press_key[D_KEY]\n");
 	}
 	else if(keycode == A_KEY || keycode == LEFT_KEY)
 	{
@@ -300,13 +300,13 @@ int	key_action(int keycode, t_info *info)
 		double	x_old_plane = vars->x_camera_plane;
 		vars->x_camera_plane = vars->x_camera_plane * cos(MOVE_DISTANCE) - vars->y_camera_plane * sin(MOVE_DISTANCE);
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
-		printf("press_key[A_KEY]\n");
+		// printf("press_key[A_KEY]\n");
 	}
 	else if (keycode == ESC_KEY)
 		close_window(info->vars);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
-	printf("player = %f,%f\n",vars->x_position_vector,vars->y_position_vector);
+	printf("player = %f,%f\n",vars->x_direction,vars->y_direction);
 	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
 	{

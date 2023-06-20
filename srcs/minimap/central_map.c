@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 22:15:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:45:31 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y, int col
 
 void central_map(t_info *info)
 {
-    printf("~~ central_map ~~\n");
     /*
     map中央を求める
     mapの縦横の大きさか描画スタート地点を決める
@@ -47,7 +46,7 @@ void central_map(t_info *info)
     int end_y;
     
     //描画開始地点を求める
-    start_x = (WIN_WIDTH / 2) - (mapdata_maxwidth_length(info->map) * BLOCK_SIZE / 2);
+    start_x = (WIN_WIDTH / 2) - ((mapdata_maxwidth_length(info->map) * BLOCK_SIZE) / 2);
     start_y = (WIN_HEIGHT / 2) - (((info->map->height) * BLOCK_SIZE) / 2);
     end_y = info->map->height;
     y = 0;
