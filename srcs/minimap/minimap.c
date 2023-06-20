@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/18 14:41:45 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/16 18:04:14 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,12 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 	int	y;
 
 	x = (draw_x * BLOCK_SIZE);
-	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE))
+	// TODO:-1を削除する (完成の時に削除する)
+	while (x < ((draw_x * BLOCK_SIZE) + BLOCK_SIZE - 1))
 	{
 		y = (draw_y * BLOCK_SIZE);
-		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
+		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE - 1))
 		{
-			//
 			my_mlx_pixel_put(data, x, y, color);
 			y++;
 		}
@@ -33,6 +33,7 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 
 void	range_to_display_with_player(t_info *info, t_data *data)
 {
+	printf("range_to_display_with_player\n");
 	int		start_x;
 	int		start_y;
 	int		end_x;
@@ -46,33 +47,33 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
-	start_x = ((int)info->player->pos_x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	start_x = ((int)info->vars->y_position_vector * BLOCK_SIZE)
 		- DISPLAY_RADIUS;
-	start_y = ((int)info->player->pos_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	start_y = ((int)info->vars->x_position_vector * BLOCK_SIZE)
 		- DISPLAY_RADIUS;
-	end_x = ((int)info->player->pos_x * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	end_x = ((int)info->vars->y_position_vector * BLOCK_SIZE)
 		+ DISPLAY_RADIUS;
-	end_y = ((int)info->player->pos_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+	end_y = ((int)info->vars->x_position_vector * BLOCK_SIZE)
 		+ DISPLAY_RADIUS;
 	start_i = start_y / BLOCK_SIZE;
 	end_i = end_y / BLOCK_SIZE;
 	if (end_y % BLOCK_SIZE != 0)
 	{
-		printf("end_i = %d\n", end_i);
+		// printf("end_i = %d\n", end_i);
 		end_i++;
 	}
 	start_j = start_x / BLOCK_SIZE;
 	end_j = end_x / BLOCK_SIZE;
 	if (end_x % BLOCK_SIZE != 0)
 	{
-		printf("end_j = %d\n", end_j);
+		// printf("end_j = %d\n", end_j);
 		end_j++;
 	}
 	i = start_i;
 	j = start_j;
 	// int map_radius = DISPLAY_RADIUS / BLOCK_SIZE;
 	// int map_top = (int)info->pos->y - map_radius;
-	debug_print_mapdata(info);
+	// debug_print_mapdata(info);
 	while (i < end_i)
 	{
 		// printf("i = %d\n", i);
@@ -82,12 +83,16 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		while (j < end_j)
 		{
 			//map_top + i - start_i > map_radius * 2
+			//マップがいの場合
 			if (i < 0 || i >= info->map->height ||
-				j < 0 || j > mapdata_width_length(info->map->map_data[i]))
+				j < 0 || j > mapdata_width_length(info->map->map_data[i])
+				 || info->map->map_data[i][j] == ' ')
 			{
 				draw_one_block(data, j - start_j, i - start_i, PINK);
 			}
-			else if (info->map->map_data[i][j] == '1')
+			else if (info->map->map_data[i][j] == '1'
+			|| info->map->map_data[i][j] == '2' || info->map->map_data[i][j] == '3'
+			|| info->map->map_data[i][j] == '4')
 			{
 				draw_one_block(data, j - start_j, i - start_i, GREEN);
 			}
@@ -106,43 +111,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		}
 		i++;
 	}
-	// #define MINIMAP_WIDTH 10
-	// #define MINIMAP_HEIGHT 20
-	// #define PLAYER_POS_Y (MINIMAP_WIDTH / 2)
-	// #define PLAYER_POS_X (MINIMAP_HEIGHT / 2)
-	/*akibaコード
-	
-	y = 0;
-	x = 0;
-	map_radius = DISPLAY_RADIUS / BLOCK_SIZE;
-	map_top = (int)info->pos->y - map_radius;
-	map_left = (int)info->pos->x - map_radius;
-	while (y < map_radius * 2)
-	{
-		x = 0;
-		while (x < map_radius * 2)
-		{
-			if (map_top + y < 0 || map_left + x < 0 || 
-				map_left + x > map_radius * 2 || map_top + y > map_radius * 2)
-				draw_one_block(data, y, x, PINK);
-			else
-			{
-				identifer = info->map->map_data[map_top + y][map_left + x];
-				if (identifer == '1')
-					draw_one_block(data, y, x, GREEN);
-				else if (identifer == '0')
-					draw_one_block(data, y, x, WHITE);
-				else if (identifer == 'N')
-					draw_one_block(data, y, x, BLUE);
-				else
-					draw_one_block(data, y, x, RED);
-			}
-			x++;
-		}
-		y++;
-	}
-	debug_print_mapdata(info);
-	*/
 }
 
 // printf("info->pos->x = %d\n", (int)info->pos->x);
@@ -159,13 +127,12 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 // printf("j = %d\n", j);
 int	minimap(t_info *info, t_data *data)
 {
-	debug_print_mapdata(info);
+	// debug_print_mapdata(info);
 	// printf("map->height = %d\n",info->map->height);
 	//minimapの画像表示
-	data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
+	// data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
-	//TODO:playerからのx,y軸において半径100pixelを描画する
 	range_to_display_with_player(info, data);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, data->img, 0, 0);
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/05/11 16:49:03 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/14 14:30:11 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,10 @@ static int	non_specific_chara(char *str)
 	i = 0;
 	while (str[i] != '\n' && str[i] != '\0')
 	{
+         //TODO: テスト終了した限り、'2','3','4'を削除する
 		if (str[i] != '0' && str[i] != '1' && str[i] != 'N'
 			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
-			&& str[i] != ' ')
+			&& str[i] != ' ' && str[i] != '2' && str[i] != '3' && str[i] != '4')
 			return (1);
 		i++;
 	}
