@@ -12,9 +12,9 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 
 # SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
 # SOURCES = $(RAYCASTING_DIR)/xpm_image.c
-# SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
+SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
 
-SOURCES = $(SOURCES_DIR)/main.c\
+# SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
           $(MAPS_DIR)/check_map_wall.c\
