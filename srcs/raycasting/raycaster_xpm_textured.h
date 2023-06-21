@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_textured.h                               :+:      :+:    :+:   */
+/*   raycaster_xpm_textured.h                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/21 16:18:12 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/21 19:20:16 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAYCASTER_TEXTURED_H
-# define RAYCASTER_TEXTURED_H
+#ifndef RAYCASTER_XPM_TEXTURED_H
+# define RAYCASTER_XPM_TEXTURED_H
 
 # include <stdbool.h>
 # include <stdio.h>
@@ -48,7 +48,17 @@
 // texture
 #define TEXTURE_WIDTH 64
 #define TEXTURE_HEIGHT 64
-#define TEXTURE_LIST_SIZE 10;
+#define TEXTURE_LIST_SIZE 10
+#define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
+#define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
+#define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
+#define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
+#define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
+#define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
+#define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
+#define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
+#define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
+#define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
 
 unsigned int	buffer[WIN_HEIGHT][WIN_WIDTH];
 
@@ -84,6 +94,7 @@ typedef enum e_color_rgb	t_color_rgb;
 typedef struct s_vars		t_vars;
 typedef struct s_data		t_data;
 typedef struct s_ray		t_ray;
+typedef struct s_texture	t_texture;
 
 enum e_color_rgb {
 	RGB_Red,
@@ -94,29 +105,37 @@ enum e_color_rgb {
 };
 
 struct	s_data {
-	void	*img;
-	char	*addr;
-	int		bits_per_pixel;
-	int		line_length;
-	int		endian;
+	void			*img;
+	// char	*addr;
+	unsigned int	*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+};
+
+struct	s_texture {
+	t_data	data;
+	int		width;
+	int		height;
 };
 
 struct s_vars
 {
-	void	*mlx;
-	void	*win;
+	void		*mlx;
+	void		*win;
 	// key_action
-	double	x_position_vector; // posX
-	double	y_position_vector; // posY
-	double	x_direction; // dirX
-	double	y_direction; // dirY
+	double		x_position_vector; // posX
+	double		y_position_vector; // posY
+	double		x_direction; // dirX
+	double		y_direction; // dirY
 	// double	move_speed; // moveSpeed
 	// double	rotate_speed; // rotSpeed
-	double	x_camera_plane; // planeX
-	double	y_camera_plane; // planeY
-	int		screen_width; // width of the screen
-	int		screen_height; // height of the screen
-	t_data	image;
+	double		x_camera_plane; // planeX
+	double		y_camera_plane; // planeY
+	int			screen_width; // width of the screen
+	int			screen_height; // height of the screen
+	t_data		image;
+	t_texture	texture_list[TEXTURE_LIST_SIZE];
 };
 
 struct s_ray {
