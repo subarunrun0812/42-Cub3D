@@ -6,28 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/20 16:50:07 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/21 13:46:56 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
-
-static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
-{
-	int				y;
-	unsigned int	add;
-	char			*dst;
-
-	y = y1;
-	add = (unsigned int)data->bits_per_pixel / 8;
-	while (y <= y2)
-	{
-		dst = data->addr + (y * data->line_length + x * (data->bits_per_pixel / 8));
-		*(unsigned int *)dst = color;
-		dst += add;
-		y += 1;
-	}
-}
 
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
@@ -45,159 +28,22 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
 }
 
-// bool	calculate_nearest_axis(t_ray *ray, t_vars *vars);
-static bool	is_hit_wall(t_ray *ray,t_info *info)
-{
-	// 壁に衝突した場合にtrueを返す
-	// printf("world_map = %d\n",world_map[ray->current_x_in_map][ray->current_y_in_map]);
-	// printf("map_data = %d\n",g_info->map->map_data[ray->current_x_in_map][ray->current_y_in_map]);
-	if ('0' < info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] &&
-	info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] < '9')
-	{
-		return (true);
-	}
-	return (false);
-}
-
-static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
-{
-	if(ray->x_direction < 0)
-	{
-		ray->x_side_distance = (vars->x_position_vector - ray->current_x_in_map) * ray->x_delta_distance;
-		return (-1);
-	}
-	ray->x_side_distance = (ray->current_x_in_map + 1.0 - vars->x_position_vector) * ray->x_delta_distance;
-	return (1);
-}
-
-static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
-{
-	if(ray->y_direction < 0)
-	{
-		ray->y_side_distance = (vars->y_position_vector - ray->current_y_in_map) * ray->y_delta_distance;
-		return (-1);
-	}
-	ray->y_side_distance = (ray->current_y_in_map + 1.0 - vars->y_position_vector) * ray->y_delta_distance;
-	return (1);
-}
-
-//perform DDA
-bool	calculate_nearest_axis(t_ray *ray, t_vars *vars,t_info *info)
-{
-	int		step_x;
-	int		step_y;
-	bool	axis;
-
-	step_x = calculate_step_x_direction(ray, vars);
-	step_y = calculate_step_y_direction(ray, vars);
-	while(1)
-	{
-		if(ray->x_side_distance < ray->y_side_distance)
-		{
-			ray->x_side_distance += ray->x_delta_distance;
-			ray->current_x_in_map += step_x;
-			axis = X_AXIS;
-		}
-		else
-		{
-			ray->y_side_distance += ray->y_delta_distance;
-			ray->current_y_in_map += step_y;
-			axis = Y_AXIS;
-		}
-		if (is_hit_wall(ray, info))
-			break ;
-	}
-	return (axis);
-}
-
-int	decide_color(t_ray *ray, bool side,t_info *info)
-{
-	int	color;
-
-	color = BLACK;
-	if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '1')
-	{
-		color = RED;
-	}
-	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '2')
-	{
-		color = GREEN;
-	}
-	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '3')
-	{
-		color = BLUE;
-	}
-	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '4')
-	{
-		color = WHITE;
-	}
-	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == 'N')
-	{
-		;
-	}
-	else
-	{
-		color = YELLOW;
-	}
-	//give x and y sides different brightness
-	if (side == Y_AXIS)
-		color = color / 2;
-	return (color);
-}
-
-int	calculate_draw_start(int screen_height, int line_height)
-{
-	int start;
-
-	start = (-line_height / 2) + (screen_height / 2);
-	if(start < 0)
-	{
-		return (0);
-	}
-	return (start);
-}
-
-int	calculate_draw_end(int screen_height, int line_height)
-{
-	int	end;
-
-	end = line_height / 2 + screen_height / 2;
-	if (screen_height <= end)
-	{
-		return (screen_height - 1);
-	}
-	return (end);
-}
-
-void	draw_line(t_ray *ray, t_info *info, int x, double wall_distance, bool side)
-{
-	// Calculate height of line to draw on screen
-	int	line_height;
-	// calculate lowest and highest pixel to fill in current stripe
-	int	draw_start;
-	int draw_end;
-	int	color;
-
-	line_height = (int)(info->vars->screen_height / wall_distance);
-	draw_start = calculate_draw_start(info->vars->screen_height, line_height);
-	draw_end = calculate_draw_end(info->vars->screen_height, line_height);
-	color = decide_color(ray, side,info);
-	my_mlx_pixel_put_line(info->vars->image, x, draw_start, draw_end, color);
-}
-
 int	draw_image(t_vars *vars,t_info *info)
 {
 	int		x_axis;
 	bool	side;
+	//レイが当たった壁までの直行距離
 	double	perpendicular_wall_distance;
 	t_ray	ray;
-
+	
+	info->ray = &ray;
 	x_axis = 0;
 	side = X_AXIS;
 	perpendicular_wall_distance = 0;
 	while (x_axis < vars->screen_width)
 	{
 		set_ray_data(&ray, vars, x_axis);
+		// printf("\x1b[32mx_axis = %d\x1b[0m\n",x_axis);
 		side = calculate_nearest_axis(&ray, vars,info);
 		if (side == X_AXIS)
 		{
@@ -212,25 +58,6 @@ int	draw_image(t_vars *vars,t_info *info)
 	}
 	return (0);
 }
-
-void updata_pos_map(t_vars *vars,t_info *info)
-{
-	//map情報を更新
-	// printf("\x1b[32x=%f,y=%f\x1b[0m\n",vars->x_position_vector,vars->x_position_vector);
-	if (info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '0')
-    {
-        info->map->map_data[(int)(vars->x_position_vector - (vars->x_direction * MOVE_DISTANCE))][(int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))] = '0';
-        info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] = 'N';
-    }
-    else if (info->map->map_data[(int)(vars->x_position_vector)][(int)(vars->y_position_vector)] == '1')
-    {
-        vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
-        vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
-    }
-	// debug_print_mapdata(info);
-	
-}
-
 
 int	key_action(int keycode, t_info *info)
 {
@@ -306,7 +133,7 @@ int	key_action(int keycode, t_info *info)
 		close_window(info->vars);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
-	printf("player = %f,%f\n",vars->x_direction,vars->y_direction);
+	// printf("player = %f,%f\n",vars->x_direction,vars->y_direction);
 	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
@@ -333,9 +160,6 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
-	// vars->move_speed = MOVE_DISTANCE;
-	// vars->rotate_speed = MOVE_DISTANCE;
-
 	vars->x_camera_plane = 0;
 	vars->y_camera_plane = 0.66;
 	vars->screen_width = WIN_WIDTH;
@@ -353,7 +177,6 @@ int	raycasting(t_info *info)
 	minimap(info, info->data);
 	mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info->vars);
 	mlx_key_hook(info->vars->win, key_action, info);
-	// mlx_loop_hook(info->vars->mlx, draw_image, info->vars);
 	mlx_loop(info->vars->mlx);
 	return (0);
 }
