@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 22:12:55 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/20 17:50:36 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
     	end_j++;
 	i = start_i;
 	j = start_j;
-	 printf("start_i = %d\n",start_i);
-	 printf("end_i = %d\n",end_i);
-    printf("start_j = %d\n",start_j);
-    printf("end_j = %d\n",end_j);
+	//  printf("start_i = %d\n",start_i);
+	//  printf("end_i = %d\n",end_i);
+    // printf("start_j = %d\n",start_j);
+    // printf("end_j = %d\n",end_j);
 	while (i < end_i)
 	{
 		j = start_j;
@@ -90,7 +90,7 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		}
 		i++;
 	}
-	// playerからrayを飛ばす処理
+	
 	// printf("vars->x_direction = %f\nvars->y_direction = %f\n",
 	// info->vars->x_direction,info->vars->y_direction);
 }

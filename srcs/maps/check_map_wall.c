@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 15:45:07 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:44:55 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	mapdata_maxwidth_length(t_map *map)
             res = j;
         i++;
 	}
-    printf("一番長い行は%d\n",res);
+    // printf("一番長い行は%d\n",res);
 	return (res);
 }
 

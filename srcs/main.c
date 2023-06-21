@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 22:16:19 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/20 16:52:55 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int	main(int argc, char **argv)
 		return (0);
 	}
 	info.data = &data;
+	//TODO:はじめに、角マップを表示したら、centralmap42の時に正常に真ん中に配置されない
 	flag.map = -1;
 	info.flag = &flag;
 	init(&info, &map, &player, &vars);
