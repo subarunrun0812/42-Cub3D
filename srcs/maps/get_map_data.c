@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/14 14:30:11 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/22 17:18:29 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ static int	non_specific_chara(char *str)
 	return (0);
 }
 
+//新しい行を追加する
 static char	*check_n(char *str)
 {
 	int		i;
@@ -51,6 +52,7 @@ static char	*check_n(char *str)
 	return (res);
 }
 
+//2次元の文字列配列に新しい行を追加する
 static char **map_str_add(char **array, char *new)
 {
     char **res;
@@ -72,6 +74,7 @@ static char **map_str_add(char **array, char *new)
     new = check_n(new);
     if (!new)
         print_error("check_n()");
+        
     res[i++] = new;
     res[i] = NULL;
     free(array);
@@ -99,6 +102,7 @@ void get_map_data(int fd,t_info *info)
             flag = 1;
 		}
         info->map->map_data = map_str_add(info->map->map_data,str);
+        // printf("info->map->map_data[%d]=%s",i,info->map->map_data[i]);
         str = get_next_line(fd);
 		i++ ;
         // printf("str = %s",str);

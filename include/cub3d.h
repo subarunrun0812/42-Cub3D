@@ -84,6 +84,7 @@
 
 typedef struct s_map
 {
+	//map_data[y][x]
 	char		**map_data;
 	int			height;
 	int			width;

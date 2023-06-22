@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/21 13:46:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/22 16:53:07 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,11 +155,12 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	// printf("info->player->pos_y=%f\n",info->player->pos_y);
 	vars->x_position_vector = info->player->pos_x;
 	vars->y_position_vector = info->player->pos_y;
-	// printf("vars->x_position_vector=%f\n",vars->x_position_vector);
-	// printf("vars->y_position_vector=%f\n",vars->y_position_vector);
+	printf("vars->x_position_vector=%f\n",vars->x_position_vector);
+	printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
+	printf("光線 [%d][%d]\n",(int)(vars->x_position_vector),(int)(vars->y_position_vector));
 	vars->x_camera_plane = 0;
 	vars->y_camera_plane = 0.66;
 	vars->screen_width = WIN_WIDTH;
