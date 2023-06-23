@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/19 22:21:28 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:03:14 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,26 @@
 
 void init_player_coordinate(t_player *player,t_map *map)
 {
-    int i;
-    int j;
-    i = 0;
-    while (map->map_data[i])
+    int _y;
+    int _x;
+    _y = 0;
+    while (map->map_data[_y])
     {
-        j = 0;
-        while (map->map_data[i][j])
+        _x = 0;
+        while (map->map_data[_y][_x])
         {
-            if (map->map_data[i][j] == 'N' || map->map_data[i][j] == 'S'
-            || map->map_data[i][j] == 'W' || map->map_data[i][j] == 'E')
+            if (map->map_data[_y][_x] == 'N' || map->map_data[_y][_x] == 'S'
+            || map->map_data[_y][_x] == 'W' || map->map_data[_y][_x] == 'E')
             {
-                player->pos_x = i;
-                player->pos_y = j;
+                // printf("init _y = %d,pos_x =%d\n",_y,_x);
+                player->pos_y = _y;
+                player->pos_x = _x;
                 // printf("map->map_data[%d][%d] == %c\n",i,j,map->map_data[i][j]);
                 return ;
             }
-            j++;
+            _x++;
         }
-        i++;
+        _y++;
     }
     return ;
 }

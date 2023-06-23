@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/22 17:42:34 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 13:24:41 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,23 @@ int mapdata_width_length(char *width)
 //文字が一番長い行を求める
 int	mapdata_maxwidth_length(t_map *map)
 {
-	int	i;
-	int	j;
+	int	_y;
+	int	_x;
 	int	res;
 
-	i = 0;
-	j = 0;
+	_y = 0;
+	_x = 0;
 	res = 0;
-	while (map->map_data[i])
+	while (map->map_data[_y])
 	{
-		while (map->map_data[i][j] != '\0')
+		while (map->map_data[_y][_x] != '\0')
 		{
-			j++;
+			_x++;
 		}
-		j -= 2;
-        if (res < j)
-            res = j;
-        i++;
+		_x -= 2;
+        if (res < _x)
+            res = _x;
+        _y++;
 	}
     // printf("一番長い行は%d\n",res);
 	return (res);

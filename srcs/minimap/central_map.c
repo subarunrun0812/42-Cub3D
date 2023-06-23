@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/21 13:49:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:49:52 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
 	// (void)color;
 	// (void)data;
 	x = draw_x;
-	while (x < draw_x + BLOCK_SIZE)
+	while (x < draw_x + BLOCK_SIZE -1)
 	{
 		y = draw_y;
-		while (y < (draw_y + BLOCK_SIZE))
+		while (y < (draw_y + BLOCK_SIZE -1))
 		{
 			my_mlx_pixel_put(data, x, y, color);
 			y++;
@@ -33,16 +33,18 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
 	}
 }
 
+/*
 void	draw_check(t_info *info, int x, int y, int i, int j)
 {
 	(void)i;
 	(void)j;
-	// if (i == x && j == y)
-	// {
+	if (i == x && j == y)
+	{
 	printf("xy = [%d][%d]\n", x, y);
 	my_mlx_pixel_put(info->data, x, y, RED);
-	// }
+	}
 }
+*/
 
 // void	draw_line_on_minimap(double pos_x, double pos_y, double end_x,
 // 		double end_y, t_info *info)
@@ -98,6 +100,7 @@ void	draw_check(t_info *info, int x, int y, int i, int j)
 // 		i++;
 // 	}
 // }
+
 void	player_draw_ray(t_info *info, t_vars *vars)
 {
 	double	x_direction;
@@ -192,8 +195,8 @@ void	central_map(t_info *info)
 			{
 				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), BLUE);
-				info->player->pos_x = start_x + (x * BLOCK_SIZE / 2);
-				info->player->pos_y = start_y + (y * BLOCK_SIZE / 2);
+				// info->player->pos_x = start_x + (x * BLOCK_SIZE / 2);
+				// info->player->pos_y = start_y + (y * BLOCK_SIZE / 2);
 			}
 			else
 				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
@@ -202,7 +205,10 @@ void	central_map(t_info *info)
 		}
 		y++;
 	}
-
+	int tmp_x = (int)(info->vars->y_position_vector + (2 * info->vars->y_direction));
+	int tmp_y = (int)(info->vars->x_position_vector + (2 * info->vars->x_direction));
+	central_draw_one_block(info->data,start_x + (tmp_x * BLOCK_SIZE)\
+	,start_y + (tmp_y * BLOCK_SIZE),FUCHSIA);
 	// player_draw_ray(info, info->vars);
 	return ;
 }
