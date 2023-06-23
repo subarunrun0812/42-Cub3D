@@ -124,8 +124,8 @@ int main(int /*argc*/, char */*argv*/[])
     {
       //calculate ray position and direction
       double cameraX = 2 * x / (double)w - 1; //x-coordinate in camera space
-      double rayDirX = dirX + planeX*cameraX;
-      double rayDirY = dirY + planeY*cameraX;
+      double rayDirX = dirX + planeX * cameraX;
+      double rayDirY = dirY + planeY * cameraX;
 
       //which box of the map we're in
       int mapX = int(posX);
@@ -146,7 +146,6 @@ int main(int /*argc*/, char */*argv*/[])
 
       int hit = 0; //was there a wall hit?
       int side; //was a NS or a EW wall hit?
-
       //calculate step and initial sideDist
       if(rayDirX < 0)
       {
@@ -195,9 +194,7 @@ int main(int /*argc*/, char */*argv*/[])
       //Calculate height of line to draw on screen
       int lineHeight = (int)(h / perpWallDist);
 
-
       int pitch = 100;
-
       //calculate lowest and highest pixel to fill in current stripe
       int drawStart = -lineHeight / 2 + h / 2 + pitch;
       if(drawStart < 0) drawStart = 0;
@@ -240,14 +237,13 @@ int main(int /*argc*/, char */*argv*/[])
     //timing for input and FPS counter
     oldTime = time;
     time = getTicks();
-    double frameTime = (time - oldTime) / 1000.0; //frametime is the time this frame has taken, in seconds
+    double frameTime = (time - oldTime) / 1000.0; //frameTime is the time this frame has taken, in seconds
     print(1.0 / frameTime); //FPS counter
     redraw();
 
     //speed modifiers
     double moveSpeed = frameTime * 5.0; //the constant value is in squares/second
     double rotSpeed = frameTime * 3.0; //the constant value is in radians/second
-
     readKeys();
     //move forward if no wall in front of you
     if(keyDown(SDLK_UP))
