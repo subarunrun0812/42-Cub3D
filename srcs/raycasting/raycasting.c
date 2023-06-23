@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 14:50:24 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:43:46 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
 	double	x_current_camera;
 
+	// カメラ平面上のx位置を-1から1の範囲で表したもの
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
 	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
 	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);

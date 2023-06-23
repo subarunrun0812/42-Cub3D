@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/16 18:59:28 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:42:45 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color
 	}
 }
 
+//画面上の各ピクセル列が視野のどの部分に対応するかを計算して、その方向に光線を設定する
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
 	double	x_current_camera;
 
+	// カメラ平面上のx位置を-1から1の範囲で表したもの
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
 	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
 	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
