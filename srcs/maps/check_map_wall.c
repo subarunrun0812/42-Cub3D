@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 13:24:41 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:21:41 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	mapdata_maxwidth_length(t_map *map)
 	res = 0;
 	while (map->map_data[_y])
 	{
-		while (map->map_data[_y][_x] != '\0')
+		while (map->map_data[_y][_x] != '\0' && map->map_data[_y][_x] != '\n')
 		{
 			_x++;
 		}

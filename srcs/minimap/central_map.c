@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 16:59:05 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:36:47 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void	central_map(t_info *info)
 	end_y = info->map->height;
 	y = 0;
 
-	// printf("start_x = %d\n",start_x);
+	
 	// printf("start_y = %d\n",start_y);
 	// printf("end_y = %d\n",end_y);
 	// printf("pos_vec [%f][%f]\n",
@@ -210,19 +210,17 @@ void	central_map(t_info *info)
 		}
 		y++;
 	}
-	int ray_len = 0;
+	int ray_len = BLOCK_SIZE / 2;
 	int tmp_x = 0;
 	int tmp_y = 0;
-	// printf("dir:xy = %f,%f\n",info->vars->x_direction,info->vars->y_direction);
-	// printf("vec:xy = %f,%f\n",info->vars->x_position_vector,info->vars->y_position_vector);
+	// pr
 	
-	
-	while (ray_len < 100)
+	while (ray_len < 50)
 	{
 		tmp_x = (ray_len * info->vars->y_direction);
 		tmp_y = (ray_len * info->vars->x_direction);
 		my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
-		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,BLACK);
+		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
 		ray_len++;
 	}
 

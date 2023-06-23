@@ -71,8 +71,8 @@
 //			MINIMAP
 //------------------------------
 
-# define BLOCK_SIZE 15
-# define DISPLAY_RADIUS 75
+# define BLOCK_SIZE 12
+# define DISPLAY_RADIUS 60
 
 //------------------------------
 //			OTHER
