@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 16:53:17 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 16:59:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,30 +226,30 @@ void	central_map(t_info *info)
 		ray_len++;
 	}
 
-	printf("camera_plane = %f,%f\n",info->vars->x_camera_plane,info->vars->y_camera_plane);
-	//はじめのrayを出力。
-	// ray_len = BLOCK_SIZE / 2;
-	ray_len = 0;
-	while (ray_len < 200)
-	{
-		//-1はFOVの一番左を指している
-		tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * -1)));
-		tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * -1)));
-		my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
-		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
-		ray_len++;
-	}
+	// printf("camera_plane = %f,%f\n",info->vars->x_camera_plane,info->vars->y_camera_plane);
+	// //はじめのrayを出力。
+	// // ray_len = BLOCK_SIZE / 2;
+	// ray_len = 0;
+	// while (ray_len < 100)
+	// {
+	// 	//-1はFOVの一番左を指している
+	// 	tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * -1)));
+	// 	tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * -1)));
+	// 	my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+	// 	,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,RED);
+	// 	ray_len++;
+	// }
 	
-	ray_len = 0;
-	while (ray_len < 200)
-	{
-		//-1はFOVの一番左を指している
-		tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * 1)));
-		tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * 1)));
-		my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
-		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
-		ray_len++;
-	}
+	// ray_len = 0;
+	// while (ray_len < 100)
+	// {
+	// 	//-1はFOVの一番左を指している
+	// 	tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * 1)));
+	// 	tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * 1)));
+	// 	my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+	// 	,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,RED);
+	// 	ray_len++;
+	// }
 	// player_draw_ray(info, info->vars);
 	return ;
 }
