@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 14:49:52 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:36:47 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
 	// (void)color;
 	// (void)data;
 	x = draw_x;
-	while (x < draw_x + BLOCK_SIZE -1)
+	while (x < draw_x + BLOCK_SIZE)
 	{
 		y = draw_y;
-		while (y < (draw_y + BLOCK_SIZE -1))
+		while (y < (draw_y + BLOCK_SIZE))
 		{
 			my_mlx_pixel_put(data, x, y, color);
 			y++;
@@ -142,6 +142,9 @@ void	central_map(t_info *info)
 	int end_x;
 	int end_y;
 
+	int mini_player_x;
+	int mini_player_y;
+
 	//描画開始地点を求める
 	start_x = (WIN_WIDTH / 2) - ((mapdata_maxwidth_length(info->map)
 			* BLOCK_SIZE) / 2);
@@ -149,7 +152,7 @@ void	central_map(t_info *info)
 	end_y = info->map->height;
 	y = 0;
 
-	// printf("start_x = %d\n",start_x);
+	
 	// printf("start_y = %d\n",start_y);
 	// printf("end_y = %d\n",end_y);
 	// printf("pos_vec [%f][%f]\n",
@@ -195,6 +198,8 @@ void	central_map(t_info *info)
 			{
 				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), BLUE);
+				mini_player_x = x;
+				mini_player_y = y;
 				// info->player->pos_x = start_x + (x * BLOCK_SIZE / 2);
 				// info->player->pos_y = start_y + (y * BLOCK_SIZE / 2);
 			}
@@ -205,10 +210,44 @@ void	central_map(t_info *info)
 		}
 		y++;
 	}
-	int tmp_x = (int)(info->vars->y_position_vector + (2 * info->vars->y_direction));
-	int tmp_y = (int)(info->vars->x_position_vector + (2 * info->vars->x_direction));
-	central_draw_one_block(info->data,start_x + (tmp_x * BLOCK_SIZE)\
-	,start_y + (tmp_y * BLOCK_SIZE),FUCHSIA);
+	int ray_len = BLOCK_SIZE / 2;
+	int tmp_x = 0;
+	int tmp_y = 0;
+	// pr
+	
+	while (ray_len < 50)
+	{
+		tmp_x = (ray_len * info->vars->y_direction);
+		tmp_y = (ray_len * info->vars->x_direction);
+		my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
+		ray_len++;
+	}
+
+	// printf("camera_plane = %f,%f\n",info->vars->x_camera_plane,info->vars->y_camera_plane);
+	// //はじめのrayを出力。
+	// // ray_len = BLOCK_SIZE / 2;
+	// ray_len = 0;
+	// while (ray_len < 100)
+	// {
+	// 	//-1はFOVの一番左を指している
+	// 	tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * -1)));
+	// 	tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * -1)));
+	// 	my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+	// 	,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,RED);
+	// 	ray_len++;
+	// }
+	
+	// ray_len = 0;
+	// while (ray_len < 100)
+	// {
+	// 	//-1はFOVの一番左を指している
+	// 	tmp_x = (ray_len * (info->vars->y_direction + (info->vars->y_camera_plane * 1)));
+	// 	tmp_y = (ray_len * (info->vars->x_direction + (info->vars->x_camera_plane * 1)));
+	// 	my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+	// 	,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,RED);
+	// 	ray_len++;
+	// }
 	// player_draw_ray(info, info->vars);
 	return ;
 }

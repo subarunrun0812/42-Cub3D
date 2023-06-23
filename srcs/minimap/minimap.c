@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/20 17:50:36 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 17:35:39 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int		end_j;
 	int		i;
 	int		j;
-
+	int mini_player_x;
+	int mini_player_y;
+	
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
 	start_i = (int)info->vars->x_position_vector - DISPLAY_RADIUS / BLOCK_SIZE;
@@ -83,7 +85,11 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'S'
 					|| info->map->map_data[i][j] == 'E'
 					|| info->map->map_data[i][j] == 'W')
+			{
 				draw_one_block(data, j - start_j, i - start_i, BLUE);
+				mini_player_x = j;
+				mini_player_y = i;
+			}
 			else
 				draw_one_block(data, j - start_j, i - start_i, MAP_RED);
 			j++;
@@ -91,6 +97,19 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		i++;
 	}
 	
+	int ray_len = BLOCK_SIZE / 2;
+	int tmp_x = 0;
+	int tmp_y = 0;
+	
+	while (ray_len < 30)
+	{
+		tmp_x = (ray_len * info->vars->y_direction);
+		tmp_y = (ray_len * info->vars->x_direction);
+		my_mlx_pixel_put(info->data, DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_x\
+		,DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y,FUCHSIA);
+		ray_len++;
+	}
+
 	// printf("vars->x_direction = %f\nvars->y_direction = %f\n",
 	// info->vars->x_direction,info->vars->y_direction);
 }

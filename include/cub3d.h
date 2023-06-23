@@ -18,8 +18,8 @@
 //------------------------------
 //			WINDOW
 //------------------------------
-# define WIN_WIDTH 2000
-# define WIN_HEIGHT 1000
+# define WIN_WIDTH 1200
+# define WIN_HEIGHT 600
 
 //------------------------------
 //			COLODR
@@ -65,14 +65,14 @@
 //キーを押した時の移動距離
 # define MOVE_DISTANCE 0.5
 # define ABS(a) ((a) < 0 ? -(a) : (a))
-# define FOV 40
+// # define FOV 40
 
 //------------------------------
 //			MINIMAP
 //------------------------------
 
-# define BLOCK_SIZE 24
-# define DISPLAY_RADIUS 120
+# define BLOCK_SIZE 12
+# define DISPLAY_RADIUS 60
 
 //------------------------------
 //			OTHER
@@ -125,6 +125,7 @@ typedef struct s_vars
 	double y_position_vector; // posY
 	double x_direction;       // dirX
 	double y_direction;       // dirY
+	//カメラ平面のx,y成分(FOV)。-1から1の範囲
 	double x_camera_plane;    // planeX
 	double y_camera_plane;    // planeY
 	int screen_width;         // width of the screen
@@ -152,6 +153,8 @@ typedef struct s_ray
 	// side_distanceに加えるべき距離を表します。
 	double		x_delta_distance;
 	double		y_delta_distance;
+
+	double		begin_ray_vec;
 }				t_ray;
 
 typedef struct s_info
