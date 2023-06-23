@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/16 18:15:17 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/18 17:38:48 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int main(int /*argc*/, char */*argv*/[])
 	// screen(screenWidth,screenHeight, 0, "Raycaster");
 	
 	// テクスチャの生成を行う。//generate some textures
-#if 0
+// #if 0
 	unsigned int	texture_list[8][texutre_width * texture_height];
 	int				x;
 	int				y;
@@ -110,40 +110,40 @@ int main(int /*argc*/, char */*argv*/[])
 		y = 0;
 		x += 1;
   }
-#else
-	// generate some textures
-	void		*texture_list[TEXTURE_LIST_SIZE];
-	static char	*texture_path_list[TEXTURE_LIST_SIZE] = {
-		"./xpm/nature.xpm",
-		"./xpm/bluestone.xpm",
-		"./xpm/colorstone.xpm",
-		"./xpm/eagle.xpm",
-     	"./xpm/greenlight.xpm",
-     	"./xpm/greystone.xpm",
-     	"./xpm/mossy.xpm",
-     	"./xpm/pillar.xpm",
-     	"./xpm/redbrick.xpm",
-     	"./xpm/wood.xpm
-	};
-	int			texture_width[TEXTURE_LIST_SIZE];
-	int			texture_height[TEXTURE_LIST_SIZE];
-	int			i;
-
-	i = 0;
-	while (i < TEXTURE_LIST_SIZE)
-	{
-		texture_list[i] = mlx_xpm_file_to_image(vars.mlx, texture_path_list[i], &texture_width[i], &texture_height[i]);
-		i += 1;
-	}
-	// loadImage(texture[0], tw, th, "pics/eagle.png");
-	// loadImage(texture[1], tw, th, "pics/redbrick.png");
-	// loadImage(texture[2], tw, th, "pics/purplestone.png");
-	// loadImage(texture[3], tw, th, "pics/greystone.png");
-	// loadImage(texture[4], tw, th, "pics/bluestone.png");
-	// loadImage(texture[5], tw, th, "pics/mossy.png");
-	// loadImage(texture[6], tw, th, "pics/wood.png");
-	// loadImage(texture[7], tw, th, "pics/colorstone.png");
-#endif
+// #else
+// 	// generate some textures
+// 	void		*texture_list[TEXTURE_LIST_SIZE];
+// 	static char	*texture_path_list[TEXTURE_LIST_SIZE] = {
+// 		"./xpm/nature.xpm",
+// 		"./xpm/bluestone.xpm",
+// 		"./xpm/colorstone.xpm",
+// 		"./xpm/eagle.xpm",
+//      	"./xpm/greenlight.xpm",
+//      	"./xpm/greystone.xpm",
+//      	"./xpm/mossy.xpm",
+//      	"./xpm/pillar.xpm",
+//      	"./xpm/redbrick.xpm",
+//      	"./xpm/wood.xpm
+// 	};
+// 	int			texture_width[TEXTURE_LIST_SIZE];
+// 	int			texture_height[TEXTURE_LIST_SIZE];
+// 	int			i;
+// 
+// 	i = 0;
+// 	while (i < TEXTURE_LIST_SIZE)
+// 	{
+// 		texture_list[i] = mlx_xpm_file_to_image(vars.mlx, texture_path_list[i], &texture_width[i], &texture_height[i]);
+// 		i += 1;
+// 	}
+// 	// loadImage(texture[0], tw, th, "pics/eagle.png");
+// 	// loadImage(texture[1], tw, th, "pics/redbrick.png");
+// 	// loadImage(texture[2], tw, th, "pics/purplestone.png");
+// 	// loadImage(texture[3], tw, th, "pics/greystone.png");
+// 	// loadImage(texture[4], tw, th, "pics/bluestone.png");
+// 	// loadImage(texture[5], tw, th, "pics/mossy.png");
+// 	// loadImage(texture[6], tw, th, "pics/wood.png");
+// 	// loadImage(texture[7], tw, th, "pics/colorstone.png");
+// #endif
 
   //start the main loop
   while(!done())
@@ -263,7 +263,7 @@ int main(int /*argc*/, char */*argv*/[])
 	  // double	floor(double x);
 	  // ¸引数x以下で最大の整数値を得る
       // wallX -= floor((wallX));
-      wall_x = floor((wallX));
+      wall_x -= floor((wallX));
 
       //x coordinate on the texture
       // int texX = int(wallX * double(texWidth));
@@ -284,27 +284,24 @@ int main(int /*argc*/, char */*argv*/[])
       // How much to increase the texture coordinate per screen pixel
       // double step = 1.0 * texHeight / lineHeight;
       double	step;
+      double	texture_position;
+	  int		y;
 
       step = (1.0 * texture_height) / line_height;
       // Starting texture coordinate
       // double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
-      double	texture_position;
-
       texture_position = (draw_start - pitch - h / 2 + line_height / 2) * step;
-	  int	y;
-
 	  y = draw_start;
       while (y < draw_end)
 	  {
 		  // Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
 		  // int texY = (int)texPos & (texHeight - 1);
-		  int	texture_y;
+		  int			texture_y;
+		  unsigned int	color;
 
 		  texture_y = (int)texture_position & (texture_height - 1);
 		  texture_position += step;
 		  // Uint32 color = texture[texNum][texHeight * texY + texX];
-		  unsigned int	color;
-
 		  color = texture_list[texture_number][texture_height * texture_y + texture_x];
 		  //make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 		  /*

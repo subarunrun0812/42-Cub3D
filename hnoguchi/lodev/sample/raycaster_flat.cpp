@@ -87,6 +87,7 @@ int main(int /*argc*/, char */*argv*/[])
       double cameraX = 2 * x / (double)w - 1; //x-coordinate in camera space
       double rayDirX = dirX + planeX * cameraX;
       double rayDirY = dirY + planeY * cameraX;
+
       //which box of the map we're in
       int mapX = int(posX);
       int mapY = int(posY);
@@ -108,7 +109,6 @@ int main(int /*argc*/, char */*argv*/[])
       // needed in C++ with IEEE 754 floating point values.
       double deltaDistX = (rayDirX == 0) ? 1e30 : std::abs(1 / rayDirX);
       double deltaDistY = (rayDirY == 0) ? 1e30 : std::abs(1 / rayDirY);
-
       double perpWallDist;
 
       //what direction to step in x or y-direction (either +1 or -1)
@@ -139,7 +139,7 @@ int main(int /*argc*/, char */*argv*/[])
         sideDistY = (mapY + 1.0 - posY) * deltaDistY;
       }
       //perform DDA
-      while(hit == 0)
+      while (hit == 0)
       {
         //jump to next map square, either in x-direction, or in y-direction
         if(sideDistX < sideDistY)

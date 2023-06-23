@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_flat.c                                   :+:      :+:    :+:   */
+/*   raycaster_textured.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/18 16:43:29 by hnoguchi         ###   ########.fr       */
+/*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
+/*   Updated: 2023/06/21 15:56:48 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "raycaster_flat.h"
+#include "raycaster_textured.h"
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {
@@ -45,7 +45,6 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
 }
 
-// bool	calculate_nearest_axis(t_ray *ray, t_vars *vars);
 static bool	is_hit_wall(t_ray *ray)
 {
 	if (0 < world_map[ray->current_x_in_map][ray->current_y_in_map])
@@ -106,40 +105,13 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 	return (axis);
 }
 
-int	decide_color(t_ray *ray, bool side)
-{
-	int	color;
-
-	color = BLACK;
-	if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 1)
-	{
-		color = RED;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 2)
-	{
-		color = GREEN;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 3)
-	{
-		color = BLUE;
-	}
-	else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 4)
-	{
-		color = WHITE;
-	}
-	else
-		color = YELLOW;
-	//give x and y sides different brightness
-	if (side == Y_AXIS)
-		color = color / 2;
-	return (color);
-}
-
 int	calculate_draw_start(int screen_height, int line_height)
 {
 	int start;
+	int pitch;
 
-	start = (-line_height / 2) + (screen_height / 2);
+	pitch = 100;
+    start = (-line_height / 2) + (screen_height / 2) + pitch;
 	if(start < 0)
 	{
 		return (0);
@@ -150,29 +122,15 @@ int	calculate_draw_start(int screen_height, int line_height)
 int	calculate_draw_end(int screen_height, int line_height)
 {
 	int	end;
+	int pitch;
 
-	end = line_height / 2 + screen_height / 2;
+	pitch = 100;
+	end = (line_height / 2) + (screen_height / 2) + pitch;
 	if (screen_height <= end)
 	{
 		return (screen_height - 1);
 	}
 	return (end);
-}
-
-void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
-{
-	// Calculate height of line to draw on screen
-	int	line_height;
-	// calculate lowest and highest pixel to fill in current stripe
-	int	draw_start;
-	int draw_end;
-	int	color;
-
-	line_height = (int)(vars->screen_height / wall_distance);
-	draw_start = calculate_draw_start(vars->screen_height, line_height);
-	draw_end = calculate_draw_end(vars->screen_height, line_height);
-	color = decide_color(ray, side);
-	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
 }
 
 int	draw_image(t_vars *vars)
@@ -182,6 +140,38 @@ int	draw_image(t_vars *vars)
 	double	perpendicular_wall_distance;
 	t_ray	ray;
 
+	// temp texture
+	// unsigned int	texture_list[8][TEXTURE_WIDTH * TEXTURE_HEIGHT];
+	// int				x;
+	// int				y;
+	// 
+	// x = 0;
+	// y = 0;
+	// while (x < TEXTURE_WIDTH)
+	// {
+	// 	while (y < TEXTURE_HEIGHT)
+	// 	{
+	// 		int	xor_color;
+	// 		int	y_color;
+	// 		int	x_y_color;
+	// 		
+	// 		xor_color = (x * 256 / TEXTURE_WIDTH) ^ (y * 256 / TEXTURE_HEIGHT);
+	// 		y_color = y * 256 / TEXTURE_HEIGHT;
+	// 		x_y_color = y * 128 / TEXTURE_HEIGHT + x * 128 / TEXTURE_WIDTH;
+	// 		texture_list[0][TEXTURE_WIDTH * y + x] = 65536 * 254 * (x != y && x != TEXTURE_WIDTH - y); // flat red texture with black cross
+	// 		texture_list[1][TEXTURE_WIDTH * y + x] = x_y_color + 256 * x_y_color + 65536 * x_y_color; // sloped greyscale
+	// 		texture_list[2][TEXTURE_WIDTH * y + x] = 256 * x_y_color + 65536 * x_y_color; // sloped yellow gradient
+	// 		texture_list[3][TEXTURE_WIDTH * y + x] = xor_color + 256 * xor_color + 65536 * xor_color; // xor greyscale
+	// 		texture_list[4][TEXTURE_WIDTH * y + x] = 256 * xor_color; // xor green
+	// 		texture_list[5][TEXTURE_WIDTH * y + x] = 65536 * 192 * (x % 16 && y % 16); // red bricks
+	// 		texture_list[6][TEXTURE_WIDTH * y + x] = 65536 * y_color; // red gradient
+	// 		texture_list[7][TEXTURE_WIDTH * y + x] = 128 + 256 * 128 + 65536 * 128; // flat grey texture
+	// 		y += 1;
+	// 	}
+	// 	y = 0;
+	// 	x += 1;
+	// }
+	// -----------
 	x_axis = 0;
 	side = X_AXIS;
 	perpendicular_wall_distance = 0;
@@ -197,14 +187,85 @@ int	draw_image(t_vars *vars)
 		{
 			perpendicular_wall_distance = ray.y_side_distance - ray.y_delta_distance;
 		}
-		draw_line(&ray, vars, x_axis, perpendicular_wall_distance, side);
+		// Calculate height of line to draw on screen
+		int	line_height;
+		// calculate lowest and highest pixel to fill in current stripe
+		int	draw_start;
+		int draw_end;
+		
+		line_height = (int)(vars->screen_height / perpendicular_wall_distance);
+		draw_start = calculate_draw_start(vars->screen_height, line_height);
+		draw_end = calculate_draw_end(vars->screen_height, line_height);
+
+		int		texture_number;
+
+		texture_number = world_map[ray.current_x_in_map][ray.current_y_in_map] - 1;
+		// calculate value of wall_x where exactly the wall was hit
+		double	wall_x;
+
+		if (side == X_AXIS)
+		{
+			wall_x = vars->y_position_vector + perpendicular_wall_distance * ray.y_direction;
+		}
+		else
+		{
+			wall_x = vars->x_position_vector + perpendicular_wall_distance * ray.x_direction;
+		}
+		wall_x -= floor((wall_x));
+		// x coordinate on the texture
+		int texture_x;
+
+		texture_x = (int)(wall_x * (double)TEXTURE_WIDTH);
+		if (side == 0 && 0 < ray.x_direction)
+		{
+			texture_x = TEXTURE_WIDTH - texture_x - 1;
+		}
+		if (side == 1 && ray.y_direction < 0)
+		{
+			texture_x = TEXTURE_WIDTH - texture_x - 1;
+		}
+		double	step;
+		double	texture_position;
+		int		y;
+		unsigned int	add;
+		
+		step = (1.0 * TEXTURE_HEIGHT) / line_height;
+		add = (unsigned int)vars->image.bits_per_pixel / 8;
+		// Starting texture coordinate
+		int	pitch;
+
+		pitch = 100;
+		texture_position = (draw_start - pitch - (vars->screen_height / 2) + (line_height / 2)) * step;
+		y = draw_start;
+
+		char			*dst;
+		while (y < draw_end)
+		{
+			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+			int				texture_y;
+			
+			texture_y = (int)texture_position & (TEXTURE_HEIGHT - 1);
+			texture_position += step;
+
+			unsigned int	color;
+			
+			color = texture_list[texture_number][TEXTURE_HEIGHT * texture_y + texture_x];
+			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+			if (side == Y_AXIS)
+			{
+				color = (color >> 1) & 8355711;
+			}
+			// buffer[y][x] = color;
+			// mlx_pixel_put(vars->mlx, vars->win, x_axis, y, color);
+			dst = vars->image.addr + (y * vars->image.line_length + x_axis * (vars->image.bits_per_pixel / 8));
+			*(unsigned int *)dst = color;
+			dst += add;
+			y += 1;
+		}
 		x_axis += 1;
 	}
 	return (0);
 }
-
-
-
 
 int	key_action(int keycode, t_vars *vars)
 {
@@ -260,8 +321,6 @@ int	key_action(int keycode, t_vars *vars)
 	{
 		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
 	}
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
-
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	return (0);
@@ -272,12 +331,10 @@ void	initialize_vars(t_vars *vars)
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	vars->x_position_vector = 22;
-	vars->y_position_vector = 12;
+	vars->x_position_vector = 22.0;
+	vars->y_position_vector = 11.5;
 	vars->x_direction = -1;
 	vars->y_direction = 0;
-	// vars->move_speed = MOVE_DISTANCE;
-	// vars->rotate_speed = MOVE_DISTANCE;
 	vars->x_camera_plane = 0;
 	vars->y_camera_plane = 0.66;
 	vars->screen_width = WIN_WIDTH;
@@ -290,11 +347,9 @@ void	initialize_vars(t_vars *vars)
 
 int	main(void)
 {
-	t_vars	vars;
-	
+	t_vars			vars;
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);
-	// mlx_loop_hook(vars.mlx, draw_image, &vars);
 	mlx_loop(vars.mlx);
 }
