@@ -18,8 +18,8 @@
 //------------------------------
 //			WINDOW
 //------------------------------
-# define WIN_WIDTH 500
-# define WIN_HEIGHT 500
+# define WIN_WIDTH 2000
+# define WIN_HEIGHT 1000
 
 //------------------------------
 //			COLODR
@@ -32,6 +32,7 @@
 # define BLUE 0x000000FF
 # define YELLOW 0x00FFFF00
 # define PINK 0x00FFDBED
+# define FUCHSIA 0x00FF00FF
 # define MAP_GREEN 0x64008000
 # define MAP_WHITE 0x64FFFFFF
 # define MAP_PINK 0x64FFDBED
@@ -70,8 +71,8 @@
 //			MINIMAP
 //------------------------------
 
-# define BLOCK_SIZE 12
-# define DISPLAY_RADIUS 60
+# define BLOCK_SIZE 24
+# define DISPLAY_RADIUS 120
 
 //------------------------------
 //			OTHER
@@ -84,6 +85,7 @@
 
 typedef struct s_map
 {
+	//map_data[y][x]
 	char		**map_data;
 	int			height;
 	int			width;

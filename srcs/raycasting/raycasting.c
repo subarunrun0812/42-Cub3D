@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/21 13:46:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/23 14:50:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,8 +153,8 @@ void	initialize_vars(t_vars *vars,t_info *info)
 
 	// printf("info->player->pos_x=%f\n",info->player->pos_x);
 	// printf("info->player->pos_y=%f\n",info->player->pos_y);
-	vars->x_position_vector = info->player->pos_x;
-	vars->y_position_vector = info->player->pos_y;
+	vars->x_position_vector = info->player->pos_y;
+	vars->y_position_vector = info->player->pos_x;
 	// printf("vars->x_position_vector=%f\n",vars->x_position_vector);
 	// printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
@@ -168,6 +168,12 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	vars->image->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	vars->image->addr = mlx_get_data_addr(vars->image->img, &vars->image->bits_per_pixel, &vars->image->line_length, &vars->image->endian);
 	draw_image(vars, info);
+	// printf("dir:xy[%f][%f]\n",vars->x_direction,vars->y_direction);
+	// printf("player:xy[%f][%f]\n",info->player->pos_x,info->player->pos_y);
+	// printf("光線:xy[%d][%d]\n",(int)(info->player->pos_x + (2 * vars->y_direction))\
+	// ,(int)(info->player->pos_y + (2 * vars->x_direction)));
+	my_mlx_pixel_put(info->data,(int)(info->player->pos_x + (2 * vars->y_direction))\
+	,(int)(info->player->pos_y + (2 * vars->x_direction)),BLACK);		
 }
 
 int	raycasting(t_info *info)
