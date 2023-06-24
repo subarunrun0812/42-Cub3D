@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 17:35:39 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 12:43:14 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int		end_j;
 	int		i;
 	int		j;
-	int mini_player_x;
-	int mini_player_y;
 	
 	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
@@ -87,8 +85,8 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'W')
 			{
 				draw_one_block(data, j - start_j, i - start_i, BLUE);
-				mini_player_x = j;
-				mini_player_y = i;
+				info->map->player_x = j;
+				info->map->player_y = i;
 			}
 			else
 				draw_one_block(data, j - start_j, i - start_i, MAP_RED);

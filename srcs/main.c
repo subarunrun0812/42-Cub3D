@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 15:18:51 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 13:12:11 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int argc, char **argv)
 	info.vars->image = &data;
 	// info.plane = &plane;
 	read_map(argv[1], &info);
-	init_player_coordinate(&player, &map);
+	init_player_coordinate(&player, &map,&info);
 	// new_window(&vars);
 	raycasting(&info);
 	// mlx_loop(vars.mlx);

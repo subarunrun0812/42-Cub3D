@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 17:36:47 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 12:44:10 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,74 +32,6 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
 		x++;
 	}
 }
-
-/*
-void	draw_check(t_info *info, int x, int y, int i, int j)
-{
-	(void)i;
-	(void)j;
-	if (i == x && j == y)
-	{
-	printf("xy = [%d][%d]\n", x, y);
-	my_mlx_pixel_put(info->data, x, y, RED);
-	}
-}
-*/
-
-// void	draw_line_on_minimap(double pos_x, double pos_y, double end_x,
-// 		double end_y, t_info *info)
-// {
-// 	int	x;
-// 	int	y;
-// 	int	i;
-// 	int	j;
-// 	x = pos_x;
-// 	y = pos_y;
-// 	i = 0;
-// 	j = 0;
-// 	printf("pos_x,end_x %d ~ %d\n", (int)pos_x, (int)end_x);
-// 	printf("pos_y,end_y %d ~ %d\n", (int)pos_y, (int)end_y);
-// 	while (i < WIN_WIDTH)
-// 	{
-// 		j = 0;
-// 		while (j < WIN_HEIGHT)
-// 		{
-// 			x = pos_x;
-// 			while (x < end_x)
-// 			{
-// 				y = pos_y;
-// 				while (y < end_y)
-// 				{
-// 					draw_check(info, x, y, i, j);
-// 					y++;
-// 				}
-// 				while (y > end_y)
-// 				{
-// 					draw_check(info, x, y, i, j);
-// 					y--;
-// 				}
-// 				x++;
-// 			}
-// 			while (x > end_x)
-// 			{
-// 				y = pos_y;
-// 				while (y < end_y)
-// 				{
-// 					draw_check(info, x, y, i, j);
-// 					y++;
-// 				}
-// 				while (y > end_y)
-// 				{
-// 					draw_check(info, x, y, i, j);
-// 					y--;
-// 				}
-// 				x--;
-// 			}
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// }
 
 void	player_draw_ray(t_info *info, t_vars *vars)
 {
@@ -141,9 +73,6 @@ void	central_map(t_info *info)
 	int start_y;
 	int end_x;
 	int end_y;
-
-	int mini_player_x;
-	int mini_player_y;
 
 	//描画開始地点を求める
 	start_x = (WIN_WIDTH / 2) - ((mapdata_maxwidth_length(info->map)
@@ -198,8 +127,8 @@ void	central_map(t_info *info)
 			{
 				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), BLUE);
-				mini_player_x = x;
-				mini_player_y = y;
+				info->map->player_x = x;
+				info->map->player_y = y;
 				// info->player->pos_x = start_x + (x * BLOCK_SIZE / 2);
 				// info->player->pos_y = start_y + (y * BLOCK_SIZE / 2);
 			}
@@ -219,8 +148,8 @@ void	central_map(t_info *info)
 	{
 		tmp_x = (ray_len * info->vars->y_direction);
 		tmp_y = (ray_len * info->vars->x_direction);
-		my_mlx_pixel_put(info->data,start_x + (mini_player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
-		,start_y + (mini_player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
+		my_mlx_pixel_put(info->data,start_x + (info->map->player_x * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_x\
+		,start_y + (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + tmp_y,FUCHSIA);
 		ray_len++;
 	}
 
