@@ -6,17 +6,18 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 16:43:46 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 14:06:06 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "../../include/cub3d.h"
 
+//光線の位置と方向を決定する
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
 	double	x_current_camera;
 
-	// カメラ平面上のx位置を-1から1の範囲で表したもの
+	// カメラ座標x-1から1の範囲で表したもの
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
 	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
 	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
@@ -24,7 +25,8 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	ray->current_y_in_map = (int)vars->y_position_vector;
 	ray->x_side_distance = 0;
 	ray->y_side_distance = 0;
-	// ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
+	// ray x,yが次のx,yブロックまでの距離
+	// 1e30はゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
 	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
 	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
 }
@@ -60,37 +62,35 @@ int	draw_image(t_vars *vars,t_info *info)
 	return (0);
 }
 
+void change_rotate_direction(t_vars *vars,double move_distance)
+{
+	double	x_old_direction = vars->x_direction;
+	vars->x_direction = vars->x_direction * cos(move_distance) - vars->y_direction * sin(move_distance);
+	vars->y_direction = x_old_direction * sin(move_distance) + vars->y_direction * cos(move_distance);
+	double	x_old_plane = vars->x_camera_plane;
+	vars->x_camera_plane = vars->x_camera_plane * cos(move_distance) - vars->y_camera_plane * sin(move_distance);
+	vars->y_camera_plane = x_old_plane * sin(move_distance) + vars->y_camera_plane * cos(move_distance);
+}
+
 int	key_action(int keycode, t_info *info)
 {
 	t_vars *vars;
 	vars = info->vars;
+	char map_pos;
+	map_pos = info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
+		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)];
 	// printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		// 壁衝突の検知
-		if (info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
-		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '1' ||
-		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
-		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '2' ||
-		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
-		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '3' ||
-		info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
-		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)] == '4')
-		{
+		if (map_pos == '1' || map_pos == '2' || map_pos == '3' || map_pos == '4')
 			printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
-		}
 		else
 		{
 			if (0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE))
-			{
 				vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-				// printf("press_key[W_KEY_1]\n");
-			}
 			if (0 < (int)(vars->x_position_vector) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)))
-			{
 				vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-				// printf("press_key[W_KEY_2]\n");
-			}
 		}
 	}
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
@@ -109,32 +109,13 @@ int	key_action(int keycode, t_info *info)
 		}
 	}
 	else if(keycode == D_KEY || keycode == RIGHT_KEY)
-	{
-		//both camera direction and camera plane must be rotated
-		double	x_old_direction = vars->x_direction;
-		vars->x_direction = vars->x_direction * cos(-MOVE_DISTANCE) - vars->y_direction * sin(-MOVE_DISTANCE);
-		vars->y_direction = x_old_direction * sin(-MOVE_DISTANCE) + vars->y_direction * cos(-MOVE_DISTANCE);
-		double	x_old_plane = vars->x_camera_plane;
-		vars->x_camera_plane = vars->x_camera_plane * cos(-MOVE_DISTANCE) - vars->y_camera_plane * sin(-MOVE_DISTANCE);
-		vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE) + vars->y_camera_plane * cos(-MOVE_DISTANCE);
-		// printf("press_key[D_KEY]\n");
-	}
+		change_rotate_direction(vars,(MOVE_DISTANCE * -1));
 	else if(keycode == A_KEY || keycode == LEFT_KEY)
-	{
-		//both camera direction and camera plane must be rotated
-		double	x_old_direction = vars->x_direction;
-		vars->x_direction = vars->x_direction * cos(MOVE_DISTANCE) - vars->y_direction * sin(MOVE_DISTANCE);
-		vars->y_direction = x_old_direction * sin(MOVE_DISTANCE) + vars->y_direction * cos(MOVE_DISTANCE);
-		double	x_old_plane = vars->x_camera_plane;
-		vars->x_camera_plane = vars->x_camera_plane * cos(MOVE_DISTANCE) - vars->y_camera_plane * sin(MOVE_DISTANCE);
-		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
-		// printf("press_key[A_KEY]\n");
-	}
+		change_rotate_direction(vars,MOVE_DISTANCE);
 	else if (keycode == ESC_KEY)
 		close_window(info->vars);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
-	// printf("player = %f,%f\n",vars->x_direction,vars->y_direction);
 	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
 	{
@@ -147,34 +128,50 @@ int	key_action(int keycode, t_info *info)
 	return (0);
 }
 
+void init_nswe_dirction(t_info *info,t_vars *vars)
+{
+	if (info->map->map_data[info->map->player_y][info->map->player_x] == NORTH)
+		;
+	else if (info->map->map_data[info->map->player_y][info->map->player_x] == SOUTH)
+		change_rotate_direction(vars,3.1);
+	else if (info->map->map_data[info->map->player_y][info->map->player_x] == EAST)
+		change_rotate_direction(vars,-1.55);
+	else if (info->map->map_data[info->map->player_y][info->map->player_x] == WEST)
+		change_rotate_direction(vars,1.55);
+	// printf("dir:xy[%f][%f]\n",vars->x_direction,vars->y_direction);
+}
+
 void	initialize_vars(t_vars *vars,t_info *info)
 {
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	// printf("info->player->pos_x=%f\n",info->player->pos_x);
-	// printf("info->player->pos_y=%f\n",info->player->pos_y);
-	vars->x_position_vector = info->player->pos_y;
-	vars->y_position_vector = info->player->pos_x;
+	// printf("info->map->player_x=%f\n",info->map->player_x);
+	// printf("info->map->player_y=%f\n",info->map->player_y);
+	vars->x_position_vector = info->map->player_y;
+	vars->y_position_vector = info->map->player_x;
 	// printf("vars->x_position_vector=%f\n",vars->x_position_vector);
 	// printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
+	//camera planeによって、FOVが決まる
 	vars->x_camera_plane = 0;
 	vars->y_camera_plane = 0.66;
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
 
+	init_nswe_dirction(info,info->vars);
 	vars->image->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	vars->image->addr = mlx_get_data_addr(vars->image->img, &vars->image->bits_per_pixel, &vars->image->line_length, &vars->image->endian);
 	draw_image(vars, info);
 	// printf("dir:xy[%f][%f]\n",vars->x_direction,vars->y_direction);
-	// printf("player:xy[%f][%f]\n",info->player->pos_x,info->player->pos_y);
-	// printf("光線:xy[%d][%d]\n",(int)(info->player->pos_x + (2 * vars->y_direction))\
-	// ,(int)(info->player->pos_y + (2 * vars->x_direction)));
-	my_mlx_pixel_put(info->data,(int)(info->player->pos_x + (2 * vars->y_direction))\
-	,(int)(info->player->pos_y + (2 * vars->x_direction)),BLACK);		
+	// printf("player:xy[%f][%f]\n",info->map->player_x,info->map->player_y);
+	// printf("光線:xy[%d][%d]\n",(int)(info->map->player_x + (2 * vars->y_direction))\
+	// ,(int)(info->map->player_y + (2 * vars->x_direction)));
+	my_mlx_pixel_put(info->data,(int)(info->map->player_x + (2 * vars->y_direction))\
+	,(int)(info->map->player_y + (2 * vars->x_direction)),BLACK);
+
 }
 
 int	raycasting(t_info *info)

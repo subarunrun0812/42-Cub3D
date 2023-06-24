@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 17:35:39 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 14:12:12 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,17 +32,13 @@ void	draw_one_block(t_data *data, int draw_x, int draw_y, int color)
 
 void	range_to_display_with_player(t_info *info, t_data *data)
 {
-	// printf("range_to_display_with_player\n");
 	int		start_i;
 	int		end_i;
 	int		start_j;
 	int		end_j;
 	int		i;
 	int		j;
-	int mini_player_x;
-	int mini_player_y;
 	
-	// printf("\x1b[32mplayer = (%f,%f)\x1b[0m\n",info->pos->y,info->pos->x);
 	// マップのx,y軸の表示する範囲
 	start_i = (int)info->vars->x_position_vector - DISPLAY_RADIUS / BLOCK_SIZE;
 	end_i = (int)info->vars->x_position_vector + DISPLAY_RADIUS / BLOCK_SIZE;
@@ -55,10 +51,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
     	end_j++;
 	i = start_i;
 	j = start_j;
-	//  printf("start_i = %d\n",start_i);
-	//  printf("end_i = %d\n",end_i);
-    // printf("start_j = %d\n",start_j);
-    // printf("end_j = %d\n",end_j);
 	while (i < end_i)
 	{
 		j = start_j;
@@ -87,8 +79,8 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'W')
 			{
 				draw_one_block(data, j - start_j, i - start_i, BLUE);
-				mini_player_x = j;
-				mini_player_y = i;
+				info->map->player_x = j;
+				info->map->player_y = i;
 			}
 			else
 				draw_one_block(data, j - start_j, i - start_i, MAP_RED);
@@ -114,24 +106,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	// info->vars->x_direction,info->vars->y_direction);
 }
 
-// printf("info->pos->x = %d\n", (int)info->pos->x);
-// printf("info->pos->y = %d\n", (int)info->pos->y);
-// printf("start_x = %d\n", start_x);
-// printf("start_y = %d\n", start_y);
-// printf("end_x = %d\n", end_x);
-// printf("end_y = %d\n", end_y);
-// printf("start_i = %d\n", start_i);
-// printf("end_i = %d\n", end_i);
-// printf("start_j = %d\n", start_j);
-// printf("end_j = %d\n", end_j);
-// printf("i = %d\n", i);
-// printf("j = %d\n", j);
 int	minimap(t_info *info, t_data *data)
 {
-	// debug_print_mapdata(info);
-	// printf("map->height = %d\n",info->map->height);
 	//minimapの画像表示
-	// data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
 	if (info->flag->map == CORNER)

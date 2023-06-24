@@ -14,9 +14,9 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 # SOURCES = $(RAYCASTING_DIR)/xpm_image.c
 # SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
 # SOURCES = $(RAYCASTING_DIR)/raycaster_xpm_textured.c
-SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
+# SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
 
-# SOURCES = $(SOURCES_DIR)/main.c\
+SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
           $(MAPS_DIR)/check_map_wall.c\
@@ -25,8 +25,6 @@ SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
           $(MINIMAP_DIR)/central_map.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
           $(PLAYER_DIR)/coordinates.c\
-          $(PLAYER_DIR)/key_hook.c\
-          $(PLAYER_DIR)/player_move.c\
           $(RAYCASTING_DIR)/raycasting.c\
           $(RAYCASTING_DIR)/calculate_nearest_axis.c\
           $(RAYCASTING_DIR)/draw_line.c\

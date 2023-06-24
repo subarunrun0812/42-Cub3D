@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:30:47 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 13:30:48 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 12:17:26 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 	return (1);
 }
 
-//DDAアルゴリズムで3次元空間内のオブジェクトとどのように交差するか計算する
+//DDAアルゴリズムで3次元空間内のオブジェクトが衝突するまでrayを飛ばす
 bool	calculate_nearest_axis(t_ray *ray, t_vars *vars,t_info *info)
 {
 	int		step_x;
@@ -58,7 +58,7 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars,t_info *info)
 	step_y = calculate_step_y_direction(ray, vars);
 	while(1)
 	{
-		//TODO: ここでmimimapにrayの線を出力
+		// x方向またはy方向のいずれかで次のマップのブロックにジャンプする。
 		if(ray->x_side_distance < ray->y_side_distance)
 		{
 			ray->x_side_distance += ray->x_delta_distance;

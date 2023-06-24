@@ -64,6 +64,7 @@
 
 //キーを押した時の移動距離
 # define MOVE_DISTANCE 0.5
+// aの絶対値を返す
 # define ABS(a) ((a) < 0 ? -(a) : (a))
 // # define FOV 40
 
@@ -82,19 +83,23 @@
 # define FALSE 1
 # define CORNER 1
 # define CENTRAL -1
+# define NORTH 'N'//北
+# define SOUTH 'S'//南
+# define EAST 'E'//東
+# define WEST 'W'//西
 
 typedef struct s_map
 {
 	//map_data[y][x]
 	char		**map_data;
+	int 		player_x;
+	int 		player_y;
 	int			height;
 	int			width;
 }				t_map;
 
 typedef struct s_player
 {
-	double		pos_x;
-	double		pos_y;
 	double		dir_x;
 	double		dir_y;
 	// double	camera_x;
@@ -195,7 +200,7 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 int				key_hook(int keycode, t_vars *vars);
 int				ft_key_hook(int keycode, t_info *info);
 int				player_coordinate(t_info *info);
-void			init_player_coordinate(t_player *player, t_map *map);
+void			init_player_coordinate(t_player *player, t_map *map,t_info *info);
 void			player_move(t_info *info, int keycode);
 
 // ------------------------------------------------
