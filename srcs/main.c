@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:49:36 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 17:12:48 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	debug_print_mapdata(t_info *info)
 	
 	return ;
 }
+
 
 int	main(int argc, char **argv)
 {
@@ -53,4 +54,15 @@ int	main(int argc, char **argv)
 	read_map(argv[1], &info);
 	init_player_coordinate(&map,&info);
 	raycasting(&info);
+}
+
+
+#define DEBUG_LEAKS_CMD_LEN (32)
+
+__attribute__((destructor))
+static void    destructor(void) {
+    char    cmd[DEBUG_LEAKS_CMD_LEN];
+
+    snprintf(cmd, DEBUG_LEAKS_CMD_LEN, "leaks %d", getpid());
+    system(cmd);
 }
