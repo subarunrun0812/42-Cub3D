@@ -25,8 +25,6 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MINIMAP_DIR)/central_map.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
           $(PLAYER_DIR)/coordinates.c\
-          $(PLAYER_DIR)/key_hook.c\
-          $(PLAYER_DIR)/player_move.c\
           $(RAYCASTING_DIR)/raycasting.c\
           $(RAYCASTING_DIR)/calculate_nearest_axis.c\
           $(RAYCASTING_DIR)/draw_line.c\
