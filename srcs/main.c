@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:30:18 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:49:36 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv)
 	t_vars vars;
 	t_data data;
 	t_flag flag;
+	t_texture texture;
 	// t_plane plane;
 	if (argc != 2)
 	{
@@ -48,6 +49,7 @@ int	main(int argc, char **argv)
 	info.flag = &flag;
 	init(&info, &map, &vars);
 	info.vars->image = &data;
+	info.texture = &texture;
 	read_map(argv[1], &info);
 	init_player_coordinate(&map,&info);
 	raycasting(&info);

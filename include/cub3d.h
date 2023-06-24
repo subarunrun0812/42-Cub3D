@@ -68,6 +68,25 @@
 # define ABS(a) ((a) < 0 ? -(a) : (a))
 // # define FOV 40
 
+
+//------------------------------
+//			TEXTURE
+//------------------------------
+
+#define TEXTURE_WIDTH 64
+#define TEXTURE_HEIGHT 64
+#define TEXTURE_LIST_SIZE 10
+#define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
+#define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
+#define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
+#define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
+#define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
+#define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
+#define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
+#define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
+#define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
+#define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+
 //------------------------------
 //			MINIMAP
 //------------------------------
@@ -113,6 +132,12 @@ typedef struct s_data
 	int			endian;
 }				t_data;
 
+typedef struct	s_texture {
+	t_data	data;
+	int		width;
+	int		height;
+}		t_texture;
+
 typedef struct s_vars
 {
 	void		*mlx;
@@ -128,6 +153,7 @@ typedef struct s_vars
 	int screen_width;         // width of the screen
 	int screen_height;        // height of the screen
 	t_data		*image;
+	t_texture	texture_list[TEXTURE_LIST_SIZE];
 }				t_vars;
 
 typedef struct s_flag
@@ -162,6 +188,7 @@ typedef struct s_info
 	t_plane		*plane;
 	t_flag		*flag;
 	t_ray		*ray;
+	t_texture	*texture;
 }				t_info;
 
 // init
