@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/22 17:18:29 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:03:58 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	non_specific_chara(char *str)
 	i = 0;
 	while (str[i] != '\n' && str[i] != '\0')
 	{
-         //TODO: テスト終了した限り、'2','3','4'を削除する
+         //TODO: 課題要件にない'2','3','4'を削除する
 		if (str[i] != '0' && str[i] != '1' && str[i] != 'N'
 			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
 			&& str[i] != ' ' && str[i] != '2' && str[i] != '3' && str[i] != '4')
@@ -93,7 +93,6 @@ void get_map_data(int fd,t_info *info)
 	}
     flag = 0;
 	int i = 0;
-    // printf("str = %s",str);
     while (str)
     {
         if (non_specific_chara(str) == 1)
@@ -102,10 +101,8 @@ void get_map_data(int fd,t_info *info)
             flag = 1;
 		}
         info->map->map_data = map_str_add(info->map->map_data,str);
-        // printf("info->map->map_data[%d]=%s",i,info->map->map_data[i]);
         str = get_next_line(fd);
 		i++ ;
-        // printf("str = %s",str);
         info->map->height++;
     }
     if (flag == 1)

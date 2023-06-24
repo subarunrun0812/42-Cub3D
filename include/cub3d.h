@@ -98,14 +98,6 @@ typedef struct s_map
 	int			width;
 }				t_map;
 
-typedef struct s_player
-{
-	double		dir_x;
-	double		dir_y;
-	// double	camera_x;
-	// double	camera_y;
-}				t_player;
-
 typedef struct s_plane
 {
 	double		x;
@@ -166,7 +158,6 @@ typedef struct s_info
 {
 	t_map		*map;
 	t_vars		*vars;
-	t_player	*player;
 	t_data		*data;
 	t_plane		*plane;
 	t_flag		*flag;
@@ -174,7 +165,7 @@ typedef struct s_info
 }				t_info;
 
 // init
-void			init(t_info *info, t_map *map, t_player *player, t_vars *vars);
+void			init(t_info *info, t_map *map, t_vars *vars);
 void			init_map(t_map *map);
 
 // ------------------------------------------------
@@ -200,7 +191,7 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 int				key_hook(int keycode, t_vars *vars);
 int				ft_key_hook(int keycode, t_info *info);
 int				player_coordinate(t_info *info);
-void			init_player_coordinate(t_player *player, t_map *map,t_info *info);
+void			init_player_coordinate(t_map *map,t_info *info);
 void			player_move(t_info *info, int keycode);
 
 // ------------------------------------------------
