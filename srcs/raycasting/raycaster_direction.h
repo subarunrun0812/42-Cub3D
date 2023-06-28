@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/23 17:39:22 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 14:51:37 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,10 @@
 # define D_KEY 2
 //キーを押した時の移動距離
 
-# define X_AXIS true
-# define Y_AXIS false
+// # define X_AXIS true
+// # define Y_AXIS false
+# define X_AXIS 0
+# define Y_AXIS 1
 
 # define MOVE_DISTANCE 0.5
 # define ABS(a) ((a) < 0 ? -(a) : (a))
@@ -100,8 +102,8 @@ struct s_vars
 	void	*mlx;
 	void	*win;
 	// key_action
-	double	x_start_position_vector;
-	double	y_start_position_vector;
+	// double	x_start_position_vector;
+	// double	y_start_position_vector;
 	double	x_position_vector; // posX
 	double	y_position_vector; // posY
 	double	x_direction; // dirX

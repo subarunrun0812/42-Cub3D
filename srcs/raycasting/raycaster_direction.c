@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/23 17:58:06 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 16:43:43 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	ray->x_side_distance = 0;
 	ray->y_side_distance = 0;
 	// ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
-	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
-	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
+	ray->x_delta_distance = (ray->x_direction == 0.0) ? 1e30 : ABS(1 / ray->x_direction);
+	ray->y_delta_distance = (ray->y_direction == 0.0) ? 1e30 : ABS(1 / ray->y_direction);
 }
 
 static bool	is_hit_wall(t_ray *ray)
@@ -99,43 +99,20 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 			ray->current_y_in_map += step_y;
 			axis = Y_AXIS;
 		}
-		if (is_hit_wall(ray))
+		if (is_hit_wall(ray) == true)
 			break ;
 	}
 	return (axis);
 }
 
-// int	decide_color(t_ray *ray, bool side)
 int	decide_color(t_vars *vars, t_ray *ray, bool side)
 {
-	(void)vars;
-	(void)ray;
 	int	color;
 
 	color = GREEN;
-	// color = BLACK;
-	// if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 1)
-	// {
-	// 	color = RED;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 2)
-	// {
-	// 	color = GREEN;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 3)
-	// {
-	// 	color = BLUE;
-	// }
-	// else if (world_map[ray->current_x_in_map][ray->current_y_in_map] == 4)
-	// {
-	// 	color = WHITE;
-	// }
-	// else
-	// 	color = YELLOW;
 	//give x and y sides different brightness
 	if (side == Y_AXIS)
 	{
-		// color = color / 2;
 		color = BLUE;
 		if (ray->current_y_in_map < vars->y_position_vector)
 		{
@@ -186,7 +163,6 @@ void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
 	line_height = (int)(vars->screen_height / wall_distance);
 	draw_start = calculate_draw_start(vars->screen_height, line_height);
 	draw_end = calculate_draw_end(vars->screen_height, line_height);
-	// color = decide_color(ray, side);
 	color = decide_color(vars, ray, side);
 	my_mlx_pixel_put_line(&vars->image, x, draw_start, draw_end, color);
 }
@@ -194,7 +170,7 @@ void	draw_line(t_ray *ray, t_vars *vars, int x, double wall_distance, bool side)
 int	draw_image(t_vars *vars)
 {
 	int		x_axis;
-	bool	side;
+	int		side;
 	double	perpendicular_wall_distance;
 	t_ray	ray;
 
@@ -219,8 +195,17 @@ int	draw_image(t_vars *vars)
 	return (0);
 }
 
+void	clean_image(t_vars *vars)
+{
+	int	x;
 
-
+	x = 0;
+	while (x < vars->screen_width)
+	{
+		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
+		x += 1;
+	}
+}
 
 int	key_action(int keycode, t_vars *vars)
 {
@@ -272,18 +257,9 @@ int	key_action(int keycode, t_vars *vars)
 		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
 		printf("press_key[A_KEY]\n");
 	}
-	// for(int x = 0; x < vars->screen_width; x++)
-	// {
-	// 	my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
-	// }
-	// mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
-
+	clean_image(vars);
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
-	for(int x = 0; x < vars->screen_width; x++)
-	{
-		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
-	}
 	return (0);
 }
 
@@ -292,16 +268,35 @@ void	initialize_vars(t_vars *vars)
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	vars->x_start_position_vector = 22.0;
-	vars->y_start_position_vector = 12.0;
-	vars->x_position_vector = 22.0;
+	// vars->x_position_vector = 22.0;
+	// vars->y_position_vector = 12.0;
+
+	vars->x_position_vector = 12.0;
 	vars->y_position_vector = 12.0;
+	// North
 	vars->x_direction = -1.0;
 	vars->y_direction = 0.0;
-	// vars->move_speed = MOVE_DISTANCE;
-	// vars->rotate_speed = MOVE_DISTANCE;
 	vars->x_camera_plane = 0.0;
 	vars->y_camera_plane = 0.66;
+
+	// South
+	// vars->x_direction = 1.0;
+	// vars->y_direction = 0.0;
+	// vars->x_camera_plane = 0.0;
+	// vars->y_camera_plane = -0.66;
+
+	// West
+	// vars->x_direction = 0.0;
+	// vars->y_direction = -1.0;
+	// vars->x_camera_plane = -0.66;
+	// vars->y_camera_plane = 0.0;
+
+	// East
+	// vars->x_direction = 0.0;
+	// vars->y_direction = 1.0;
+	// vars->x_camera_plane = 0.66;
+	// vars->y_camera_plane = 0.0;
+
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
 
@@ -317,6 +312,5 @@ int	main(void)
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);
-	// mlx_loop_hook(vars.mlx, draw_image, &vars);
 	mlx_loop(vars.mlx);
 }
