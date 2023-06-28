@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 18:42:14 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:49:42 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -342,7 +342,7 @@ void	clean_image(t_vars *vars)
 	x = 0;
 	while (x < vars->screen_width)
 	{
-		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
+		my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
 		x += 1;
 	}
 }
@@ -401,6 +401,10 @@ int	key_action(int keycode, t_vars *vars)
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	clean_image(vars);
+	// for(int x = 0; x < vars->screen_width; x++)
+	// {
+	// 	my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
+	// }
 	return (0);
 }
 
@@ -486,10 +490,10 @@ void	initialize_vars(t_vars *vars)
 	vars->x_position_vector = 22.0;
 	vars->y_position_vector = 11.5;
 	// North
-	// vars->x_direction = -1.0;
-	// vars->y_direction = 0.0;
-	// vars->x_camera_plane = 0.0;
-	// vars->y_camera_plane = 0.66;
+	vars->x_direction = -1.0;
+	vars->y_direction = 0.0;
+	vars->x_camera_plane = 0.0;
+	vars->y_camera_plane = 0.66;
 
 	// South
 	// vars->x_direction = 1.0;
