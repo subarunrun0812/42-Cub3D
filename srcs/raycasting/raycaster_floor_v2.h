@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_floor.h                                  :+:      :+:    :+:   */
+/*   raycaster_floor_v2.h                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 17:47:09 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:02:56 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAYCASTER_FLOOR_H
-# define RAYCASTER_FLOOR_H
+#ifndef RAYCASTER_FLOOR_V2_H
+# define RAYCASTER_FLOOR_V2_H
 
 # include <stdbool.h>
 # include <stdio.h>
@@ -49,45 +49,53 @@
 #define TEXTURE_WIDTH 64
 #define TEXTURE_HEIGHT 64
 #define TEXTURE_LIST_SIZE 10
-#define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
-#define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
-#define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
-#define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
-#define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
-#define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
-#define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
-#define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
-#define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
-#define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+// #define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
+// #define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
+// #define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
+// #define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
+// #define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
+// #define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
+// #define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
+// #define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
+// #define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
+// #define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+
+#define TEXTURE_PATH_FLOOR_1 "./srcs/raycasting/xpm/greystone.xpm"
+#define TEXTURE_PATH_FLOOR_2 "./srcs/raycasting/xpm/bluestone.xpm"
+#define TEXTURE_PATH_CEILING "./srcs/raycasting/xpm/wood.xpm"
+#define TEXTURE_PATH_SOUTH_WALL "./srcs/raycasting/xpm/eagle.xpm"
+#define TEXTURE_PATH_NORTH_WALL "./srcs/raycasting/xpm/redbrick.xpm"
+#define TEXTURE_PATH_EAST_WALL "./srcs/raycasting/xpm/purplestone.xpm"
+#define TEXTURE_PATH_WEST_WALL "./srcs/raycasting/xpm/mossy.xpm"
 
 unsigned int	buffer[WIN_HEIGHT][WIN_WIDTH];
 
 int world_map[MAP_WIDTH][MAP_HEIGHT] =
 {
-	{8,8,8,8,8,8,8,8,8,8,8,4,4,6,4,4,6,4,6,4,4,4,6,4},
-	{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
-  	{8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,6},
-  	{8,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6},
-  	{8,0,3,3,0,0,0,0,0,8,8,4,0,0,0,0,0,0,0,0,0,0,0,4},
-  	{8,0,0,0,0,0,0,0,0,0,8,4,0,0,0,0,0,6,6,6,0,6,4,6},
-  	{8,8,8,8,0,8,8,8,8,8,8,4,4,4,4,4,4,6,0,0,0,0,0,6},
-  	{7,7,7,7,0,7,7,7,7,0,8,0,8,0,8,0,8,4,0,4,0,6,0,6},
-  	{7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,0,0,0,0,0,6},
-  	{7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,0,0,0,0,4},
-  	{7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,8,6,0,6,0,6,0,6},
-  	{7,7,0,0,0,0,0,0,7,8,0,8,0,8,0,8,8,6,4,6,0,6,6,6},
-  	{7,7,7,7,0,7,7,7,7,8,8,4,0,6,8,4,8,3,3,3,0,3,3,3},
-  	{2,2,2,2,0,2,2,2,2,4,6,4,0,0,6,0,6,3,0,0,0,0,0,3},
-  	{2,2,0,0,0,0,0,2,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
-  	{2,0,0,0,0,0,0,0,2,4,0,0,0,0,0,0,4,3,0,0,0,0,0,3},
-  	{1,0,0,0,0,0,0,0,1,4,4,4,4,4,6,0,6,3,3,0,0,0,3,3},
-  	{2,0,0,0,0,0,0,0,2,2,2,1,2,2,2,6,6,0,0,5,0,5,0,5},
-  	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
-  	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
-  	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5},
-  	{2,0,0,0,0,0,0,0,2,0,0,0,0,0,2,5,0,5,0,5,0,5,0,5},
-  	{2,2,0,0,0,0,0,2,2,2,0,0,0,2,2,0,5,0,5,0,0,0,5,5},
-  	{2,2,2,2,1,2,2,2,2,2,2,1,2,2,2,5,5,5,5,5,5,5,5,5}
+	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+	{1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+  	{1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+  	{1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  	{1,0,1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1,1,1,0,1,1,1},
+  	{1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1},
+  	{1,1,1,1,0,1,1,1,1,0,1,0,1,0,1,0,1,1,0,1,0,1,0,1},
+  	{1,1,0,0,0,0,0,0,1,1,0,1,0,1,0,1,1,1,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,1,0,1,0,1},
+  	{1,1,0,0,0,0,0,0,1,1,0,1,0,1,0,1,1,1,1,1,0,1,1,1},
+  	{1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1},
+  	{1,1,1,1,0,1,1,1,1,1,1,1,0,0,1,0,1,1,0,0,0,0,0,1},
+  	{1,1,0,0,0,0,0,1,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,1,1,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,1,1,0,0,0,1,1},
+  	{1,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1,0,0,1,0,1,0,1},
+  	{1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,1,0,1,0,0,0,1,1},
+  	{1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,0,1,0,1,0,1},
+  	{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+  	{1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,1,0,1,0,1,0,1},
+  	{1,1,0,0,0,0,0,1,1,1,0,0,0,1,1,0,1,0,1,0,0,0,1,1},
+  	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
 typedef enum e_color_rgb	t_color_rgb;

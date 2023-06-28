@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_floor.c                                  :+:      :+:    :+:   */
+/*   raycaster_floor_v2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 17:46:11 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:42:14 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "raycaster_floor.h"
+#include "raycaster_floor_v2.h"
 
 static void	my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsigned int color)
 {
@@ -189,11 +189,11 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			checker_board_pattern = (int)((x_cell + y_cell) & 1);
 			if (checker_board_pattern == 0)
 			{
-				floor_texture = 3;
+				floor_texture = 0;
 			}
 			else
 			{
-				floor_texture = 4;
+				floor_texture = 1;
 			}
 
 			// get the texture coordinate from the fractional part
@@ -213,7 +213,7 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			// get the texture coordinate from the fractional part
 			int	ceiling_texture;
 
-			ceiling_texture = 6;
+			ceiling_texture = 2;
 			x_texture_coordinate = (int)(vars->texture_list[ceiling_texture].width * (x_floor - x_cell)) & (vars->texture_list[ceiling_texture].width - 1);
 			y_texture_coordinate = (int)(vars->texture_list[ceiling_texture].height * (y_floor - y_cell)) & (vars->texture_list[ceiling_texture].height - 1);
 
@@ -263,7 +263,20 @@ int	draw_image(t_vars *vars)
 
 		int		texture_number;
 
-		texture_number = world_map[ray.current_x_in_map][ray.current_y_in_map] - 1;
+		// texture_number = world_map[ray.current_x_in_map][ray.current_y_in_map] - 1;
+		texture_number = 3;
+		if (side == Y_AXIS)
+		{
+			texture_number = 5;
+			if (ray.current_y_in_map < vars->y_position_vector)
+			{
+				texture_number = 6;
+			}
+		}
+		else if (ray.current_x_in_map < vars->x_position_vector)
+		{
+			texture_number = 4;
+		}
 		// calculate value of wall_x where exactly the wall was hit
 		double	wall_x;
 
@@ -322,6 +335,18 @@ int	draw_image(t_vars *vars)
 	return (0);
 }
 
+void	clean_image(t_vars *vars)
+{
+	int	x;
+
+	x = 0;
+	while (x < vars->screen_width)
+	{
+		my_mlx_pixel_put_line(&vars->image, x, 0, WIN_HEIGHT, 0x00000000);
+		x += 1;
+	}
+}
+
 int	key_action(int keycode, t_vars *vars)
 {
 	if (keycode == W_KEY)
@@ -375,44 +400,82 @@ int	key_action(int keycode, t_vars *vars)
 	draw_floor_and_ceiling(vars);
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
-	for(int x = 0; x < vars->screen_width; x++)
-	{
-		my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
-	}
+	clean_image(vars);
 	return (0);
+}
+
+void	create_floor_textures(t_vars *vars)
+{
+	vars->texture_list[0].data.img = mlx_xpm_file_to_image(vars->mlx,
+			TEXTURE_PATH_FLOOR_1, &vars->texture_list[0].width,
+			&vars->texture_list[0].height);
+	vars->texture_list[0].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[0].data.img, &vars->texture_list[0].data.bits_per_pixel,
+			&vars->texture_list[0].data.line_length,
+			&vars->texture_list[0].data.endian);
+	vars->texture_list[1].data.img = mlx_xpm_file_to_image(vars->mlx,
+			TEXTURE_PATH_FLOOR_2, &vars->texture_list[1].width,
+			&vars->texture_list[1].height);
+	vars->texture_list[1].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[1].data.img, &vars->texture_list[1].data.bits_per_pixel,
+			&vars->texture_list[1].data.line_length,
+			&vars->texture_list[1].data.endian);
+}
+
+void	create_ceiling_textures(t_vars *vars)
+{
+	vars->texture_list[2].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_CEILING, &vars->texture_list[2].width,
+			&vars->texture_list[2].height);
+	vars->texture_list[2].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[2].data.img, &vars->texture_list[2].data.bits_per_pixel,
+			&vars->texture_list[2].data.line_length,
+			&vars->texture_list[2].data.endian);
+}
+
+void	create_south_and_north_textures(t_vars *vars)
+{
+	vars->texture_list[3].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_SOUTH_WALL, &vars->texture_list[3].width,
+			&vars->texture_list[3].height);
+	vars->texture_list[3].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[3].data.img, &vars->texture_list[3].data.bits_per_pixel,
+			&vars->texture_list[3].data.line_length,
+			&vars->texture_list[3].data.endian);
+	vars->texture_list[4].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_NORTH_WALL, &vars->texture_list[4].width,
+			&vars->texture_list[4].height);
+	vars->texture_list[4].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[4].data.img, &vars->texture_list[4].data.bits_per_pixel,
+			&vars->texture_list[4].data.line_length,
+			&vars->texture_list[4].data.endian);
+}
+
+void	create_east_and_west_textures(t_vars *vars)
+{
+	vars->texture_list[5].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_EAST_WALL, &vars->texture_list[5].width,
+			&vars->texture_list[5].height);
+	vars->texture_list[5].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[5].data.img, &vars->texture_list[5].data.bits_per_pixel,
+			&vars->texture_list[5].data.line_length,
+			&vars->texture_list[5].data.endian);
+
+	vars->texture_list[6].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_WEST_WALL, &vars->texture_list[6].width,
+			&vars->texture_list[6].height);
+	vars->texture_list[6].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[6].data.img, &vars->texture_list[6].data.bits_per_pixel,
+			&vars->texture_list[6].data.line_length,
+			&vars->texture_list[6].data.endian);
 }
 
 void	create_xpm_textures(t_vars *vars)
 {
-	vars->texture_list[0].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_EAGLE, &vars->texture_list[0].width, &vars->texture_list[0].height);
-	vars->texture_list[0].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[0].data.img, &vars->texture_list[0].data.bits_per_pixel, &vars->texture_list[0].data.line_length, &vars->texture_list[0].data.endian);
-
-	vars->texture_list[1].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_RED_BRICK, &vars->texture_list[1].width, &vars->texture_list[1].height);
-	vars->texture_list[1].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[1].data.img, &vars->texture_list[1].data.bits_per_pixel, &vars->texture_list[1].data.line_length, &vars->texture_list[1].data.endian);
-
-	vars->texture_list[2].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_PURPLE_STONE, &vars->texture_list[2].width, &vars->texture_list[2].height);
-	vars->texture_list[2].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[2].data.img, &vars->texture_list[2].data.bits_per_pixel, &vars->texture_list[2].data.line_length, &vars->texture_list[2].data.endian);
-
-	vars->texture_list[3].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_GREY_STONE, &vars->texture_list[3].width, &vars->texture_list[3].height);
-	vars->texture_list[3].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[3].data.img, &vars->texture_list[3].data.bits_per_pixel, &vars->texture_list[3].data.line_length, &vars->texture_list[3].data.endian);
-
-	vars->texture_list[4].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_BLUE_STONE, &vars->texture_list[4].width, &vars->texture_list[4].height);
-	vars->texture_list[4].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[4].data.img, &vars->texture_list[4].data.bits_per_pixel, &vars->texture_list[4].data.line_length, &vars->texture_list[4].data.endian);
-
-	vars->texture_list[5].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_MOSSY, &vars->texture_list[5].width, &vars->texture_list[5].height);
-	vars->texture_list[5].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[5].data.img, &vars->texture_list[5].data.bits_per_pixel, &vars->texture_list[5].data.line_length, &vars->texture_list[5].data.endian);
-
-	vars->texture_list[6].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_WOOD, &vars->texture_list[6].width, &vars->texture_list[6].height);
-	vars->texture_list[6].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[6].data.img, &vars->texture_list[6].data.bits_per_pixel, &vars->texture_list[6].data.line_length, &vars->texture_list[6].data.endian);
-
-	vars->texture_list[7].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_COLOR_STONE, &vars->texture_list[7].width, &vars->texture_list[7].height);
-	vars->texture_list[7].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[7].data.img, &vars->texture_list[7].data.bits_per_pixel, &vars->texture_list[7].data.line_length, &vars->texture_list[7].data.endian);
-
-	vars->texture_list[8].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_BARREL, &vars->texture_list[8].width, &vars->texture_list[8].height);
-	vars->texture_list[8].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[8].data.img, &vars->texture_list[8].data.bits_per_pixel, &vars->texture_list[8].data.line_length, &vars->texture_list[8].data.endian);
-
-	vars->texture_list[9].data.img = mlx_xpm_file_to_image(vars->mlx, TEXTURE_PATH_PILLAR, &vars->texture_list[9].width, &vars->texture_list[9].height);
-	vars->texture_list[9].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[9].data.img, &vars->texture_list[9].data.bits_per_pixel, &vars->texture_list[9].data.line_length, &vars->texture_list[9].data.endian);
+	create_floor_textures(vars);
+	create_ceiling_textures(vars);
+	create_south_and_north_textures(vars);
+	create_east_and_west_textures(vars);
 }
 
 void	initialize_vars(t_vars *vars)
@@ -423,10 +486,10 @@ void	initialize_vars(t_vars *vars)
 	vars->x_position_vector = 22.0;
 	vars->y_position_vector = 11.5;
 	// North
-	vars->x_direction = -1.0;
-	vars->y_direction = 0.0;
-	vars->x_camera_plane = 0.0;
-	vars->y_camera_plane = 0.66;
+	// vars->x_direction = -1.0;
+	// vars->y_direction = 0.0;
+	// vars->x_camera_plane = 0.0;
+	// vars->y_camera_plane = 0.66;
 
 	// South
 	// vars->x_direction = 1.0;
@@ -450,7 +513,8 @@ void	initialize_vars(t_vars *vars)
 	vars->screen_height = WIN_HEIGHT;
 
 	vars->image.img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
-	vars->image.addr = (unsigned int *)mlx_get_data_addr(vars->image.img, &vars->image.bits_per_pixel, &vars->image.line_length, &vars->image.endian);
+	vars->image.addr = (unsigned int *)mlx_get_data_addr(vars->image.img,
+			&vars->image.bits_per_pixel, &vars->image.line_length, &vars->image.endian);
 	create_xpm_textures(vars);
 	draw_floor_and_ceiling(vars);
 	draw_image(vars);
