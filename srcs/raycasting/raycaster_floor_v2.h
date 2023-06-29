@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 18:02:56 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/29 16:24:36 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,14 @@
 // #define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
 // #define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
 // #define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+
+#define FLOOR_1 0
+#define FLOOR_2 1
+#define CEILING 2
+#define SOUTH_WALL 3
+#define NORTH_WALL 4
+#define EAST_WALL 5
+#define WEST_WALL 6
 
 #define TEXTURE_PATH_FLOOR_1 "./srcs/raycasting/xpm/greystone.xpm"
 #define TEXTURE_PATH_FLOOR_2 "./srcs/raycasting/xpm/bluestone.xpm"

@@ -6,11 +6,33 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 18:49:42 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/29 19:00:59 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "raycaster_floor_v2.h"
+
+typedef struct s_draw	t_draw;
+
+struct s_draw
+{
+	bool	side;
+	double	perpendicular_wall_distance;
+	int		line_height;
+	int		start;
+	int		end;
+};
+
+typedef struct s_draw_texture	t_draw_texture;
+
+struct s_draw_texture
+{
+	int		list_number;
+	double	wall_x;
+	int		x_coordinate;
+	double	step;
+	double	position;
+};
 
 static void	my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsigned int color)
 {
@@ -26,22 +48,7 @@ static void	my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsigned 
 	}
 }
 
-void	set_ray_data(t_ray *ray, t_vars *vars, int x)
-{
-	double	x_current_camera;
-
-	x_current_camera = 2 * x / (double)vars->screen_width - 1;
-	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
-	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
-	ray->current_x_in_map = (int)vars->x_position_vector;
-	ray->current_y_in_map = (int)vars->y_position_vector;
-	ray->x_side_distance = 0;
-	ray->y_side_distance = 0;
-	// ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
-	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
-	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
-}
-
+// TODO: get_nearest_axis.c
 static bool	is_hit_wall(t_ray *ray)
 {
 	if (0 < world_map[ray->current_x_in_map][ray->current_y_in_map])
@@ -53,7 +60,7 @@ static bool	is_hit_wall(t_ray *ray)
 
 static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 {
-	if(ray->x_direction < 0)
+	if (ray->x_direction < 0)
 	{
 		ray->x_side_distance = (vars->x_position_vector - ray->current_x_in_map) * ray->x_delta_distance;
 		return (-1);
@@ -64,7 +71,7 @@ static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 
 static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 {
-	if(ray->y_direction < 0)
+	if (ray->y_direction < 0)
 	{
 		ray->y_side_distance = (vars->y_position_vector - ray->current_y_in_map) * ray->y_delta_distance;
 		return (-1);
@@ -74,7 +81,7 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 }
 
 //perform DDA
-bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
+bool	get_nearest_axis(t_ray *ray, t_vars *vars)
 {
 	int		step_x;
 	int		step_y;
@@ -82,9 +89,9 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 
 	step_x = calculate_step_x_direction(ray, vars);
 	step_y = calculate_step_y_direction(ray, vars);
-	while(1)
+	while (1)
 	{
-		if(ray->x_side_distance < ray->y_side_distance)
+		if (ray->x_side_distance < ray->y_side_distance)
 		{
 			ray->x_side_distance += ray->x_delta_distance;
 			ray->current_x_in_map += step_x;
@@ -100,30 +107,6 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 			break ;
 	}
 	return (axis);
-}
-
-int	calculate_draw_start(int screen_height, int line_height)
-{
-	int start;
-
-    start = (-line_height / 2) + (screen_height / 2);
-	if(start < 0)
-	{
-		return (0);
-	}
-	return (start);
-}
-
-int	calculate_draw_end(int screen_height, int line_height)
-{
-	int	end;
-
-	end = (line_height / 2) + (screen_height / 2);
-	if (screen_height <= end)
-	{
-		return (screen_height - 1);
-	}
-	return (end);
 }
 
 int	draw_floor_and_ceiling(t_vars *vars)
@@ -229,112 +212,184 @@ int	draw_floor_and_ceiling(t_vars *vars)
 	return (0);
 }
 
+void	set_ray_data(t_ray *ray, t_vars *vars, int x)
+{
+	double	x_current_camera;
+
+	x_current_camera = 2 * x / (double)vars->screen_width - 1;
+	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
+	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
+	ray->current_x_in_map = (int)vars->x_position_vector;
+	ray->current_y_in_map = (int)vars->y_position_vector;
+	ray->x_side_distance = 0;
+	ray->y_side_distance = 0;
+	// ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
+	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
+	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
+}
+
+double	get_perpendicular_wall_distance(t_ray *ray, bool side)
+{
+	if (side == X_AXIS)
+	{
+		return (ray->x_side_distance - ray->x_delta_distance);
+	}
+	return (ray->y_side_distance - ray->y_delta_distance);
+}
+
+int	decide_draw_texture(t_ray *ray, t_vars *vars, bool side)
+{
+	if (side == Y_AXIS)
+	{
+		if (ray->current_y_in_map < vars->y_position_vector)
+		{
+			return (WEST_WALL);
+		}
+		return (EAST_WALL);
+	}
+	else if (ray->current_x_in_map < vars->x_position_vector)
+	{
+		return (NORTH_WALL);
+	}
+	return (SOUTH_WALL);
+}
+
+int	get_draw_start_y_coordinate(int screen_height, int line_height)
+{
+	int start;
+
+    start = (-line_height / 2) + (screen_height / 2);
+	if (start < 0)
+	{
+		return (0);
+	}
+	return (start);
+}
+
+int	get_draw_end_y_coordinate(int screen_height, int line_height)
+{
+	int	end;
+
+	end = (line_height / 2) + (screen_height / 2);
+	if (screen_height <= end)
+	{
+		return (screen_height - 1);
+	}
+	return (end);
+}
+
+double	get_hit_wall_x(t_draw *draw, t_ray *ray, t_vars *vars)
+{
+	double	wall_x;
+
+	wall_x = 0.0;
+	if (draw->side == X_AXIS)
+	{
+		wall_x
+			= vars->y_position_vector
+			+ draw->perpendicular_wall_distance * ray->y_direction;
+	}
+	else
+	{
+		wall_x
+			= vars->x_position_vector
+			+ draw->perpendicular_wall_distance * ray->x_direction;
+	}
+	wall_x -= floor((wall_x));
+	return (wall_x);
+}
+
+int	get_x_coordinate_texture(t_draw_texture *texture, t_draw *draw, t_ray *ray, t_vars *vars)
+{
+	int	x_coordinate_texture;
+
+	x_coordinate_texture
+		= (int)(texture->wall_x
+				* (double)vars->texture_list[texture->list_number].width);
+	if (draw->side == 0 && 0 < ray->x_direction)
+	{
+		x_coordinate_texture
+			= vars->texture_list[texture->list_number].width
+			- x_coordinate_texture - 1;
+	}
+	if (draw->side == 1 && ray->y_direction < 0)
+	{
+		x_coordinate_texture
+			= vars->texture_list[texture->list_number].width
+			- x_coordinate_texture - 1;
+	}
+	return (x_coordinate_texture);
+}
+
+void	set_draw_data(t_draw *draw, t_ray *ray, t_vars *vars)
+{
+	draw->side = get_nearest_axis(ray, vars);
+	draw->perpendicular_wall_distance
+		= get_perpendicular_wall_distance(ray, draw->side);
+	draw->line_height
+		= (int)(vars->screen_height / draw->perpendicular_wall_distance);
+	draw->start = get_draw_start_y_coordinate(vars->screen_height, draw->line_height);
+	draw->end = get_draw_end_y_coordinate(vars->screen_height, draw->line_height);
+}
+
+void	set_draw_texture_data(t_draw_texture *texture, t_draw *draw, t_ray *ray, t_vars *vars)
+{
+	texture->list_number = decide_draw_texture(ray, vars, draw->side);
+	texture->wall_x = get_hit_wall_x(draw, ray, vars);
+	texture->x_coordinate = get_x_coordinate_texture(texture, draw, ray, vars);
+	// Starting texture coordinate
+	texture->step = (1.0 * vars->texture_list[texture->list_number].height) / draw->line_height;
+	texture->position = (draw->start - (vars->screen_height / 2) + (draw->line_height / 2)) * texture->step;
+}
+
+void	put_texture(t_draw_texture *texture, t_draw *draw, t_vars *vars
+		, int x_coordinate_screen)
+{
+	unsigned int	color;
+	int				y_coordinate_screen;
+	int				y_coordinate_texture;
+	
+	y_coordinate_screen = draw->start;
+	while (y_coordinate_screen < draw->end)
+	{
+		// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
+		y_coordinate_texture
+			= (int)texture->position & (vars->texture_list[texture->list_number].height - 1);
+		texture->position += texture->step;
+		color = *(vars->texture_list[texture->list_number].data.addr
+				+ vars->texture_list[texture->list_number].height * y_coordinate_texture
+				+ texture->x_coordinate);
+		// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+		if (draw->side == Y_AXIS)
+		{
+			color = (color >> 1) & 8355711;
+		}
+		vars->image.addr
+			[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
+		y_coordinate_screen += 1;
+	}
+}
+
 int	draw_image(t_vars *vars)
 {
-	int		x_axis;
-	bool	side;
-	double	perpendicular_wall_distance;
-	t_ray	ray;
+	int				x_coordinate_screen;
+	t_ray			ray;
+	t_draw			draw;
+	t_draw_texture	texture;
 
-	x_axis = 0;
-	side = X_AXIS;
-	perpendicular_wall_distance = 0;
-	while (x_axis < vars->screen_width)
+	x_coordinate_screen = 0;
+	while (x_coordinate_screen < vars->screen_width)
 	{
-		set_ray_data(&ray, vars, x_axis);
-		side = calculate_nearest_axis(&ray, vars);
-		if (side == X_AXIS)
-		{
-			perpendicular_wall_distance = ray.x_side_distance - ray.x_delta_distance;
-		}
-		else
-		{
-			perpendicular_wall_distance = ray.y_side_distance - ray.y_delta_distance;
-		}
-		// Calculate height of line to draw on screen
-		int	line_height;
-		// calculate lowest and highest pixel to fill in current stripe
-		int	draw_start;
-		int draw_end;
-		
-		line_height = (int)(vars->screen_height / perpendicular_wall_distance);
-		draw_start = calculate_draw_start(vars->screen_height, line_height);
-		draw_end = calculate_draw_end(vars->screen_height, line_height);
-
-		int		texture_number;
-
-		// texture_number = world_map[ray.current_x_in_map][ray.current_y_in_map] - 1;
-		texture_number = 3;
-		if (side == Y_AXIS)
-		{
-			texture_number = 5;
-			if (ray.current_y_in_map < vars->y_position_vector)
-			{
-				texture_number = 6;
-			}
-		}
-		else if (ray.current_x_in_map < vars->x_position_vector)
-		{
-			texture_number = 4;
-		}
-		// calculate value of wall_x where exactly the wall was hit
-		double	wall_x;
-
-		if (side == X_AXIS)
-		{
-			wall_x = vars->y_position_vector + perpendicular_wall_distance * ray.y_direction;
-		}
-		else
-		{
-			wall_x = vars->x_position_vector + perpendicular_wall_distance * ray.x_direction;
-		}
-		wall_x -= floor((wall_x));
-		// x coordinate on the texture
-		int texture_x;
-
-		texture_x = (int)(wall_x * (double)vars->texture_list[texture_number].width);
-		if (side == 0 && 0 < ray.x_direction)
-		{
-			texture_x = vars->texture_list[texture_number].width - texture_x - 1;
-		}
-		if (side == 1 && ray.y_direction < 0)
-		{
-			texture_x = vars->texture_list[texture_number].width - texture_x - 1;
-		}
-		double	step;
-		double	texture_position;
-		int		y;
-		
-		step = (1.0 * vars->texture_list[texture_number].height) / line_height;
-		// Starting texture coordinate
-
-		texture_position = (draw_start - (vars->screen_height / 2) + (line_height / 2)) * step;
-		y = draw_start;
-
-		while (y < draw_end)
-		{
-			// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-			int				texture_y;
-			
-			texture_y = (int)texture_position & (vars->texture_list[texture_number].height - 1);
-			texture_position += step;
-
-			unsigned int	color;
-			
-			color = *(vars->texture_list[texture_number].data.addr + vars->texture_list[texture_number].height * texture_y + texture_x);
-			// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			if (side == Y_AXIS)
-			{
-				color = (color >> 1) & 8355711;
-			}
-			vars->image.addr[y * vars->screen_width + x_axis] = color;
-			y += 1;
-		}
-		x_axis += 1;
+		set_ray_data(&ray, vars, x_coordinate_screen);
+		set_draw_data(&draw, &ray, vars);
+		set_draw_texture_data(&texture, &draw, &ray, vars);
+		put_texture(&texture, &draw, vars, x_coordinate_screen);
+		x_coordinate_screen += 1;
 	}
 	return (0);
 }
 
+// TODO: clean_image.c
 void	clean_image(t_vars *vars)
 {
 	int	x;
@@ -347,131 +402,203 @@ void	clean_image(t_vars *vars)
 	}
 }
 
+// TODO: key_action.c
+void	move_forward(t_vars *vars)
+{
+	int	one_step_forward_x_position_vector;
+	int	one_step_forward_y_position_vector;
+
+	one_step_forward_x_position_vector
+		= (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE);
+	one_step_forward_y_position_vector
+		= (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE);
+	if ((0 < one_step_forward_x_position_vector
+			&& one_step_forward_x_position_vector < MAP_WIDTH)
+		&& (0 < (int)(vars->y_position_vector)
+		&& (int)(vars->y_position_vector) < MAP_HEIGHT))
+	{
+		vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
+	}
+	if ((0 < (int)(vars->x_position_vector)
+		&& (int)(vars->x_position_vector) < MAP_WIDTH)
+		&& (0 < one_step_forward_y_position_vector
+		&& one_step_forward_y_position_vector < MAP_HEIGHT))
+	{
+		vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
+	}
+}
+
+void	move_backword(t_vars *vars)
+{
+	int	one_step_backword_x_position_vector;
+	int	one_step_backword_y_position_vector;
+
+	one_step_backword_x_position_vector
+		= (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE);
+	one_step_backword_y_position_vector
+		= (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
+	if ((0 < one_step_backword_x_position_vector
+			&& one_step_backword_x_position_vector < MAP_WIDTH)
+		&& (0 < (int)(vars->y_position_vector)
+		&& (int)(vars->y_position_vector) < MAP_HEIGHT))
+	{
+		vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
+	}
+	if ((0 < (int)(vars->x_position_vector)
+		&& (int)(vars->x_position_vector) < MAP_WIDTH)
+		&& (0 < one_step_backword_y_position_vector
+		&& one_step_backword_y_position_vector < MAP_HEIGHT))
+	{
+		vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
+	}
+}
+
+void	rotate_right_camera(t_vars *vars)
+{
+	double	x_old_direction;
+	double	x_old_plane;
+
+	x_old_direction = vars->x_direction;
+	x_old_plane = vars->x_camera_plane;
+	vars->x_direction
+		= vars->x_direction * cos(-MOVE_DISTANCE)
+		- vars->y_direction * sin(-MOVE_DISTANCE);
+	vars->y_direction
+		= x_old_direction * sin(-MOVE_DISTANCE)
+		+ vars->y_direction * cos(-MOVE_DISTANCE);
+	vars->x_camera_plane
+		= vars->x_camera_plane * cos(-MOVE_DISTANCE)
+		- vars->y_camera_plane * sin(-MOVE_DISTANCE);
+	vars->y_camera_plane
+		= x_old_plane * sin(-MOVE_DISTANCE)
+		+ vars->y_camera_plane * cos(-MOVE_DISTANCE);
+}
+
+void	rotate_left_camera(t_vars *vars)
+{
+	double	x_old_direction;
+	double	x_old_plane;
+
+	x_old_direction = vars->x_direction;
+	x_old_plane = vars->x_camera_plane;
+	vars->x_direction
+		= vars->x_direction * cos(MOVE_DISTANCE)
+		- vars->y_direction * sin(MOVE_DISTANCE);
+	vars->y_direction
+		= x_old_direction * sin(MOVE_DISTANCE)
+		+ vars->y_direction * cos(MOVE_DISTANCE);
+	vars->x_camera_plane
+		= vars->x_camera_plane * cos(MOVE_DISTANCE)
+		- vars->y_camera_plane * sin(MOVE_DISTANCE);
+	vars->y_camera_plane
+		= x_old_plane * sin(MOVE_DISTANCE)
+		+ vars->y_camera_plane * cos(MOVE_DISTANCE);
+}
+
 int	key_action(int keycode, t_vars *vars)
 {
 	if (keycode == W_KEY)
 	{
-		if ((0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
-		{
-			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-			printf("press_key[W_KEY_1]\n");
-		}
-		if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) && (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT))
-		{
-			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-			printf("press_key[W_KEY_2]\n");
-		}
+		move_forward(vars);
 	}
 	else if (keycode == S_KEY)
 	{
-		if((0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) && (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
-		{
-			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
-			printf("press_key[S_KEY_1]\n");
-		}
-		if((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE)) && (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE) < MAP_HEIGHT)))
-		{
-			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
-			printf("press_key[S_KEY_2]\n");
-		}
+		move_backword(vars);
 	}
-	else if(keycode == D_KEY)
+	else if (keycode == D_KEY)
 	{
-		//both camera direction and camera plane must be rotated
-		double	x_old_direction = vars->x_direction;
-		vars->x_direction = vars->x_direction * cos(-MOVE_DISTANCE) - vars->y_direction * sin(-MOVE_DISTANCE);
-		vars->y_direction = x_old_direction * sin(-MOVE_DISTANCE) + vars->y_direction * cos(-MOVE_DISTANCE);
-		double	x_old_plane = vars->x_camera_plane;
-		vars->x_camera_plane = vars->x_camera_plane * cos(-MOVE_DISTANCE) - vars->y_camera_plane * sin(-MOVE_DISTANCE);
-		vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE) + vars->y_camera_plane * cos(-MOVE_DISTANCE);
-		printf("press_key[D_KEY]\n");
+		rotate_right_camera(vars);
 	}
-	else if(keycode == A_KEY)
+	else if (keycode == A_KEY)
 	{
-		//both camera direction and camera plane must be rotated
-		double	x_old_direction = vars->x_direction;
-		vars->x_direction = vars->x_direction * cos(MOVE_DISTANCE) - vars->y_direction * sin(MOVE_DISTANCE);
-		vars->y_direction = x_old_direction * sin(MOVE_DISTANCE) + vars->y_direction * cos(MOVE_DISTANCE);
-		double	x_old_plane = vars->x_camera_plane;
-		vars->x_camera_plane = vars->x_camera_plane * cos(MOVE_DISTANCE) - vars->y_camera_plane * sin(MOVE_DISTANCE);
-		vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
-		printf("press_key[A_KEY]\n");
+		rotate_left_camera(vars);
 	}
 	draw_floor_and_ceiling(vars);
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	clean_image(vars);
-	// for(int x = 0; x < vars->screen_width; x++)
-	// {
-	// 	my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
-	// }
 	return (0);
 }
 
+// TODO: create_xpm_textures.c
 void	create_floor_textures(t_vars *vars)
 {
-	vars->texture_list[0].data.img = mlx_xpm_file_to_image(vars->mlx,
-			TEXTURE_PATH_FLOOR_1, &vars->texture_list[0].width,
-			&vars->texture_list[0].height);
-	vars->texture_list[0].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[0].data.img, &vars->texture_list[0].data.bits_per_pixel,
-			&vars->texture_list[0].data.line_length,
-			&vars->texture_list[0].data.endian);
-	vars->texture_list[1].data.img = mlx_xpm_file_to_image(vars->mlx,
-			TEXTURE_PATH_FLOOR_2, &vars->texture_list[1].width,
-			&vars->texture_list[1].height);
-	vars->texture_list[1].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[1].data.img, &vars->texture_list[1].data.bits_per_pixel,
-			&vars->texture_list[1].data.line_length,
-			&vars->texture_list[1].data.endian);
+	vars->texture_list[FLOOR_1].data.img = mlx_xpm_file_to_image(vars->mlx,
+			TEXTURE_PATH_FLOOR_1,
+			&vars->texture_list[FLOOR_1].width,
+			&vars->texture_list[FLOOR_1].height);
+	vars->texture_list[FLOOR_1].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[FLOOR_1].data.img,
+			&vars->texture_list[FLOOR_1].data.bits_per_pixel,
+			&vars->texture_list[FLOOR_1].data.line_length,
+			&vars->texture_list[FLOOR_1].data.endian);
+	vars->texture_list[FLOOR_2].data.img = mlx_xpm_file_to_image(vars->mlx,
+			TEXTURE_PATH_FLOOR_2,
+			&vars->texture_list[FLOOR_2].width,
+			&vars->texture_list[FLOOR_2].height);
+	vars->texture_list[FLOOR_2].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[FLOOR_2].data.img,
+			&vars->texture_list[FLOOR_2].data.bits_per_pixel,
+			&vars->texture_list[FLOOR_2].data.line_length,
+			&vars->texture_list[FLOOR_2].data.endian);
 }
 
 void	create_ceiling_textures(t_vars *vars)
 {
-	vars->texture_list[2].data.img = mlx_xpm_file_to_image(
-			vars->mlx, TEXTURE_PATH_CEILING, &vars->texture_list[2].width,
-			&vars->texture_list[2].height);
-	vars->texture_list[2].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[2].data.img, &vars->texture_list[2].data.bits_per_pixel,
-			&vars->texture_list[2].data.line_length,
-			&vars->texture_list[2].data.endian);
+	vars->texture_list[CEILING].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_CEILING,
+			&vars->texture_list[CEILING].width,
+			&vars->texture_list[CEILING].height);
+	vars->texture_list[CEILING].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[CEILING].data.img,
+			&vars->texture_list[CEILING].data.bits_per_pixel,
+			&vars->texture_list[CEILING].data.line_length,
+			&vars->texture_list[CEILING].data.endian);
 }
 
 void	create_south_and_north_textures(t_vars *vars)
 {
-	vars->texture_list[3].data.img = mlx_xpm_file_to_image(
-			vars->mlx, TEXTURE_PATH_SOUTH_WALL, &vars->texture_list[3].width,
-			&vars->texture_list[3].height);
-	vars->texture_list[3].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[3].data.img, &vars->texture_list[3].data.bits_per_pixel,
-			&vars->texture_list[3].data.line_length,
-			&vars->texture_list[3].data.endian);
-	vars->texture_list[4].data.img = mlx_xpm_file_to_image(
-			vars->mlx, TEXTURE_PATH_NORTH_WALL, &vars->texture_list[4].width,
-			&vars->texture_list[4].height);
-	vars->texture_list[4].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[4].data.img, &vars->texture_list[4].data.bits_per_pixel,
-			&vars->texture_list[4].data.line_length,
-			&vars->texture_list[4].data.endian);
+	vars->texture_list[SOUTH_WALL].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_SOUTH_WALL,
+			&vars->texture_list[SOUTH_WALL].width,
+			&vars->texture_list[SOUTH_WALL].height);
+	vars->texture_list[SOUTH_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[SOUTH_WALL].data.img,
+			&vars->texture_list[SOUTH_WALL].data.bits_per_pixel,
+			&vars->texture_list[SOUTH_WALL].data.line_length,
+			&vars->texture_list[SOUTH_WALL].data.endian);
+	vars->texture_list[NORTH_WALL].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_NORTH_WALL,
+			&vars->texture_list[NORTH_WALL].width,
+			&vars->texture_list[NORTH_WALL].height);
+	vars->texture_list[NORTH_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[NORTH_WALL].data.img,
+			&vars->texture_list[NORTH_WALL].data.bits_per_pixel,
+			&vars->texture_list[NORTH_WALL].data.line_length,
+			&vars->texture_list[NORTH_WALL].data.endian);
 }
 
 void	create_east_and_west_textures(t_vars *vars)
 {
-	vars->texture_list[5].data.img = mlx_xpm_file_to_image(
-			vars->mlx, TEXTURE_PATH_EAST_WALL, &vars->texture_list[5].width,
-			&vars->texture_list[5].height);
-	vars->texture_list[5].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[5].data.img, &vars->texture_list[5].data.bits_per_pixel,
-			&vars->texture_list[5].data.line_length,
-			&vars->texture_list[5].data.endian);
-
-	vars->texture_list[6].data.img = mlx_xpm_file_to_image(
-			vars->mlx, TEXTURE_PATH_WEST_WALL, &vars->texture_list[6].width,
-			&vars->texture_list[6].height);
-	vars->texture_list[6].data.addr = (unsigned int *)mlx_get_data_addr(
-			vars->texture_list[6].data.img, &vars->texture_list[6].data.bits_per_pixel,
-			&vars->texture_list[6].data.line_length,
-			&vars->texture_list[6].data.endian);
+	vars->texture_list[EAST_WALL].data.img = mlx_xpm_file_to_image(
+			vars->mlx, TEXTURE_PATH_EAST_WALL,
+			&vars->texture_list[EAST_WALL].width,
+			&vars->texture_list[EAST_WALL].height);
+	vars->texture_list[EAST_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[EAST_WALL].data.img,
+			&vars->texture_list[EAST_WALL].data.bits_per_pixel,
+			&vars->texture_list[EAST_WALL].data.line_length,
+			&vars->texture_list[EAST_WALL].data.endian);
+	vars->texture_list[WEST_WALL].data.img = mlx_xpm_file_to_image(
+			vars->mlx,
+			TEXTURE_PATH_WEST_WALL,
+			&vars->texture_list[WEST_WALL].width,
+			&vars->texture_list[WEST_WALL].height);
+	vars->texture_list[WEST_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+			vars->texture_list[WEST_WALL].data.img,
+			&vars->texture_list[WEST_WALL].data.bits_per_pixel,
+			&vars->texture_list[WEST_WALL].data.line_length,
+			&vars->texture_list[WEST_WALL].data.endian);
 }
 
 void	create_xpm_textures(t_vars *vars)
@@ -482,43 +609,47 @@ void	create_xpm_textures(t_vars *vars)
 	create_east_and_west_textures(vars);
 }
 
+// North
+// vars->x_direction = -1.0;
+// vars->y_direction = 0.0;
+// vars->x_camera_plane = 0.0;
+// vars->y_camera_plane = 0.66;
+
+// South
+// vars->x_direction = 1.0;
+// vars->y_direction = 0.0;
+// vars->x_camera_plane = 0.0;
+// vars->y_camera_plane = -0.66;
+
+// West
+// vars->x_direction = 0.0;
+// vars->y_direction = -1.0;
+// vars->x_camera_plane = -0.66;
+// vars->y_camera_plane = 0.0;
+
+// East
+// vars->x_direction = 0.0;
+// vars->y_direction = 1.0;
+// vars->x_camera_plane = 0.66;
+// vars->y_camera_plane = 0.0;
+
+// TODO: initialize_vars.c
 void	initialize_vars(t_vars *vars)
 {
 	vars->mlx = mlx_init();
-    vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
-
+	vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 	vars->x_position_vector = 22.0;
 	vars->y_position_vector = 11.5;
-	// North
 	vars->x_direction = -1.0;
 	vars->y_direction = 0.0;
 	vars->x_camera_plane = 0.0;
 	vars->y_camera_plane = 0.66;
-
-	// South
-	// vars->x_direction = 1.0;
-	// vars->y_direction = 0.0;
-	// vars->x_camera_plane = 0.0;
-	// vars->y_camera_plane = -0.66;
-
-	// West
-	// vars->x_direction = 0.0;
-	// vars->y_direction = -1.0;
-	// vars->x_camera_plane = -0.66;
-	// vars->y_camera_plane = 0.0;
-
-	// East
-	// vars->x_direction = 0.0;
-	// vars->y_direction = 1.0;
-	// vars->x_camera_plane = 0.66;
-	// vars->y_camera_plane = 0.0;
-
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
-
 	vars->image.img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	vars->image.addr = (unsigned int *)mlx_get_data_addr(vars->image.img,
-			&vars->image.bits_per_pixel, &vars->image.line_length, &vars->image.endian);
+			&vars->image.bits_per_pixel, &vars->image.line_length,
+			&vars->image.endian);
 	create_xpm_textures(vars);
 	draw_floor_and_ceiling(vars);
 	draw_image(vars);
