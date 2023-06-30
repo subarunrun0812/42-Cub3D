@@ -12,6 +12,7 @@
         "string_view": "c",
         "vector": "c",
         "raycasting.h": "c",
-        "cub3d.h": "c"
+        "cub3d.h": "c",
+        "filesystem": "c"
     },
 }

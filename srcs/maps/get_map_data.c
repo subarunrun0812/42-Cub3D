@@ -6,23 +6,23 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:03:58 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:02:17 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../../include/cub3d.h"
+#include "../../include/cub3d.h"
 
 static int	non_specific_chara(char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (str[i] != '\n' && str[i] != '\0')
 	{
-         //TODO: 課題要件にない'2','3','4'を削除する
-		if (str[i] != '0' && str[i] != '1' && str[i] != 'N'
-			&& str[i] != 'S' && str[i] != 'E' && str[i] != 'W'
-			&& str[i] != ' ' && str[i] != '2' && str[i] != '3' && str[i] != '4')
+		// TODO: 課題要件にない'2','3','4'を削除する
+		if (str[i] != '0' && str[i] != '1' && str[i] != 'N' && str[i] != 'S'
+			&& str[i] != 'E' && str[i] != 'W' && str[i] != ' ' && str[i] != '2'
+			&& str[i] != '3' && str[i] != '4')
 			return (1);
 		i++;
 	}
@@ -52,62 +52,82 @@ static char	*check_n(char *str)
 	return (res);
 }
 
-//2次元の文字列配列に新しい行を追加する
-static char **map_str_add(char **array, char *new)
+// 2次元の文字列配列に新しい行を追加する
+static char	**map_str_add(char **array, char *new)
 {
-    char **res;
-    int i;
-    int vertical;
+	char	**res;
+	int		i;
+	int		vertical;
 
-    vertical = 0;
-    while (array && array[vertical] != NULL)
-        vertical++;
-    res = (char **)malloc(sizeof(char *) * (vertical + 2));
-    if (!res)
-        print_error("map");
-    i = 0;
-    while (i < vertical)
-    {
-        res[i] = array[i];
-        i++;
-    }
-    new = check_n(new);
-    if (!new)
-        print_error("check_n()");
-        
-    res[i++] = new;
-    res[i] = NULL;
-    free(array);
-    return (res);
+	vertical = 0;
+	while (array && array[vertical] != NULL)
+		vertical++;
+	res = (char **)malloc(sizeof(char *) * (vertical + 2));
+	if (!res)
+		print_error("map");
+	i = 0;
+	while (i < vertical)
+	{
+		res[i] = array[i];
+		i++;
+	}
+	new = check_n(new);
+	if (!new)
+		print_error("check_n()");
+	res[i++] = new;
+	res[i] = NULL;
+	free(array);
+	return (res);
 }
 
-void get_map_data(int fd,t_info *info)
+void	get_map_data(int fd, t_info *info)
 {
-    char *str;
-    int flag;
+	char	*str;
+	int		flag;
+	int		count;
+	int		i;
 
-    str = get_next_line(fd);
-    if (!str)
+	str = get_next_line(fd);
+	if (!str)
 	{
-        print_error("get_next_line");
+		print_error("get_next_line");
 	}
-    flag = 0;
-	int i = 0;
-    while (str)
-    {
-        if (non_specific_chara(str) == 1)
+	flag = 0;
+	i = 0;
+    count = 0;
+	while (str)
+	{
+		if (count < 6)
 		{
-        	printf("\x1b[31mstr = %s\x1b[0m\n",str);
-            flag = 1;
+            count += read_texture(str,info->texture);
+            str = get_next_line(fd);
+			i++;
+            printf("count = %d\n",count);
 		}
-        info->map->map_data = map_str_add(info->map->map_data,str);
-        str = get_next_line(fd);
-		i++ ;
-        info->map->height++;
-    }
-    if (flag == 1)
-    {
-        free_mapdata(info->map->map_data, info->map->height);
-        print_error("get_next_line");
-    }
+		else
+		{
+			if (non_specific_chara(str) == 1)
+			{
+				printf("\x1b[31mstr = %s\x1b[0m\n", str);
+				flag = 1;
+			}
+			info->map->map_data = map_str_add(info->map->map_data, str);
+			str = get_next_line(fd);
+			i++;
+			info->map->height++;
+			if (flag == 1)
+			{
+				free_mapdata(info->map->map_data, info->map->height);
+				print_error("get_next_line");
+			}
+		}
+	}
+    printf("\x1b[32m");
+    printf("texture->no=%s\n",info->texture->no);
+    printf("texture->so=%s\n",info->texture->so);
+    printf("texture->we=%s\n",info->texture->we);
+    printf("texture->ea=%s\n",info->texture->ea);
+    printf("texture->floor=%s\n",info->texture->floor);
+    printf("texture->celling=%s\n",info->texture->celling);
+    printf("\x1b[0m\n");
 }
