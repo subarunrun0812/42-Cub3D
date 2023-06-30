@@ -118,7 +118,7 @@ typedef struct s_map
 
 typedef struct s_plane
 {
-	double		x;
+  double		x;
 	double		y;
 }				t_plane;
 

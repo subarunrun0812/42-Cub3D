@@ -15,6 +15,7 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 # SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
 # SOURCES = $(RAYCASTING_DIR)/raycaster_xpm_textured.c
 # SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
+SOURCES = $(RAYCASTING_DIR)/raycasting_hnoguchi.c
 
 SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\

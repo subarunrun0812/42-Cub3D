@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/23 13:57:57 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/28 18:48:37 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,10 +105,8 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars)
 int	calculate_draw_start(int screen_height, int line_height)
 {
 	int start;
-	int pitch;
 
-	pitch = 100;
-    start = (-line_height / 2) + (screen_height / 2) + pitch;
+    start = (-line_height / 2) + (screen_height / 2);
 	if(start < 0)
 	{
 		return (0);
@@ -119,10 +117,8 @@ int	calculate_draw_start(int screen_height, int line_height)
 int	calculate_draw_end(int screen_height, int line_height)
 {
 	int	end;
-	int pitch;
 
-	pitch = 100;
-	end = (line_height / 2) + (screen_height / 2) + pitch;
+	end = (line_height / 2) + (screen_height / 2);
 	if (screen_height <= end)
 	{
 		return (screen_height - 1);
@@ -135,11 +131,6 @@ int	draw_floor_and_ceiling(t_vars *vars)
 	int	y;
 
 	y = (vars->screen_height / 2) - 1;
-	printf("\nBegin ------\n");
-	printf("y                                                    : [%d]\n", y);
-	printf("(vars->screen_width * y)                             : [%d]\n", (vars->screen_width * y));
-	// printf("(vars->screen_width * (vars->screen_height - y - 1)) : [%d]\n", (vars->screen_width * (vars->screen_height - y - 1)));
-	printf("(vars->screen_width * (vars->screen_height - y))     : [%d]\n", (vars->screen_width * (vars->screen_height - y)));
     while (y < vars->screen_height)
     {
 		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
@@ -208,26 +199,26 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			// get the texture coordinate from the fractional part
 			int x_texture_coordinate;
 			int y_texture_coordinate;
-
-			x_texture_coordinate = (int)(vars->texture_list[floor_texture].width * (x_floor - x_cell)) & (vars->texture_list[floor_texture].width - 1);
-			y_texture_coordinate = (int)(vars->texture_list[floor_texture].height * (y_floor - y_cell)) & (vars->texture_list[floor_texture].height - 1);
-
 			unsigned int	color;
 
 			// floor
+			x_texture_coordinate = (int)(vars->texture_list[floor_texture].width * (x_floor - x_cell)) & (vars->texture_list[floor_texture].width - 1);
+			y_texture_coordinate = (int)(vars->texture_list[floor_texture].height * (y_floor - y_cell)) & (vars->texture_list[floor_texture].height - 1);
+
 			color = *(vars->texture_list[floor_texture].data.addr + vars->texture_list[floor_texture].width * y_texture_coordinate + x_texture_coordinate);
 			color = (color >> 1) & 8355711;
 			vars->image.addr[(vars->screen_width * y) + x] = color;
 
 			// ceiling
-			int				ceiling_texture;
+			// get the texture coordinate from the fractional part
+			int	ceiling_texture;
 
 			ceiling_texture = 6;
+			x_texture_coordinate = (int)(vars->texture_list[ceiling_texture].width * (x_floor - x_cell)) & (vars->texture_list[ceiling_texture].width - 1);
+			y_texture_coordinate = (int)(vars->texture_list[ceiling_texture].height * (y_floor - y_cell)) & (vars->texture_list[ceiling_texture].height - 1);
+
 			color = *(vars->texture_list[ceiling_texture].data.addr + vars->texture_list[ceiling_texture].height * y_texture_coordinate + x_texture_coordinate);
 			color = (color >> 1) & 8355711;
-			// buffer[screenHeight - y - 1][x] = color;
-			// vars->image.addr[((vars->screen_width - y - 1 * vars->screen_width)) + x] = color;
-			// vars->image.addr[(vars->screen_width * (vars->screen_height - y - 1)) + x] = color;
 			vars->image.addr[(vars->screen_width * (vars->screen_height - y)) + x] = color;
 			x += 1;
 			x_floor += x_step_floor;
@@ -235,11 +226,6 @@ int	draw_floor_and_ceiling(t_vars *vars)
 		}
 		y += 1;
 	}
-	printf("\nEnd ------\n");
-	printf("y                                                    : [%d]\n", y);
-	printf("(vars->screen_width * y)                             : [%d]\n", (vars->screen_width * y));
-	// printf("(vars->screen_width * (vars->screen_height - y - 1)) : [%d]\n", (vars->screen_width * (vars->screen_height - y - 1)));
-	printf("(vars->screen_width * (vars->screen_height - y))     : [%d]\n", (vars->screen_width * (vars->screen_height - y)));
 	return (0);
 }
 
@@ -308,10 +294,8 @@ int	draw_image(t_vars *vars)
 		
 		step = (1.0 * vars->texture_list[texture_number].height) / line_height;
 		// Starting texture coordinate
-		int	pitch;
 
-		pitch = 100;
-		texture_position = (draw_start - pitch - (vars->screen_height / 2) + (line_height / 2)) * step;
+		texture_position = (draw_start - (vars->screen_height / 2) + (line_height / 2)) * step;
 		y = draw_start;
 
 		while (y < draw_end)
@@ -438,10 +422,30 @@ void	initialize_vars(t_vars *vars)
 
 	vars->x_position_vector = 22.0;
 	vars->y_position_vector = 11.5;
-	vars->x_direction = -1;
-	vars->y_direction = 0;
-	vars->x_camera_plane = 0;
+	// North
+	vars->x_direction = -1.0;
+	vars->y_direction = 0.0;
+	vars->x_camera_plane = 0.0;
 	vars->y_camera_plane = 0.66;
+
+	// South
+	// vars->x_direction = 1.0;
+	// vars->y_direction = 0.0;
+	// vars->x_camera_plane = 0.0;
+	// vars->y_camera_plane = -0.66;
+
+	// West
+	// vars->x_direction = 0.0;
+	// vars->y_direction = -1.0;
+	// vars->x_camera_plane = -0.66;
+	// vars->y_camera_plane = 0.0;
+
+	// East
+	// vars->x_direction = 0.0;
+	// vars->y_direction = 1.0;
+	// vars->x_camera_plane = 0.66;
+	// vars->y_camera_plane = 0.0;
+
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
 
@@ -455,6 +459,7 @@ void	initialize_vars(t_vars *vars)
 int	main(void)
 {
 	t_vars			vars;
+
 	initialize_vars(&vars);
 	mlx_put_image_to_window(vars.mlx, vars.win, vars.image.img, 0, 0);
 	mlx_key_hook(vars.win, key_action, &vars);
