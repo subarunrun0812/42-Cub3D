@@ -108,7 +108,7 @@ typedef struct s_player
 
 typedef struct s_plane
 {
-	double		x;
+  double		x;
 	double		y;
 }				t_plane;
 
