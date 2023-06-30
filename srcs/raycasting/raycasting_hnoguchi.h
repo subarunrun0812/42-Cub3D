@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/30 14:52:33 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/30 18:15:54 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,13 @@
 # define MOVE_DISTANCE 0.5
 # define ABS(a) ((a) < 0 ? -(a) : (a))
 
+# define X 0
+# define Y 1
+
 // texture
 #define TEXTURE_WIDTH 64
 #define TEXTURE_HEIGHT 64
 #define TEXTURE_LIST_SIZE 10
-// #define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
-// #define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
-// #define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
-// #define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
-// #define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
-// #define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
-// #define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
-// #define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
-// #define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
-// #define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
 
 #define FLOOR_1 0
 #define FLOOR_2 1

@@ -65,7 +65,6 @@ typedef struct s_plane
 	double 	y;
 }			t_plane;
 
-
 typedef struct s_data
 {
 	void	*img;
@@ -74,6 +73,7 @@ typedef struct s_data
 	int		line_length;
 	int		endian;
 }			t_data;
+
 typedef struct s_vars
 {
 	void	*mlx;
