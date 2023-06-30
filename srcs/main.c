@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 17:12:48 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 12:58:16 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ int	main(int argc, char **argv)
 		printf("\x1b[31mError:\nno map specified.\x1b[0m\n");
 		return (0);
 	}
-	info.data = &data;
-	//TODO:はじめに、角マップを表示したら、centralmap42の時に正常に真ん中に配置されない
-	flag.map = -1;
-	info.flag = &flag;
 	init(&info, &map, &vars);
+	info.data = &data;
+	info.flag = &flag;
 	info.vars->image = &data;
 	info.texture = &texture;
+	//TODO:はじめに、角マップを表示したら、centralmap42の時に正常に真ん中に配置されない
+	flag.map = -1;
 	read_map(argv[1], &info);
 	init_player_coordinate(&map,&info);
 	raycasting(&info);
