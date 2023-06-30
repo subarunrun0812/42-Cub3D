@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 17:22:37 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 18:42:43 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,11 @@ void	get_map_data(int fd, t_info *info)
 	int		flag;
 	int		count;
 	int		i;
+    t_rgb   f_rgb;
+    t_rgb   c_rgb;
 
+    info->texture->f_rgb = &f_rgb;
+    info->texture->c_rgb = &c_rgb;
 	str = get_next_line(fd);
 	if (!str)
 	{
@@ -141,7 +145,13 @@ void	get_map_data(int fd, t_info *info)
     printf("texture->so=%s\n",info->texture->so);
     printf("texture->we=%s\n",info->texture->we);
     printf("texture->ea=%s\n",info->texture->ea);
-    printf("texture->floor=%s\n",info->texture->floor);
-    printf("texture->celling=%s\n",info->texture->celling);
+    printf("texture->floor=%s\n",info->texture->f_tex);
+    printf("texture->celling=%s\n",info->texture->c_tex);
+    printf("texture->floor->red=%d\n",info->texture->f_rgb->red);
+    printf("texture->floor->red=%d\n",info->texture->f_rgb->green);
+    printf("texture->floor->red=%d\n",info->texture->f_rgb->blue);
+    printf("texture->floor->red=%d\n",info->texture->c_rgb->red);
+    printf("texture->floor->red=%d\n",info->texture->c_rgb->green);
+    printf("texture->floor->red=%d\n",info->texture->c_rgb->blue);
     printf("\x1b[0m\n");
 }

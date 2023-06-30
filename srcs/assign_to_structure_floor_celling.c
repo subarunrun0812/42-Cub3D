@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 16:49:35 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 16:53:13 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 18:38:37 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 void	assign_to_structure_floor(char **str, t_texture *texture)
 {
-	texture->floor = assign_to_structure(str);
+	texture->f_tex = assign_to_structure(str,"floor",texture);
 }
 
 void	assign_to_structure_celling(char **str, t_texture *texture)
 {
-	texture->celling = assign_to_structure(str);
+	texture->c_tex = assign_to_structure(str,"celling",texture);
 }

@@ -131,14 +131,23 @@ typedef struct s_data
 	int			endian;
 }				t_data;
 
+typedef struct s_rgb
+{
+	int			red;
+	int			green;
+	int			blue;
+}				t_rgb;
+
 typedef struct s_texture
 {
 	char		*no;
 	char		*so;
 	char		*we;
 	char		*ea;
-	char		*floor;
-	char		*celling;
+	char		*f_tex;
+	char		*c_tex;
+	t_rgb		*f_rgb;
+	t_rgb		*c_rgb;
 }				t_texture;
 
 typedef struct s_vars
@@ -217,7 +226,8 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 
 // FILE
 int				read_texture(char *str, t_texture *texture);
-char			*assign_to_structure(char **str);
+char			*assign_to_structure(char **str, char *identifier,
+					t_texture *texture);
 void			assign_to_structure_floor(char **str, t_texture *texture);
 void			assign_to_structure_celling(char **str, t_texture *texture);
 void			assign_to_structure_no(char **str, t_texture *texture);
