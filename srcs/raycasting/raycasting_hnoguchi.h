@@ -1,17 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_floor_v2.h                               :+:      :+:    :+:   */
+/*   raycasting_hnoguchi.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/29 16:24:36 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/30 14:52:33 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAYCASTER_FLOOR_V2_H
-# define RAYCASTER_FLOOR_V2_H
+#ifndef RAYCASTING_HNOGUCHI_H
+# define RAYCASTING_HNOGUCHI_H
 
 # include <stdbool.h>
 # include <stdio.h>
@@ -106,11 +106,13 @@ int world_map[MAP_WIDTH][MAP_HEIGHT] =
   	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-typedef enum e_color_rgb	t_color_rgb;
-typedef struct s_vars		t_vars;
-typedef struct s_data		t_data;
-typedef struct s_ray		t_ray;
-typedef struct s_texture	t_texture;
+typedef enum e_color_rgb		t_color_rgb;
+typedef struct s_vars			t_vars;
+typedef struct s_data			t_data;
+typedef struct s_ray			t_ray;
+typedef struct s_texture		t_texture;
+typedef struct s_draw			t_draw;
+typedef struct s_draw_texture	t_draw_texture;
 
 enum e_color_rgb {
 	RGB_Red,
@@ -144,8 +146,6 @@ struct s_vars
 	double		y_position_vector; // posY
 	double		x_direction; // dirX
 	double		y_direction; // dirY
-	// double	move_speed; // moveSpeed
-	// double	rotate_speed; // rotSpeed
 	double		x_camera_plane; // planeX
 	double		y_camera_plane; // planeY
 	int			screen_width; // width of the screen
@@ -163,6 +163,24 @@ struct s_ray {
 	double	y_side_distance;
 	double	x_delta_distance;
 	double	y_delta_distance;
+};
+
+struct s_draw
+{
+	bool	side;
+	double	perpendicular_wall_distance;
+	int		line_height;
+	int		start;
+	int		end;
+};
+
+struct s_draw_texture
+{
+	int		list_number;
+	double	wall_x;
+	int		x_coordinate;
+	double	step;
+	double	position;
 };
 
 #endif

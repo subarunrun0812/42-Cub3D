@@ -1,40 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycaster_floor_v2.c                               :+:      :+:    :+:   */
+/*   raycasting_hnoguchi.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/29 19:00:59 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/06/30 14:54:55 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "raycaster_floor_v2.h"
+#include "raycasting_hnoguchi.h"
 
-typedef struct s_draw	t_draw;
-
-struct s_draw
-{
-	bool	side;
-	double	perpendicular_wall_distance;
-	int		line_height;
-	int		start;
-	int		end;
-};
-
-typedef struct s_draw_texture	t_draw_texture;
-
-struct s_draw_texture
-{
-	int		list_number;
-	double	wall_x;
-	int		x_coordinate;
-	double	step;
-	double	position;
-};
-
-static void	my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsigned int color)
+static void	my_mlx_pixel_put_line(t_vars *vars
+		, int x, int y1, int y2, unsigned int color)
 {
 	int				y;
 	unsigned int	*dst;
@@ -62,10 +41,14 @@ static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->x_direction < 0)
 	{
-		ray->x_side_distance = (vars->x_position_vector - ray->current_x_in_map) * ray->x_delta_distance;
+		ray->x_side_distance
+			= (vars->x_position_vector - ray->current_x_in_map)
+			* ray->x_delta_distance;
 		return (-1);
 	}
-	ray->x_side_distance = (ray->current_x_in_map + 1.0 - vars->x_position_vector) * ray->x_delta_distance;
+	ray->x_side_distance
+		= (ray->current_x_in_map + 1.0 - vars->x_position_vector)
+		* ray->x_delta_distance;
 	return (1);
 }
 
@@ -73,10 +56,14 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->y_direction < 0)
 	{
-		ray->y_side_distance = (vars->y_position_vector - ray->current_y_in_map) * ray->y_delta_distance;
+		ray->y_side_distance
+			= (vars->y_position_vector - ray->current_y_in_map)
+			* ray->y_delta_distance;
 		return (-1);
 	}
-	ray->y_side_distance = (ray->current_y_in_map + 1.0 - vars->y_position_vector) * ray->y_delta_distance;
+	ray->y_side_distance
+		= (ray->current_y_in_map + 1.0 - vars->y_position_vector)
+		* ray->y_delta_distance;
 	return (1);
 }
 
@@ -112,10 +99,10 @@ bool	get_nearest_axis(t_ray *ray, t_vars *vars)
 int	draw_floor_and_ceiling(t_vars *vars)
 {
 	int	y;
-
+	
 	y = (vars->screen_height / 2) - 1;
-    while (y < vars->screen_height)
-    {
+	while (y < vars->screen_height)
+	{
 		// rayDir for leftmost ray (x = 0) and rightmost ray (x = w)
 		float	x_ray_direction_0;
 		float	y_ray_direction_0;
@@ -172,11 +159,11 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			checker_board_pattern = (int)((x_cell + y_cell) & 1);
 			if (checker_board_pattern == 0)
 			{
-				floor_texture = 0;
+				floor_texture = FLOOR_1;
 			}
 			else
 			{
-				floor_texture = 1;
+				floor_texture = FLOOR_2;
 			}
 
 			// get the texture coordinate from the fractional part
@@ -196,7 +183,7 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			// get the texture coordinate from the fractional part
 			int	ceiling_texture;
 
-			ceiling_texture = 2;
+			ceiling_texture = CEILING;
 			x_texture_coordinate = (int)(vars->texture_list[ceiling_texture].width * (x_floor - x_cell)) & (vars->texture_list[ceiling_texture].width - 1);
 			y_texture_coordinate = (int)(vars->texture_list[ceiling_texture].height * (y_floor - y_cell)) & (vars->texture_list[ceiling_texture].height - 1);
 
@@ -217,16 +204,32 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	double	x_current_camera;
 
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
-	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
-	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
-	ray->current_x_in_map = (int)vars->x_position_vector;
+	ray->x_direction
+		= vars->x_direction + (vars->x_camera_plane * x_current_camera);
+	ray->y_direction
+		= vars->y_direction + (vars->y_camera_plane * x_current_camera);
+	ray->current_x_in_map
+		= (int)vars->x_position_vector;
 	ray->current_y_in_map = (int)vars->y_position_vector;
 	ray->x_side_distance = 0;
 	ray->y_side_distance = 0;
-	// ゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
-	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
-	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
+	if (ray->x_direction == 0)
+	{
+		ray->x_delta_distance = 1e30;
+	}
+	else
+		ray->x_delta_distance = ABS(1 / ray->x_direction);
+	if (ray->y_direction == 0)
+	{
+		ray->y_delta_distance = 1e30;
+	}
+	else
+		ray->y_delta_distance = ABS(1 / ray->y_direction);
 }
+// ray->x_delta_distance
+//	= (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
+// ray->y_delta_distance
+//	= (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
 
 double	get_perpendicular_wall_distance(t_ray *ray, bool side)
 {
@@ -256,9 +259,9 @@ int	decide_draw_texture(t_ray *ray, t_vars *vars, bool side)
 
 int	get_draw_start_y_coordinate(int screen_height, int line_height)
 {
-	int start;
+	int	start;
 
-    start = (-line_height / 2) + (screen_height / 2);
+	start = (-line_height / 2) + (screen_height / 2);
 	if (start < 0)
 	{
 		return (0);
@@ -299,13 +302,14 @@ double	get_hit_wall_x(t_draw *draw, t_ray *ray, t_vars *vars)
 	return (wall_x);
 }
 
-int	get_x_coordinate_texture(t_draw_texture *texture, t_draw *draw, t_ray *ray, t_vars *vars)
+int	get_x_coordinate_texture(t_draw_texture *texture,
+		t_draw *draw, t_ray *ray, t_vars *vars)
 {
 	int	x_coordinate_texture;
 
 	x_coordinate_texture
 		= (int)(texture->wall_x
-				* (double)vars->texture_list[texture->list_number].width);
+			* (double)vars->texture_list[texture->list_number].width);
 	if (draw->side == 0 && 0 < ray->x_direction)
 	{
 		x_coordinate_texture
@@ -323,23 +327,31 @@ int	get_x_coordinate_texture(t_draw_texture *texture, t_draw *draw, t_ray *ray, 
 
 void	set_draw_data(t_draw *draw, t_ray *ray, t_vars *vars)
 {
-	draw->side = get_nearest_axis(ray, vars);
+	draw->side
+		= get_nearest_axis(ray, vars);
 	draw->perpendicular_wall_distance
 		= get_perpendicular_wall_distance(ray, draw->side);
 	draw->line_height
 		= (int)(vars->screen_height / draw->perpendicular_wall_distance);
-	draw->start = get_draw_start_y_coordinate(vars->screen_height, draw->line_height);
-	draw->end = get_draw_end_y_coordinate(vars->screen_height, draw->line_height);
+	draw->start
+		= get_draw_start_y_coordinate(vars->screen_height, draw->line_height);
+	draw->end
+		= get_draw_end_y_coordinate(vars->screen_height, draw->line_height);
 }
 
-void	set_draw_texture_data(t_draw_texture *texture, t_draw *draw, t_ray *ray, t_vars *vars)
+void	set_draw_texture_data(t_draw_texture *texture,
+		t_draw *draw, t_ray *ray, t_vars *vars)
 {
 	texture->list_number = decide_draw_texture(ray, vars, draw->side);
 	texture->wall_x = get_hit_wall_x(draw, ray, vars);
-	texture->x_coordinate = get_x_coordinate_texture(texture, draw, ray, vars);
-	// Starting texture coordinate
-	texture->step = (1.0 * vars->texture_list[texture->list_number].height) / draw->line_height;
-	texture->position = (draw->start - (vars->screen_height / 2) + (draw->line_height / 2)) * texture->step;
+	texture->x_coordinate
+		= get_x_coordinate_texture(texture, draw, ray, vars);
+	texture->step
+		= (1.0 * vars->texture_list[texture->list_number].height)
+		/ draw->line_height;
+	texture->position
+		= (draw->start - (vars->screen_height / 2)
+			+ (draw->line_height / 2)) * texture->step;
 }
 
 void	put_texture(t_draw_texture *texture, t_draw *draw, t_vars *vars
@@ -348,24 +360,24 @@ void	put_texture(t_draw_texture *texture, t_draw *draw, t_vars *vars
 	unsigned int	color;
 	int				y_coordinate_screen;
 	int				y_coordinate_texture;
-	
+
 	y_coordinate_screen = draw->start;
 	while (y_coordinate_screen < draw->end)
 	{
-		// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
 		y_coordinate_texture
-			= (int)texture->position & (vars->texture_list[texture->list_number].height - 1);
+			= (int)texture->position
+			& (vars->texture_list[texture->list_number].height - 1);
 		texture->position += texture->step;
 		color = *(vars->texture_list[texture->list_number].data.addr
-				+ vars->texture_list[texture->list_number].height * y_coordinate_texture
+				+ vars->texture_list[texture->list_number].height
+				* y_coordinate_texture
 				+ texture->x_coordinate);
-		// make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 		if (draw->side == Y_AXIS)
 		{
 			color = (color >> 1) & 8355711;
 		}
-		vars->image.addr
-			[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
+		vars->image.addr[y_coordinate_screen * vars->screen_width
+			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
 	}
 }
@@ -558,20 +570,24 @@ void	create_ceiling_textures(t_vars *vars)
 
 void	create_south_and_north_textures(t_vars *vars)
 {
-	vars->texture_list[SOUTH_WALL].data.img = mlx_xpm_file_to_image(
+	vars->texture_list[SOUTH_WALL].data.img
+		= mlx_xpm_file_to_image(
 			vars->mlx, TEXTURE_PATH_SOUTH_WALL,
 			&vars->texture_list[SOUTH_WALL].width,
 			&vars->texture_list[SOUTH_WALL].height);
-	vars->texture_list[SOUTH_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+	vars->texture_list[SOUTH_WALL].data.addr
+		= (unsigned int *)mlx_get_data_addr(
 			vars->texture_list[SOUTH_WALL].data.img,
 			&vars->texture_list[SOUTH_WALL].data.bits_per_pixel,
 			&vars->texture_list[SOUTH_WALL].data.line_length,
 			&vars->texture_list[SOUTH_WALL].data.endian);
-	vars->texture_list[NORTH_WALL].data.img = mlx_xpm_file_to_image(
+	vars->texture_list[NORTH_WALL].data.img
+		= mlx_xpm_file_to_image(
 			vars->mlx, TEXTURE_PATH_NORTH_WALL,
 			&vars->texture_list[NORTH_WALL].width,
 			&vars->texture_list[NORTH_WALL].height);
-	vars->texture_list[NORTH_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
+	vars->texture_list[NORTH_WALL].data.addr
+		= (unsigned int *)mlx_get_data_addr(
 			vars->texture_list[NORTH_WALL].data.img,
 			&vars->texture_list[NORTH_WALL].data.bits_per_pixel,
 			&vars->texture_list[NORTH_WALL].data.line_length,
