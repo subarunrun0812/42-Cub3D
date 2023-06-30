@@ -21,6 +21,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
           $(SOURCES_DIR)/read_texture.c\
+          $(SOURCES_DIR)/assign_to_structure.c\
           $(SOURCES_DIR)/assign_to_structure_floor_celling.c\
           $(SOURCES_DIR)/assign_to_structure_nswe.c\
           $(MAPS_DIR)/read_map.c\

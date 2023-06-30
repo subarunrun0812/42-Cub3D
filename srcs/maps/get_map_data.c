@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 18:42:43 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 19:19:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,10 +148,10 @@ void	get_map_data(int fd, t_info *info)
     printf("texture->floor=%s\n",info->texture->f_tex);
     printf("texture->celling=%s\n",info->texture->c_tex);
     printf("texture->floor->red=%d\n",info->texture->f_rgb->red);
-    printf("texture->floor->red=%d\n",info->texture->f_rgb->green);
-    printf("texture->floor->red=%d\n",info->texture->f_rgb->blue);
-    printf("texture->floor->red=%d\n",info->texture->c_rgb->red);
-    printf("texture->floor->red=%d\n",info->texture->c_rgb->green);
-    printf("texture->floor->red=%d\n",info->texture->c_rgb->blue);
+    printf("texture->floor->green=%d\n",info->texture->f_rgb->green);
+    printf("texture->floor->blue=%d\n",info->texture->f_rgb->blue);
+    printf("texture->celling->red=%d\n",info->texture->c_rgb->red);
+    printf("texture->celling->green=%d\n",info->texture->c_rgb->green);
+    printf("texture->celling->blue=%d\n",info->texture->c_rgb->blue);
     printf("\x1b[0m\n");
 }
