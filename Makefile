@@ -16,18 +16,20 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 # SOURCES = $(RAYCASTING_DIR)/raycaster_xpm_textured.c
 # SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
 SOURCES = $(RAYCASTING_DIR)/raycasting_hnoguchi.c
-# SOURCES = $(RAYCASTING_DIR)/raycaster_direction.c
 
-# SOURCES = $(SOURCES_DIR)/main.c\
+SOURCES = $(SOURCES_DIR)/main.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
           $(MAPS_DIR)/check_map_wall.c\
           $(MAPS_DIR)/check_only_one_nswe.c\
           $(MINIMAP_DIR)/minimap.c\
+          $(MINIMAP_DIR)/central_map.c\
+          $(MINIMAP_DIR)/updata_pos_map.c\
           $(PLAYER_DIR)/coordinates.c\
-          $(PLAYER_DIR)/key_hook.c\
-          $(PLAYER_DIR)/player_move.c\
           $(RAYCASTING_DIR)/raycasting.c\
+          $(RAYCASTING_DIR)/calculate_nearest_axis.c\
+          $(RAYCASTING_DIR)/draw_line.c\
+          $(RAYCASTING_DIR)/my_mlx_pixel_put_line.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
