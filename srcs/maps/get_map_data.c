@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 17:02:17 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:22:37 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,18 @@ static char	**map_str_add(char **array, char *new)
 	return (res);
 }
 
+int check_texture_section(char *str)
+{
+    int i;
+    i = 0;
+
+    while (str[i] == ' ' || str[i] == '\t' || str[i] == '\0')
+        i++;
+    if ('0' <= str[i] && str[i] <= '9')
+        return (-1);
+    return (0);
+}
+
 void	get_map_data(int fd, t_info *info)
 {
 	char	*str;
@@ -97,13 +109,15 @@ void	get_map_data(int fd, t_info *info)
     count = 0;
 	while (str)
 	{
-		if (count < 6)
+		if (check_texture_section(str) == 0)
 		{
             count += read_texture(str,info->texture);
             str = get_next_line(fd);
 			i++;
-            printf("count = %d\n",count);
+            // printf("count = %d\n",count);
 		}
+        else if (count < 6)
+            print_error("texture num");
 		else
 		{
 			if (non_specific_chara(str) == 1)

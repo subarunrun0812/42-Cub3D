@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 14:17:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 17:02:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/30 17:31:31 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,29 +30,24 @@ char *assign_to_structure(char **str)
 	int		i;
 
 	i = 0;
-	// printf("assign_to_structure_no()\n");
 	while (**str == ' ' || **str == '\t')
 		(*str)++;
-	// printf("str=%s",*str);
 	path = (char *)malloc(sizeof(char) * (word_len(str) + 1));
-	while (**str != ' ' && **str != '\t' && **str != '\0')
+	while (**str != ' ' && **str != '\t' && **str != '\0' && **str != '\n')
 	{
-		// path[i++] = (**str)++;
 		path[i] = **str;
-		// printf("path[%d]=%c\n",i,path[i]);
-		// printf("**str=%c\n",**str);
-		i++;
-		(*str)++;
+        if (**str != '\n')
+            i++;
+	    (*str)++;
 	}
-	i--;
 	path[i] = '\0';
-	// printf("path=%s\n", path);
-	if ('0' > *path && *path > '9')
+    // printf("path=%s\n",path);
+	if (*path < '0' || '9' < *path)
 	{
 		if (open(path, O_RDONLY) == -1)
 		{
 			perror("open() texture path");
-			// print_error("done");
+            print_error("open");
 		}
 	}
     return (path);
@@ -78,23 +73,18 @@ int	read_texture(char *str, t_texture *texture)
 		if (*str != ' ' && *str != '\t')
 			identifier[j++] = *(str++);
 		identifier[j] = '\0';
-		// printf("identifier = %s\n", identifier);
-		if (*str != ' ' && *str != '\t')
-		{
-			// printf("str=%s\n", str);
-			print_error("texture 識別子が3文字以上");
-		}
-        if (ft_strncmp(identifier, "NO", 2) == 0)
+
+        if (ft_strncmp(identifier, "NO", 3) == 0)
 		    assign_to_structure_no(&str, texture);
-        else if (ft_strncmp(identifier, "SO", 2) == 0)
+        else if (ft_strncmp(identifier, "SO", 3) == 0)
 		    assign_to_structure_so(&str, texture);
-        else if (ft_strncmp(identifier, "WE", 2) == 0)
+        else if (ft_strncmp(identifier, "WE", 3) == 0)
 		    assign_to_structure_we(&str, texture);
-        else if (ft_strncmp(identifier, "EA", 2) == 0)
+        else if (ft_strncmp(identifier, "EA", 3) == 0)
 		    assign_to_structure_ea(&str, texture);
-        else if (ft_strncmp(identifier, "F", 1) == 0)
+        else if (ft_strncmp(identifier, "F", 2) == 0)
 		    assign_to_structure_floor(&str, texture);
-        else if (ft_strncmp(identifier, "C", 1) == 0)
+        else if (ft_strncmp(identifier, "C", 2) == 0)
 		    assign_to_structure_celling(&str, texture);
         else
 			print_error("texture");
