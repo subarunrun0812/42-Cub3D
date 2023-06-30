@@ -69,6 +69,24 @@
 // # define FOV 40
 
 //------------------------------
+//			TEXTURE
+//------------------------------
+
+# define TEXTURE_WIDTH 64
+# define TEXTURE_HEIGHT 64
+# define TEXTURE_LIST_SIZE 10
+# define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
+# define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
+# define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
+# define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
+# define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
+# define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
+# define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
+# define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
+# define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
+# define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+
+//------------------------------
 //			MINIMAP
 //------------------------------
 
@@ -83,28 +101,20 @@
 # define FALSE 1
 # define CORNER 1
 # define CENTRAL -1
-# define NORTH 'N'//北
-# define SOUTH 'S'//南
-# define EAST 'E'//東
-# define WEST 'W'//西
+# define NORTH 'N' //北
+# define SOUTH 'S' //南
+# define EAST 'E'  //東
+# define WEST 'W'  //西
 
 typedef struct s_map
 {
-	//map_data[y][x]
+	// map_data[y][x]
 	char		**map_data;
-	int 		player_x;
-	int 		player_y;
+	int			player_x;
+	int			player_y;
 	int			height;
 	int			width;
 }				t_map;
-
-typedef struct s_player
-{
-	double		dir_x;
-	double		dir_y;
-	// double	camera_x;
-	// double	camera_y;
-}				t_player;
 
 typedef struct s_plane
 {
@@ -121,6 +131,25 @@ typedef struct s_data
 	int			endian;
 }				t_data;
 
+typedef struct s_rgb
+{
+	int			red;
+	int			green;
+	int			blue;
+}				t_rgb;
+
+typedef struct s_texture
+{
+	char		*no;
+	char		*so;
+	char		*we;
+	char		*ea;
+	char		*f_tex;
+	char		*c_tex;
+	t_rgb		*f_rgb;
+	t_rgb		*c_rgb;
+}				t_texture;
+
 typedef struct s_vars
 {
 	void		*mlx;
@@ -131,11 +160,12 @@ typedef struct s_vars
 	double x_direction;       // dirX
 	double y_direction;       // dirY
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
-	double x_camera_plane;    // planeX
-	double y_camera_plane;    // planeY
-	int screen_width;         // width of the screen
-	int screen_height;        // height of the screen
+	double x_camera_plane; // planeX
+	double y_camera_plane; // planeY
+	int screen_width;      // width of the screen
+	int screen_height;     // height of the screen
 	t_data		*image;
+	t_texture	texture_list[TEXTURE_LIST_SIZE];
 }				t_vars;
 
 typedef struct s_flag
@@ -166,22 +196,23 @@ typedef struct s_info
 {
 	t_map		*map;
 	t_vars		*vars;
-	t_player	*player;
 	t_data		*data;
 	t_plane		*plane;
 	t_flag		*flag;
 	t_ray		*ray;
+	t_texture	*texture;
 }				t_info;
 
 // init
-void			init(t_info *info, t_map *map, t_player *player, t_vars *vars);
+void			init(t_info *info, t_map *map, t_vars *vars);
 void			init_map(t_map *map);
 
 // ------------------------------------------------
-// MAP
+// FILE
 // ------------------------------------------------
 
-void			read_map(char *path, t_info *info);
+// MAP
+void			read_file(char *path, t_info *info);
 void			get_map_data(int fd, t_info *info);
 void			check_map_wall(t_info *info);
 void			check_only_one_nswe(t_map *map);
@@ -193,6 +224,17 @@ int				mapdata_width_length(char *width);
 int				mapdata_maxwidth_length(t_map *map);
 void			updata_pos_map(t_vars *vars, t_info *info);
 
+// FILE
+int				read_texture(char *str, t_texture *texture);
+char			*assign_to_structure(char **str, char *identifier,
+					t_texture *texture);
+void			assign_to_structure_floor(char **str, t_texture *texture);
+void			assign_to_structure_celling(char **str, t_texture *texture);
+void			assign_to_structure_no(char **str, t_texture *texture);
+void			assign_to_structure_so(char **str, t_texture *texture);
+void			assign_to_structure_we(char **str, t_texture *texture);
+void			assign_to_structure_ea(char **str, t_texture *texture);
+
 // ------------------------------------------------
 // PLAYER
 // ------------------------------------------------
@@ -200,7 +242,7 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 int				key_hook(int keycode, t_vars *vars);
 int				ft_key_hook(int keycode, t_info *info);
 int				player_coordinate(t_info *info);
-void			init_player_coordinate(t_player *player, t_map *map,t_info *info);
+void			init_player_coordinate(t_map *map, t_info *info);
 void			player_move(t_info *info, int keycode);
 
 // ------------------------------------------------

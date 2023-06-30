@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 14:12:12 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:05:10 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,9 +101,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		,DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y,FUCHSIA);
 		ray_len++;
 	}
-
-	// printf("vars->x_direction = %f\nvars->y_direction = %f\n",
-	// info->vars->x_direction,info->vars->y_direction);
 }
 
 int	minimap(t_info *info, t_data *data)

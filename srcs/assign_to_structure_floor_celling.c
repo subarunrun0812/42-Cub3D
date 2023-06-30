@@ -1,22 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   assign_to_structure_floor_celling.c                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 18:50:28 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 12:57:02 by susasaki         ###   ########.fr       */
+/*   Created: 2023/06/30 16:49:35 by susasaki          #+#    #+#             */
+/*   Updated: 2023/06/30 18:38:37 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/cub3d.h"
+#include "../../include/cub3d.h"
 
-void	init(t_info *info, t_map *map, t_vars *vars)
+void	assign_to_structure_floor(char **str, t_texture *texture)
 {
-	info->map = map;
-	info->vars = vars;
-	map->map_data = NULL;
-	map->height = 0;
-	map->width = 0;
+	texture->f_tex = assign_to_structure(str,"floor",texture);
+}
+
+void	assign_to_structure_celling(char **str, t_texture *texture)
+{
+	texture->c_tex = assign_to_structure(str,"celling",texture);
 }

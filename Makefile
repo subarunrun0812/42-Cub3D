@@ -18,6 +18,13 @@ MINIMAP_DIR = $(SOURCES_DIR)/minimap
 SOURCES = $(RAYCASTING_DIR)/raycasting_hnoguchi.c
 
 SOURCES = $(SOURCES_DIR)/main.c\
+          $(SOURCES_DIR)/free.c\
+          $(SOURCES_DIR)/init.c\
+          $(SOURCES_DIR)/print_error.c\
+          $(SOURCES_DIR)/read_texture.c\
+          $(SOURCES_DIR)/assign_to_structure.c\
+          $(SOURCES_DIR)/assign_to_structure_floor_celling.c\
+          $(SOURCES_DIR)/assign_to_structure_nswe.c\
           $(MAPS_DIR)/read_map.c\
           $(MAPS_DIR)/get_map_data.c\
           $(MAPS_DIR)/check_map_wall.c\
@@ -33,9 +40,6 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
-          $(SOURCES_DIR)/free.c\
-          $(SOURCES_DIR)/init.c\
-          $(SOURCES_DIR)/print_error.c\
           $(GNL_DIR)/get_next_line.c\
           $(GNL_DIR)/get_next_line_utils.c
 

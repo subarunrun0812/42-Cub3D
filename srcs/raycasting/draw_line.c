@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:30:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 13:30:43 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:05:58 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,29 +18,17 @@ static int	decide_color(t_ray *ray, bool side,t_info *info)
 
 	color = BLACK;
 	if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '1')
-	{
 		color = RED;
-	}
 	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '2')
-	{
 		color = GREEN;
-	}
 	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '3')
-	{
 		color = BLUE;
-	}
 	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == '4')
-	{
 		color = WHITE;
-	}
 	else if (info->map->map_data[ray->current_x_in_map][ray->current_y_in_map] == 'N')
-	{
 		;
-	}
 	else
-	{
 		color = YELLOW;
-	}
 	//give x and y sides different brightness
 	if (side == Y_AXIS)
 		color = color / 2;

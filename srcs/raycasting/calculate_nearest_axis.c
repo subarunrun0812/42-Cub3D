@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:30:47 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 12:17:26 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:05:37 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,6 @@ bool	calculate_nearest_axis(t_ray *ray, t_vars *vars,t_info *info)
 			ray->current_y_in_map += step_y;
 			axis = Y_AXIS;
 		}
-		// printf("current_in_map [%d][%d]\n",
-		// ray->current_x_in_map,ray->current_y_in_map);
-		// printf("side_distance [%f][%f]\n",
-		// ray->x_side_distance,ray->y_side_distance);
-		// central_map(info);
 		if (is_hit_wall(ray, info))
 			break ;
 	}

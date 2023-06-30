@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 14:06:06 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:28:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	ray->current_y_in_map = (int)vars->y_position_vector;
 	ray->x_side_distance = 0;
 	ray->y_side_distance = 0;
-	// ray x,yが次のx,yブロックまでの距離
+	// ray x,yが次の座標x,yの整数値までの距離を計算する
 	// 1e30はゼロ除算を回避する。（ゼロの場合は、非常に大きい値を設定する。）
 	ray->x_delta_distance = (ray->x_direction == 0) ? 1e30 : ABS(1 / ray->x_direction);
 	ray->y_delta_distance = (ray->y_direction == 0) ? 1e30 : ABS(1 / ray->y_direction);
@@ -46,7 +46,6 @@ int	draw_image(t_vars *vars,t_info *info)
 	while (x_axis < vars->screen_width)
 	{
 		set_ray_data(&ray, vars, x_axis);
-		// printf("\x1b[32mx_axis = %d\x1b[0m\n",x_axis);
 		side = calculate_nearest_axis(&ray, vars,info);
 		if (side == X_AXIS)
 		{
@@ -79,10 +78,8 @@ int	key_action(int keycode, t_info *info)
 	char map_pos;
 	map_pos = info->map->map_data[(int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE)]
 		[(int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)];
-	// printf("keycode = %d\n",keycode);
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
-		// 壁衝突の検知
 		if (map_pos == '1' || map_pos == '2' || map_pos == '3' || map_pos == '4')
 			printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
 		else
@@ -93,19 +90,18 @@ int	key_action(int keycode, t_info *info)
 				vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 		}
 	}
+	//TODO:Sキーを押したら、A,Dキーの操作が反転する
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
 	{
 		if(0 < (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE))
 		{
 			vars->x_direction *= -1;
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-			// printf("press_key[S_KEY_1]\n");
 		}
 		if(0 < (int)(vars->x_position_vector) && (0 < (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE))))
 		{
 			vars->y_direction *= -1;
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-			// printf("press_key[S_KEY_2]\n");
 		}
 	}
 	else if(keycode == D_KEY || keycode == RIGHT_KEY)
@@ -118,9 +114,7 @@ int	key_action(int keycode, t_info *info)
 		info->flag->map *= -1;
 	updata_pos_map(vars, info);
 	for(int x = 0; x < vars->screen_width; x++)
-	{
 		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
-	}
 	draw_image(vars, info);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image->img, 0, 0);
 	//minimapの再描画
@@ -128,6 +122,7 @@ int	key_action(int keycode, t_info *info)
 	return (0);
 }
 
+//スタート時のplayerの向きを変更する
 void init_nswe_dirction(t_info *info,t_vars *vars)
 {
 	if (info->map->map_data[info->map->player_y][info->map->player_x] == NORTH)
@@ -138,7 +133,6 @@ void init_nswe_dirction(t_info *info,t_vars *vars)
 		change_rotate_direction(vars,-1.55);
 	else if (info->map->map_data[info->map->player_y][info->map->player_x] == WEST)
 		change_rotate_direction(vars,1.55);
-	// printf("dir:xy[%f][%f]\n",vars->x_direction,vars->y_direction);
 }
 
 void	initialize_vars(t_vars *vars,t_info *info)
@@ -146,12 +140,8 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	vars->mlx = mlx_init();
     vars->win = mlx_new_window(vars->mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
 
-	// printf("info->map->player_x=%f\n",info->map->player_x);
-	// printf("info->map->player_y=%f\n",info->map->player_y);
 	vars->x_position_vector = info->map->player_y;
 	vars->y_position_vector = info->map->player_x;
-	// printf("vars->x_position_vector=%f\n",vars->x_position_vector);
-	// printf("vars->y_position_vector=%f\n",vars->y_position_vector);
 	vars->x_direction = -1;
 	vars->y_direction = 0;
 
@@ -165,10 +155,6 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	vars->image->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
 	vars->image->addr = mlx_get_data_addr(vars->image->img, &vars->image->bits_per_pixel, &vars->image->line_length, &vars->image->endian);
 	draw_image(vars, info);
-	// printf("dir:xy[%f][%f]\n",vars->x_direction,vars->y_direction);
-	// printf("player:xy[%f][%f]\n",info->map->player_x,info->map->player_y);
-	// printf("光線:xy[%d][%d]\n",(int)(info->map->player_x + (2 * vars->y_direction))\
-	// ,(int)(info->map->player_y + (2 * vars->x_direction)));
 	my_mlx_pixel_put(info->data,(int)(info->map->player_x + (2 * vars->y_direction))\
 	,(int)(info->map->player_y + (2 * vars->x_direction)),BLACK);
 

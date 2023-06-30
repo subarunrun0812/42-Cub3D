@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/23 17:21:41 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/06/24 15:04:45 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int mapdata_width_length(char *width)
 	i -= 2;
     return (i);
 }
+
 //文字が一番長い行を求める
 int	mapdata_maxwidth_length(t_map *map)
 {
@@ -46,7 +47,6 @@ int	mapdata_maxwidth_length(t_map *map)
             res = _x;
         _y++;
 	}
-    // printf("一番長い行は%d\n",res);
 	return (res);
 }
 
@@ -117,16 +117,10 @@ static void check_space_around_zero(int _y,char **map_data)
             // printf("\x1b[31mbase = %c,i=%d,tmp_j=%d\x1b[0m\n",map_data[_y][tmp_j],_y,tmp_j);
 			while (tmp_j < j + 2)
 			{
-                // printf("\x1b[32m%c\x1b[0m",map_data[_y-1][tmp_j]);
-                // printf("\x1b[32m%c\x1b[0m",map_data[_y][tmp_j]);
-                // printf("\x1b[32m%c\x1b[0m",map_data[_y+1][tmp_j]);
-                // printf("\n");
 				if (map_data[_y-1][j] == ' ' || map_data[_y][tmp_j] == ' '
                 || map_data[_y+1][j] == ' ' ||  map_data[_y-1][j] == '\n'
                 || map_data[_y][tmp_j] == '\n' || map_data[_y+1][j] == '\n')
-				{
 					print_error("space around zero");
-				}
 				tmp_j++;
 			}
 		}
@@ -144,13 +138,9 @@ void check_map_wall(t_info *info)
     while (_y < info->map->height)
     {
         if (_y == fast)
-        {
             check_map_upper_or_lower(info->map->map_data,_y);
-        }
         else if (_y == info->map->height - 1)
-        {
             check_map_upper_or_lower(info->map->map_data,_y);
-        }
         else
         {
             //2 ~ 最後-1行目までの処理
