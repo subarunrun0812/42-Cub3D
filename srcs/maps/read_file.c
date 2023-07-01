@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 16:34:10 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 15:06:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/01 15:22:44 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,9 @@ void	read_file(char *path, t_info *info)
 	if (fd == -1)
 		print_error("open");
 	// map読み込み	
-	get_map_data(fd, info);
+	get_data_file(fd, info);
 	if (info->map->height < 3)
-	{
 		print_error("map is small\n");
-		exit(1);
-	}
-	// mapが壁で囲まれているかチェックする
 	check_map_wall(info);
 	check_only_one_nswe(info->map);
 	close(fd);

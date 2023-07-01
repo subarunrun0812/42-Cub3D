@@ -18,6 +18,7 @@
 //------------------------------
 //			WINDOW
 //------------------------------
+
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 600
 
@@ -118,7 +119,7 @@ typedef struct s_map
 
 typedef struct s_plane
 {
-  double		x;
+	double		x;
 	double		y;
 }				t_plane;
 
@@ -204,8 +205,8 @@ typedef struct s_info
 }				t_info;
 
 // init
-void			init(t_info *info, t_map *map, t_vars *vars);
-void			init_map(t_map *map);
+void			init(t_info *info, t_map *map, t_vars *vars, t_data *data);
+void			init_second(t_info *info, t_flag *flag, t_texture *texture);
 
 // ------------------------------------------------
 // FILE
@@ -213,7 +214,7 @@ void			init_map(t_map *map);
 
 // MAP
 void			read_file(char *path, t_info *info);
-void			get_map_data(int fd, t_info *info);
+void			get_data_file(int fd, t_info *info);
 void			check_map_wall(t_info *info);
 void			check_only_one_nswe(t_map *map);
 int				minimap(t_info *info, t_data *data);
@@ -228,12 +229,15 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 int				read_texture(char *str, t_texture *texture);
 char			*assign_to_structure(char **str, char *identifier,
 					t_texture *texture);
+void			parse_and_assign_rgb_values(char *path, char *identifier,
+					t_texture *texture);
 void			assign_to_structure_floor(char **str, t_texture *texture);
 void			assign_to_structure_celling(char **str, t_texture *texture);
 void			assign_to_structure_no(char **str, t_texture *texture);
 void			assign_to_structure_so(char **str, t_texture *texture);
 void			assign_to_structure_we(char **str, t_texture *texture);
 void			assign_to_structure_ea(char **str, t_texture *texture);
+int				double_pointer_word_len(char **str);
 
 // ------------------------------------------------
 // PLAYER
@@ -261,7 +265,7 @@ bool			calculate_nearest_axis(t_ray *ray, t_vars *vars, t_info *info);
 // ------------------------------------------------
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int				close_window(t_vars *vars);
+int				close_window(t_info *info);
 int				new_window(t_vars *vars);
 
 // ------------------------------------------------
@@ -270,6 +274,8 @@ int				new_window(t_vars *vars);
 
 // free
 void			free_mapdata(char **map_data, int vertical);
+void			free_texture(t_info *info);
+
 // print_error
 void			print_error(char *str);
 

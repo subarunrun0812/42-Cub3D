@@ -9,6 +9,7 @@ RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
 WINDOW_DIR = $(SOURCES_DIR)/window
 PLAYER_DIR = $(SOURCES_DIR)/player
 MINIMAP_DIR = $(SOURCES_DIR)/minimap
+TEXTURE_DIR = $(SOURCES_DIR)/texture
 
 # SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
 # SOURCES = $(RAYCASTING_DIR)/xpm_image.c
@@ -21,12 +22,13 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
-          $(SOURCES_DIR)/read_texture.c\
-          $(SOURCES_DIR)/assign_to_structure.c\
-          $(SOURCES_DIR)/assign_to_structure_floor_celling.c\
-          $(SOURCES_DIR)/assign_to_structure_nswe.c\
-          $(MAPS_DIR)/read_map.c\
-          $(MAPS_DIR)/get_map_data.c\
+          $(TEXTURE_DIR)/read_texture.c\
+          $(TEXTURE_DIR)/assign_to_structure.c\
+          $(TEXTURE_DIR)/assign_to_structure_floor_celling.c\
+          $(TEXTURE_DIR)/assign_to_structure_nswe.c\
+          $(TEXTURE_DIR)/assign_to_structure_rgb.c\
+          $(MAPS_DIR)/read_file.c\
+          $(MAPS_DIR)/get_data_file.c\
           $(MAPS_DIR)/check_map_wall.c\
           $(MAPS_DIR)/check_only_one_nswe.c\
           $(MINIMAP_DIR)/minimap.c\
@@ -52,7 +54,7 @@ MINILIBX	 = $(MINILIBX_DIR)/libmlx.a
 INCLUDE = -I include -I $(LIBFT_DIR) -I $(GNL_DIR) -I $(MINILIBX_DIR)
 
 VPATH = $(SOURCES_DIR):$(MAPS_DIR):$(RAYCASTING_DIR):$(GNL_DIR) \
-		$(WINDOW_DIR):$(PLAYER_DIR):$(MINIMAP_DIR)
+		$(WINDOW_DIR):$(PLAYER_DIR):$(MINIMAP_DIR):$(TEXTURE_DIR)
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SOURCES:.c=.o)))
