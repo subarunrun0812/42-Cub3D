@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 19:19:24 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/01 12:40:00 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,8 +145,8 @@ void	get_map_data(int fd, t_info *info)
     printf("texture->so=%s\n",info->texture->so);
     printf("texture->we=%s\n",info->texture->we);
     printf("texture->ea=%s\n",info->texture->ea);
-    printf("texture->floor=%s\n",info->texture->f_tex);
-    printf("texture->celling=%s\n",info->texture->c_tex);
+    printf("texture->f_tex=%s\n",info->texture->f_tex);
+    printf("texture->c_tex=%s\n",info->texture->c_tex);
     printf("texture->floor->red=%d\n",info->texture->f_rgb->red);
     printf("texture->floor->green=%d\n",info->texture->f_rgb->green);
     printf("texture->floor->blue=%d\n",info->texture->f_rgb->blue);

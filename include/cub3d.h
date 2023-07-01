@@ -18,6 +18,7 @@
 //------------------------------
 //			WINDOW
 //------------------------------
+
 # define WIN_WIDTH 1200
 # define WIN_HEIGHT 600
 
@@ -118,7 +119,7 @@ typedef struct s_map
 
 typedef struct s_plane
 {
-  double		x;
+	double		x;
 	double		y;
 }				t_plane;
 
@@ -204,8 +205,8 @@ typedef struct s_info
 }				t_info;
 
 // init
-void			init(t_info *info, t_map *map, t_vars *vars);
-void			init_map(t_map *map);
+void			init(t_info *info, t_map *map, t_vars *vars, t_data *data);
+void			init_second(t_info *info, t_flag *flag, t_texture *texture);
 
 // ------------------------------------------------
 // FILE
@@ -261,7 +262,7 @@ bool			calculate_nearest_axis(t_ray *ray, t_vars *vars, t_info *info);
 // ------------------------------------------------
 
 void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int				close_window(t_vars *vars);
+int				close_window(t_info *info);
 int				new_window(t_vars *vars);
 
 // ------------------------------------------------
@@ -270,6 +271,8 @@ int				new_window(t_vars *vars);
 
 // free
 void			free_mapdata(char **map_data, int vertical);
+void			free_texture(t_info *info);
+
 // print_error
 void			print_error(char *str);
 

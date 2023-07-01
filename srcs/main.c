@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 15:18:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/01 12:33:12 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,31 +38,26 @@ int	main(int argc, char **argv)
 	t_data data;
 	t_flag flag;
 	t_texture texture;
-	// t_plane plane;
+	
 	if (argc != 2)
-	{
-		printf("\x1b[31mError:\nno map specified.\x1b[0m\n");
-		return (0);
-	}
-	init(&info, &map, &vars);
-	info.data = &data;
-	info.flag = &flag;
-	info.vars->image = &data;
-	info.texture = &texture;
-	//TODO:はじめに、角マップを表示したら、centralmap42の時に正常に真ん中に配置されない
-	flag.map = -1;
+		print_error("no map specified.");
+	init(&info, &map, &vars, &data);
+	init_second(&info, &flag, &texture);
 	read_file(argv[1], &info);
 	init_player_coordinate(&map,&info);
 	raycasting(&info);
+	free_texture(&info);
+	// exit(0);
+	return (0);
 }
 
 
-// #define DEBUG_LEAKS_CMD_LEN (32)
+#define DEBUG_LEAKS_CMD_LEN (32)
 
-// __attribute__((destructor))
-// static void    destructor(void) {
-//     char    cmd[DEBUG_LEAKS_CMD_LEN];
+__attribute__((destructor))
+static void    destructor(void) {
+    char    cmd[DEBUG_LEAKS_CMD_LEN];
 
-//     snprintf(cmd, DEBUG_LEAKS_CMD_LEN, "leaks %d", getpid());
-//     system(cmd);
-// }
+    snprintf(cmd, DEBUG_LEAKS_CMD_LEN, "leaks %d", getpid());
+    system(cmd);
+}

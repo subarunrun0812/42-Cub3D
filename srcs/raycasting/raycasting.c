@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:28:05 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/01 13:01:45 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ int	key_action(int keycode, t_info *info)
 	else if(keycode == A_KEY || keycode == LEFT_KEY)
 		change_rotate_direction(vars,MOVE_DISTANCE);
 	else if (keycode == ESC_KEY)
-		close_window(info->vars);
+		close_window(info);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
 	updata_pos_map(vars, info);
@@ -165,7 +165,7 @@ int	raycasting(t_info *info)
 	initialize_vars(info->vars,info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
 	minimap(info, info->data);
-	mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info->vars);
+	// mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);
 	return (0);
