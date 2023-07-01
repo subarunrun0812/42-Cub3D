@@ -214,7 +214,7 @@ void			init_second(t_info *info, t_flag *flag, t_texture *texture);
 
 // MAP
 void			read_file(char *path, t_info *info);
-void			get_map_data(int fd, t_info *info);
+void			get_data_file(int fd, t_info *info);
 void			check_map_wall(t_info *info);
 void			check_only_one_nswe(t_map *map);
 int				minimap(t_info *info, t_data *data);
@@ -229,12 +229,15 @@ void			updata_pos_map(t_vars *vars, t_info *info);
 int				read_texture(char *str, t_texture *texture);
 char			*assign_to_structure(char **str, char *identifier,
 					t_texture *texture);
+void			parse_and_assign_rgb_values(char *path, char *identifier,
+					t_texture *texture);
 void			assign_to_structure_floor(char **str, t_texture *texture);
 void			assign_to_structure_celling(char **str, t_texture *texture);
 void			assign_to_structure_no(char **str, t_texture *texture);
 void			assign_to_structure_so(char **str, t_texture *texture);
 void			assign_to_structure_we(char **str, t_texture *texture);
 void			assign_to_structure_ea(char **str, t_texture *texture);
+int				double_pointer_word_len(char **str);
 
 // ------------------------------------------------
 // PLAYER
