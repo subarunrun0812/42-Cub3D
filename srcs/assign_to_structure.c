@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 19:06:11 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 19:27:19 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/01 11:38:53 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static void assign_rgb_value(char *num_str, t_texture *texture, char *identifier
 {
     int rgb = atoi(num_str);
 
+    // カラーコードの範囲を超えていないかチェック
     if (rgb < 0 || 255 < rgb)
         print_error("rgb");
 
@@ -101,7 +102,7 @@ static void	xpm_filename_check(char *filename)
 	return ;
 }
 
-
+// 壁のtexture、床天井の色をファイルから読み取り
 char *assign_to_structure(char **str, char *identifier, t_texture *texture)
 {
     char *path;
@@ -123,11 +124,13 @@ char *assign_to_structure(char **str, char *identifier, t_texture *texture)
     }
     path[i] = '\0';
 
+    //RGBのカラーコードの場合
     if ('0' <= *path && *path <= '9')
     {
         parse_and_assign_rgb_values(path, identifier, texture);
+        return (NULL);
     }
-    else
+    else // テクスチャの.xpmの場合
     {
         xpm_filename_check(path);
 
@@ -137,6 +140,6 @@ char *assign_to_structure(char **str, char *identifier, t_texture *texture)
             print_error("open");
         }
     }
-    return path;
+    return (path);
 }
 
