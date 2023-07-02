@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 14:07:25 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:38:51 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int mapdata_width_length(char *width)
     return (i);
 }
 
-//文字が一番長い行を求める
+//文字が一番長い列を求める
 int	mapdata_maxwidth_length(t_map *map)
 {
 	int	_y;
@@ -38,6 +38,7 @@ int	mapdata_maxwidth_length(t_map *map)
 	res = 0;
 	while (map->map_data[_y])
 	{
+		_x = 0;
 		while (map->map_data[_y][_x] != '\0' && map->map_data[_y][_x] != '\n')
 		{
 			_x++;
