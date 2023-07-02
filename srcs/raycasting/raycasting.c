@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/01 13:01:45 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 13:42:02 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,8 @@ void change_rotate_direction(t_vars *vars,double move_distance)
 	double	x_old_plane = vars->x_camera_plane;
 	vars->x_camera_plane = vars->x_camera_plane * cos(move_distance) - vars->y_camera_plane * sin(move_distance);
 	vars->y_camera_plane = x_old_plane * sin(move_distance) + vars->y_camera_plane * cos(move_distance);
+	printf("\x1b[32mdirection xy=[%f][%f]\x1b[0m\n",vars->x_direction,vars->y_direction);
+	printf("\x1b[32mcamera_plane xy=[%f][%f]\x1b[0m\n",vars->x_camera_plane,vars->y_camera_plane);
 }
 
 int	key_action(int keycode, t_info *info)
@@ -157,6 +159,8 @@ void	initialize_vars(t_vars *vars,t_info *info)
 	draw_image(vars, info);
 	my_mlx_pixel_put(info->data,(int)(info->map->player_x + (2 * vars->y_direction))\
 	,(int)(info->map->player_y + (2 * vars->x_direction)),BLACK);
+	// printf("\x1b[32mdirection xy=[%f][%f]\x1b[0m\n",vars->x_direction,vars->y_direction);
+	// printf("\x1b[32mcamera_plane xy=[%f][%f]\x1b[0m\n",vars->x_camera_plane,vars->y_camera_plane);
 
 }
 
