@@ -223,7 +223,7 @@ void			range_to_display_with_player(t_info *info, t_data *data);
 void			draw_one_block(t_data *data, int draw_x, int draw_y, int color);
 int				mapdata_width_length(char *width);
 int				mapdata_maxwidth_length(t_map *map);
-void			updata_pos_map(t_vars *vars, t_info *info);
+void			updata_pos_map(t_vars *vars, t_info *info,int keycode);
 
 // FILE
 int				read_texture(char *str, t_texture *texture);
