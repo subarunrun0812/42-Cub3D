@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 14:17:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/30 19:12:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 15:39:56 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,3 +54,4 @@ int	read_texture(char *str, t_texture *texture)
 	}
 	return (res);
 }
+
