@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 14:25:40 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 16:04:23 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,14 +101,14 @@ void	draw_ray_player_direction(t_info *info, int start_x, int start_y)
 	ray_len = BLOCK_SIZE / 2;
 	middle_ray_x = 0;
 	middle_ray_y = 0;
-	while (ray_len < 50)
+	while (ray_len < 100)
 	{
 		middle_ray_x = (ray_len * info->vars->y_direction);
 		middle_ray_y = (ray_len * info->vars->x_direction);
 		my_mlx_pixel_put(info->data, start_x + (info->map->player_x * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
 			+ (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
-			+ middle_ray_y, FUCHSIA);
+			+ middle_ray_y, BLACK);
 		ray_len++;
 	}
 }

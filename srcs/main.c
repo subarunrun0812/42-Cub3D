@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/01 12:33:12 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 14:46:52 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void	debug_print_mapdata(t_info *info)
 {
 	for (int i = 0; i < info->map->height; i++)
 	{
-		for (int j = 0; j < mapdata_width_length(info->map->map_data[i]); j++)
+		for (int j = 0; j< mapdata_width_length(info->map->map_data[i]) + 1; j++)
 		{
 			if (info->map->map_data[i][j] == 'N')
 				printf("\x1b[32m%c\x1b[0m", info->map->map_data[i][j]);
@@ -45,6 +45,7 @@ int	main(int argc, char **argv)
 	init_second(&info, &flag, &texture);
 	read_file(argv[1], &info);
 	init_player_coordinate(&map,&info);
+	debug_print_mapdata(&info);
 	raycasting(&info);
 	free_texture(&info);
 	// exit(0);
