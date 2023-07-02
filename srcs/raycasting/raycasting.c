@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 16:01:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:38:09 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,26 @@ void	change_rotate_direction(t_vars *vars, double move_distance)
 		vars->y_camera_plane);
 }
 
-void	move_backword(t_vars *vars, t_info *info)
+void	move_forward(t_vars *vars, t_info *info)
+{
+	char	forward_map_pos;
+	vars = info->vars;
+	forward_map_pos = info->map->map_data[(int)(vars->x_position_vector
+		+ vars->x_direction * MOVE_DISTANCE)][(int)(vars->y_position_vector
+		+ vars->y_direction * MOVE_DISTANCE)];
+	if (forward_map_pos == '1' || forward_map_pos == '2'
+			|| forward_map_pos == '3' || forward_map_pos == '4')
+			printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
+	else
+	{
+		if (0 < (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE))
+			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
+		if (0 < (int)(vars->x_position_vector) && (0 < (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE)))
+			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
+		}
+}
+
+void	move_back(t_vars *vars, t_info *info)
 {
 	int		map_back_x_pos;
 	int		map_back_y_pos;
@@ -120,45 +139,15 @@ void	move_backword(t_vars *vars, t_info *info)
 int	key_action(int keycode, t_info *info)
 {
 	t_vars	*vars;
-	char	forward_map_pos;
 
-	vars = info->vars;
-	forward_map_pos = info->map->map_data[(int)(vars->x_position_vector
-		+ vars->x_direction * MOVE_DISTANCE)][(int)(vars->y_position_vector
-		+ vars->y_direction * MOVE_DISTANCE)];
+		vars = info->vars;
 	if (keycode == W_KEY || keycode == UP_KEY)
 	{
-		if (forward_map_pos == '1' || forward_map_pos == '2'
-			|| forward_map_pos == '3' || forward_map_pos == '4')
-			printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
-		else
-		{
-			if (0 < (int)(vars->x_position_vector + vars->x_direction
-					* MOVE_DISTANCE))
-				vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-			if (0 < (int)(vars->x_position_vector)
-				&& (0 < (int)(vars->y_position_vector + vars->y_direction
-						* MOVE_DISTANCE)))
-				vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-		}
+		move_forward(vars, info);
 	}
-	// TODO:Sキーを押したら、A,Dキーの操作が反転する
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
 	{
-		// if (0 < (int)(vars->x_position_vector - vars->x_direction
-		// 		* MOVE_DISTANCE))
-		// {
-		// 	vars->x_direction *= -1;
-		// 	vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
-		// }
-		// if (0 < (int)(vars->x_position_vector)
-		// 	&& (0 < (int)(vars->y_position_vector - (vars->y_direction
-		// 				* MOVE_DISTANCE))))
-		// {
-		// 	vars->y_direction *= -1;
-		// 	vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
-		// }
-		move_backword(vars, info);
+		move_back(vars, info);
 	}
 	else if (keycode == D_KEY || keycode == RIGHT_KEY)
 		change_rotate_direction(vars, (MOVE_DISTANCE * -1));
