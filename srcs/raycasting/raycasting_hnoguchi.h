@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/02 15:57:31 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:01:39 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,14 +43,13 @@
 # define UP_KEY 126
 //キーを押した時の移動距離
 
-# define X_AXIS true
-# define Y_AXIS false
+// # define X_AXIS true
+// # define Y_AXIS false
+# define X_AXIS 0
+# define Y_AXIS 1
 
 # define MOVE_DISTANCE 0.5
 # define ABS(a) ((a) < 0 ? -(a) : (a))
-
-# define X 0
-# define Y 1
 
 // texture
 #define TEXTURE_WIDTH 64
@@ -103,32 +102,33 @@ int world_map[MAP_WIDTH][MAP_HEIGHT] =
   	{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 };
 
-typedef enum e_color_rgb		t_color_rgb;
-typedef struct s_vars			t_vars;
-typedef struct s_data			t_data;
-typedef struct s_ray			t_ray;
-typedef struct s_texture		t_texture;
-typedef struct s_draw			t_draw;
-typedef struct s_draw_texture	t_draw_texture;
+// typedef enum e_color_rgb			t_color_rgb;
+typedef struct s_vars				t_vars;
+typedef struct s_data				t_data;
+typedef struct s_ray				t_ray;
+typedef struct s_texture_data		t_texture_data;
+typedef struct s_draw_wall			t_draw_wall;
+typedef struct s_draw_texture		t_draw_texture;
+typedef struct s_draw_background	t_draw_background;
 
-enum e_color_rgb {
-	RGB_Red,
-	RGB_Green,
-	RGB_Blue,
-	RGB_White,
-	RGB_Yellow
-};
+// enum e_color_rgb {
+// 	RGB_Red,
+// 	RGB_Green,
+// 	RGB_Blue,
+// 	RGB_White,
+// 	RGB_Yellow
+// };
 
 struct	s_data {
 	void			*img;
-	// char	*addr;
 	unsigned int	*addr;
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
 };
 
-struct	s_texture {
+// struct	s_texture
+struct	s_texture_data {
 	t_data	data;
 	int		width;
 	int		height;
@@ -136,19 +136,18 @@ struct	s_texture {
 
 struct s_vars
 {
-	void		*mlx;
-	void		*win;
-	// key_action
-	double		x_position_vector; // posX
-	double		y_position_vector; // posY
-	double		x_direction; // dirX
-	double		y_direction; // dirY
-	double		x_camera_plane; // planeX
-	double		y_camera_plane; // planeY
-	int			screen_width; // width of the screen
-	int			screen_height; // height of the screen
-	t_data		image;
-	t_texture	texture_list[TEXTURE_LIST_SIZE];
+	void			*mlx;
+	void			*win;
+	double			x_position_vector;
+	double			y_position_vector;
+	double			x_direction;
+	double			y_direction;
+	double			x_camera_plane;
+	double			y_camera_plane;
+	int				screen_width;
+	int				screen_height;
+	t_data			image;
+	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
 };
 
 struct s_ray {
@@ -162,9 +161,10 @@ struct s_ray {
 	double	y_delta_distance;
 };
 
-struct s_draw
+// struct s_draw
+struct s_draw_wall
 {
-	bool	side;
+	int		side;
 	double	perpendicular_wall_distance;
 	int		line_height;
 	int		start;
@@ -178,6 +178,13 @@ struct s_draw_texture
 	int		x_coordinate;
 	double	step;
 	double	position;
+};
+
+struct s_draw_background {
+	float	x_move_amount;
+	float	y_move_amount;
+	float	x_coordinate;
+	float	y_coordinate;
 };
 
 #endif

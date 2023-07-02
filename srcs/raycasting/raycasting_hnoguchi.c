@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/02 16:06:54 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:21:14 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	my_mlx_pixel_put_line(t_vars *vars
 // TODO: get_nearest_axis.c
 static bool	is_hit_wall(t_ray *ray)
 {
-	// if ('0' < world_map[ray->current_x_in_map][ray->current_y_in_map] && world_map[ray->current_x_in_map][ray->current_y_in_map] < '9')
 	if (0 < world_map[ray->current_x_in_map][ray->current_y_in_map])
 	{
 		return (true);
@@ -61,11 +60,11 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 }
 
 //perform DDA
-bool	get_nearest_axis(t_ray *ray, t_vars *vars)
+int	get_nearest_axis(t_ray *ray, t_vars *vars)
 {
-	int		step_x;
-	int		step_y;
-	bool	axis;
+	int	step_x;
+	int	step_y;
+	int	axis;
 
 	step_x = calculate_step_x_direction(ray, vars);
 	step_y = calculate_step_y_direction(ray, vars);
@@ -89,37 +88,28 @@ bool	get_nearest_axis(t_ray *ray, t_vars *vars)
 	return (axis);
 }
 
-typedef struct s_draw_background	t_draw_background;
-
-struct s_draw_background {
-	float	x_move_amount;
-	float	y_move_amount;
-	float	x_coordinate;
-	float	y_coordinate;
-};
-
 void	set_draw_data_background(t_draw_background *draw, t_vars *vars, int y_coordinate, float vertical_position_camera)
 {
 	float	ray_direction_left[2];
 	float	ray_direction_right[2];
 	float	row_distance;
 
-	ray_direction_left[X] = vars->x_direction - vars->x_camera_plane;
-	ray_direction_left[Y] = vars->y_direction - vars->y_camera_plane;
-	ray_direction_right[X] = vars->x_direction + vars->x_camera_plane;
-	ray_direction_right[Y] = vars->y_direction + vars->y_camera_plane;
+	ray_direction_left[X_AXIS] = vars->x_direction - vars->x_camera_plane;
+	ray_direction_left[Y_AXIS] = vars->y_direction - vars->y_camera_plane;
+	ray_direction_right[X_AXIS] = vars->x_direction + vars->x_camera_plane;
+	ray_direction_right[Y_AXIS] = vars->y_direction + vars->y_camera_plane;
 	row_distance = vertical_position_camera / y_coordinate;
-	draw->x_move_amount = row_distance * (ray_direction_right[X] - ray_direction_left[X]) / vars->screen_width;
-	draw->y_move_amount = row_distance * (ray_direction_right[Y] - ray_direction_left[Y]) / vars->screen_width;
-	draw->x_coordinate = vars->x_position_vector + row_distance * ray_direction_left[X];
-	draw->y_coordinate = vars->y_position_vector + row_distance * ray_direction_left[Y];
+	draw->x_move_amount = row_distance * (ray_direction_right[X_AXIS] - ray_direction_left[X_AXIS]) / vars->screen_width;
+	draw->y_move_amount = row_distance * (ray_direction_right[Y_AXIS] - ray_direction_left[Y_AXIS]) / vars->screen_width;
+	draw->x_coordinate = vars->x_position_vector + row_distance * ray_direction_left[X_AXIS];
+	draw->y_coordinate = vars->y_position_vector + row_distance * ray_direction_left[Y_AXIS];
 }
 
 int	decide_texture_floor(int cell[2])
 {
 	int	checker_board_pattern;
 
-	checker_board_pattern = (int)((cell[X] + cell[Y]) & 1);
+	checker_board_pattern = (int)((cell[X_AXIS] + cell[Y_AXIS]) & 1);
 	if (checker_board_pattern == 0)
 	{
 		return (FLOOR_1);
@@ -134,11 +124,11 @@ void	put_texture_floor(t_draw_background *draw, t_vars *vars, int coordinate_scr
 	unsigned int	color;
 
 	floor_texture = decide_texture_floor(cell);
-	coordinate_texture[X] = (int)(vars->texture_list[floor_texture].width * (draw->x_coordinate - cell[X])) & (vars->texture_list[floor_texture].width - 1);
-	coordinate_texture[Y] = (int)(vars->texture_list[floor_texture].height * (draw->y_coordinate - cell[Y])) & (vars->texture_list[floor_texture].height - 1);
-	color = *(vars->texture_list[floor_texture].data.addr + vars->texture_list[floor_texture].width * coordinate_texture[Y] + coordinate_texture[X]);
+	coordinate_texture[X_AXIS] = (int)(vars->texture_list[floor_texture].width * (draw->x_coordinate - cell[X_AXIS])) & (vars->texture_list[floor_texture].width - 1);
+	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
+	color = *(vars->texture_list[floor_texture].data.addr + vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->image.addr[(vars->screen_width * coordinate_screen[Y]) + coordinate_screen[X]] = color;
+	vars->image.addr[(vars->screen_width * coordinate_screen[Y_AXIS]) + coordinate_screen[X_AXIS]] = color;
 }
 
 void	put_texture_ceiling(t_draw_background *draw, t_vars *vars, int coordinate_screen[2], int cell[2])
@@ -146,11 +136,11 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars, int coordinate_s
 	int				coordinate_texture[2];
 	unsigned int	color;
 
-	coordinate_texture[X] = (int)(vars->texture_list[CEILING].width * (draw->x_coordinate - cell[X])) & (vars->texture_list[CEILING].width - 1);
-	coordinate_texture[Y] = (int)(vars->texture_list[CEILING].height * (draw->y_coordinate - cell[Y])) & (vars->texture_list[CEILING].height - 1);
-	color = *(vars->texture_list[CEILING].data.addr + vars->texture_list[CEILING].height * coordinate_texture[Y] + coordinate_texture[X]);
+	coordinate_texture[X_AXIS] = (int)(vars->texture_list[CEILING].width * (draw->x_coordinate - cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
+	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
+	color = *(vars->texture_list[CEILING].data.addr + vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->image.addr[(vars->screen_width * (vars->screen_height - coordinate_screen[Y])) + coordinate_screen[X]] = color;
+	vars->image.addr[(vars->screen_width * (vars->screen_height - coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
 }
 
 int	draw_floor_and_ceiling(t_vars *vars)
@@ -159,22 +149,22 @@ int	draw_floor_and_ceiling(t_vars *vars)
 	int					cell[2];
 	t_draw_background	draw;
 
-	coordinate_screen[Y] = (vars->screen_height / 2) - 1;
-	while (coordinate_screen[Y] < vars->screen_height)
+	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
+	while (coordinate_screen[Y_AXIS] < vars->screen_height)
 	{
-		set_draw_data_background(&draw, vars, coordinate_screen[Y] - (vars->screen_height / 2), 0.5 * vars->screen_height);
-		coordinate_screen[X] = 0;
-		while (coordinate_screen[X] < vars->screen_width)
+		set_draw_data_background(&draw, vars, coordinate_screen[Y_AXIS] - (vars->screen_height / 2), 0.5 * vars->screen_height);
+		coordinate_screen[X_AXIS] = 0;
+		while (coordinate_screen[X_AXIS] < vars->screen_width)
 		{
-			cell[X] = (int)draw.x_coordinate;
-			cell[Y] = (int)draw.y_coordinate;
+			cell[X_AXIS] = (int)draw.x_coordinate;
+			cell[Y_AXIS] = (int)draw.y_coordinate;
 			put_texture_floor(&draw, vars, coordinate_screen, cell);
 			put_texture_ceiling(&draw, vars, coordinate_screen, cell);
-			coordinate_screen[X] += 1;
+			coordinate_screen[X_AXIS] += 1;
 			draw.x_coordinate += draw.x_move_amount;
 			draw.y_coordinate += draw.y_move_amount;
 		}
-		coordinate_screen[Y] += 1;
+		coordinate_screen[Y_AXIS] += 1;
 	}
 	return (0);
 }
@@ -204,7 +194,7 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 		ray->y_delta_distance = ABS(1 / ray->y_direction);
 }
 
-double	get_perpendicular_wall_distance(t_ray *ray, bool side)
+double	get_perpendicular_wall_distance(t_ray *ray, int side)
 {
 	if (side == X_AXIS)
 	{
@@ -213,7 +203,7 @@ double	get_perpendicular_wall_distance(t_ray *ray, bool side)
 	return (ray->y_side_distance - ray->y_delta_distance);
 }
 
-int	decide_draw_texture(t_ray *ray, t_vars *vars, bool side)
+int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 {
 	if (side == Y_AXIS)
 	{
@@ -254,93 +244,34 @@ int	get_draw_end_y_coordinate(int screen_height, int line_height)
 	return (end);
 }
 
-double	get_hit_wall_x(t_draw *draw, t_ray *ray, t_vars *vars)
-{
-	double	wall_x;
+// double	get_hit_wall_x(t_draw_wall *wall, t_ray *ray, t_vars *vars)
+// {
+// 	double	wall_x;
+// 
+// 	wall_x = 0.0;
+// 	if (wall->side == X_AXIS)
+// 		{
+// 			color = (color >> 1) & 8355711;
+// 		}
+// 		vars->image.addr[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
+// 		y_coordinate_screen += 1;
+// 	}
+// }
 
-	wall_x = 0.0;
-	if (draw->side == X_AXIS)
-	{
-		wall_x = vars->y_position_vector + draw->perpendicular_wall_distance * ray->y_direction;
-	}
-	else
-	{
-		wall_x = vars->x_position_vector + draw->perpendicular_wall_distance * ray->x_direction;
-	}
-	wall_x -= floor((wall_x));
-	return (wall_x);
-}
-
-int	get_x_coordinate_texture(t_draw_texture *texture,
-		t_draw *draw, t_ray *ray, t_vars *vars)
-{
-	int	x_coordinate_texture;
-
-	x_coordinate_texture = (int)(texture->wall_x * (double)vars->texture_list[texture->list_number].width);
-	if (draw->side == 0 && 0 < ray->x_direction)
-	{
-		x_coordinate_texture = vars->texture_list[texture->list_number].width - x_coordinate_texture - 1;
-	}
-	if (draw->side == 1 && ray->y_direction < 0)
-	{
-		x_coordinate_texture = vars->texture_list[texture->list_number].width - x_coordinate_texture - 1;
-	}
-	return (x_coordinate_texture);
-}
-
-void	set_draw_data_wall(t_draw *draw, t_ray *ray, t_vars *vars)
-{
-	draw->side = get_nearest_axis(ray, vars);
-	draw->perpendicular_wall_distance = get_perpendicular_wall_distance(ray, draw->side);
-	draw->line_height = (int)(vars->screen_height / draw->perpendicular_wall_distance);
-	draw->start = get_draw_start_y_coordinate(vars->screen_height, draw->line_height);
-	draw->end = get_draw_end_y_coordinate(vars->screen_height, draw->line_height);
-}
-
-void	set_draw_texture_data(t_draw_texture *texture, t_draw *draw, t_ray *ray, t_vars *vars)
-{
-	texture->list_number = decide_draw_texture(ray, vars, draw->side);
-	texture->wall_x = get_hit_wall_x(draw, ray, vars);
-	texture->x_coordinate = get_x_coordinate_texture(texture, draw, ray, vars);
-	texture->step = (1.0 * vars->texture_list[texture->list_number].height) / draw->line_height;
-	texture->position = (draw->start - (vars->screen_height / 2) + (draw->line_height / 2)) * texture->step;
-}
-
-void	put_texture(t_draw_texture *texture, t_draw *draw, t_vars *vars , int x_coordinate_screen)
-{
-	unsigned int	color;
-	int				y_coordinate_screen;
-	int				y_coordinate_texture;
-
-	y_coordinate_screen = draw->start;
-	while (y_coordinate_screen < draw->end)
-	{
-		y_coordinate_texture = (int)texture->position & (vars->texture_list[texture->list_number].height - 1);
-		texture->position += texture->step;
-		color = *(vars->texture_list[texture->list_number].data.addr + vars->texture_list[texture->list_number].height * y_coordinate_texture + texture->x_coordinate);
-		if (draw->side == Y_AXIS)
-		{
-			color = (color >> 1) & 8355711;
-		}
-		vars->image.addr[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
-		y_coordinate_screen += 1;
-	}
-}
-
-int	draw_image(t_vars *vars)
+int	draw_wall(t_vars *vars)
 {
 	int				x_coordinate_screen;
 	t_ray			ray;
-	t_draw			draw;
+	t_draw_wall		wall;
 	t_draw_texture	texture;
 
 	x_coordinate_screen = 0;
 	while (x_coordinate_screen < vars->screen_width)
 	{
 		set_ray_data(&ray, vars, x_coordinate_screen);
-		set_draw_data_wall(&draw, &ray, vars);
-		set_draw_texture_data(&texture, &draw, &ray, vars);
-		put_texture(&texture, &draw, vars, x_coordinate_screen);
+		set_draw_data_wall(&wall, &ray, vars);
+		set_draw_texture_data(&texture, &wall, &ray, vars);
+		put_texture(&texture, &wall, vars, x_coordinate_screen);
 		x_coordinate_screen += 1;
 	}
 	return (0);
@@ -367,7 +298,6 @@ void	move_forward(t_vars *vars)
 
 	one_step_forward_x_position_vector = (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE);
 	one_step_forward_y_position_vector = (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE);
-	// if ((0 < one_step_forward_x_position_vector && one_step_forward_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
 	if (0 < one_step_forward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
 		if (world_map[one_step_forward_x_position_vector][(int)vars->y_position_vector] == 0)
@@ -375,7 +305,6 @@ void	move_forward(t_vars *vars)
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 		}
 	}
-	// if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_forward_y_position_vector && one_step_forward_y_position_vector < MAP_HEIGHT))
 	if (0 < (int)(vars->x_position_vector) && 0 < one_step_forward_y_position_vector)
 	{
 		if (world_map[(int)vars->x_position_vector][one_step_forward_y_position_vector] == 0)
@@ -392,7 +321,6 @@ void	move_backward(t_vars *vars)
 
 	one_step_backward_x_position_vector = (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE);
 	one_step_backward_y_position_vector = (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
-	// if ((0 < one_step_backward_x_position_vector && one_step_backward_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
 	if (0 < one_step_backward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
 		if (world_map[one_step_backward_x_position_vector][(int)vars->y_position_vector] == 0)
@@ -400,7 +328,6 @@ void	move_backward(t_vars *vars)
 			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
 		}
 	}
-	// if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_backward_y_position_vector && one_step_backward_y_position_vector < MAP_HEIGHT))
 	if (0 < (int)vars->x_position_vector && 0 < one_step_backward_y_position_vector)
 	{
 		if (world_map[(int)vars->x_position_vector][one_step_backward_y_position_vector] == 0)
@@ -463,7 +390,7 @@ int	key_action(int keycode, t_vars *vars)
 	// 	info->flag->map *= -1;
 	// }
 	draw_floor_and_ceiling(vars);
-	draw_image(vars);
+	draw_wall(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
 	//minimapの再描画
 	// minimap(info, info->data);
@@ -605,7 +532,7 @@ void	initialize_vars(t_vars *vars)
 	vars->image.addr = (unsigned int *)mlx_get_data_addr(vars->image.img, &vars->image.bits_per_pixel, &vars->image.line_length, &vars->image.endian);
 	create_xpm_textures(vars);
 	draw_floor_and_ceiling(vars);
-	draw_image(vars);
+	draw_wall(vars);
 }
 
 int	main(void)
