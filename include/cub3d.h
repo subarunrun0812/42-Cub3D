@@ -75,9 +75,16 @@
 //			TEXTURE
 //------------------------------
 
-// # define TEXTURE_WIDTH 64
-// # define TEXTURE_HEIGHT 64
-// # define TEXTURE_LIST_SIZE 10
+# define TEXTURE_WIDTH 64
+# define TEXTURE_HEIGHT 64
+# define TEXTURE_LIST_SIZE 10
+#define FLOOR_1 0
+#define FLOOR_2 1
+#define CEILING 2
+#define SOUTH_WALL 3
+#define NORTH_WALL 4
+#define EAST_WALL 5
+#define WEST_WALL 6
 // # define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
 // # define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
 // # define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
@@ -211,6 +218,13 @@ struct s_draw_texture
 	int		x_coordinate;
 	double	step;
 	double	position;
+}	t_draw_texture;
+
+struct s_draw_background {
+	float	x_move_amount;
+	float	y_move_amount;
+	float	x_coordinate;
+	float	y_coordinate;
 }	t_draw_texture;
 
 typedef struct s_info
