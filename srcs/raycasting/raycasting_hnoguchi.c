@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/30 18:38:54 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/02 16:06:54 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -367,30 +367,46 @@ void	move_forward(t_vars *vars)
 
 	one_step_forward_x_position_vector = (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE);
 	one_step_forward_y_position_vector = (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE);
-	if ((0 < one_step_forward_x_position_vector && one_step_forward_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+	// if ((0 < one_step_forward_x_position_vector && one_step_forward_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+	if (0 < one_step_forward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
-		vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
+		if (world_map[one_step_forward_x_position_vector][(int)vars->y_position_vector] == 0)
+		{
+			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
+		}
 	}
-	if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_forward_y_position_vector && one_step_forward_y_position_vector < MAP_HEIGHT))
+	// if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_forward_y_position_vector && one_step_forward_y_position_vector < MAP_HEIGHT))
+	if (0 < (int)(vars->x_position_vector) && 0 < one_step_forward_y_position_vector)
 	{
-		vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
+		if (world_map[(int)vars->x_position_vector][one_step_forward_y_position_vector] == 0)
+		{
+			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
+		}
 	}
 }
 
-void	move_backword(t_vars *vars)
+void	move_backward(t_vars *vars)
 {
-	int	one_step_backword_x_position_vector;
-	int	one_step_backword_y_position_vector;
+	int	one_step_backward_x_position_vector;
+	int	one_step_backward_y_position_vector;
 
-	one_step_backword_x_position_vector = (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE);
-	one_step_backword_y_position_vector = (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
-	if ((0 < one_step_backword_x_position_vector && one_step_backword_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+	one_step_backward_x_position_vector = (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE);
+	one_step_backward_y_position_vector = (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
+	// if ((0 < one_step_backward_x_position_vector && one_step_backward_x_position_vector < MAP_WIDTH) && (0 < (int)(vars->y_position_vector) && (int)(vars->y_position_vector) < MAP_HEIGHT))
+	if (0 < one_step_backward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
-		vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
+		if (world_map[one_step_backward_x_position_vector][(int)vars->y_position_vector] == 0)
+		{
+			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
+		}
 	}
-	if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_backword_y_position_vector && one_step_backword_y_position_vector < MAP_HEIGHT))
+	// if ((0 < (int)(vars->x_position_vector) && (int)(vars->x_position_vector) < MAP_WIDTH) && (0 < one_step_backward_y_position_vector && one_step_backward_y_position_vector < MAP_HEIGHT))
+	if (0 < (int)vars->x_position_vector && 0 < one_step_backward_y_position_vector)
 	{
-		vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
+		if (world_map[(int)vars->x_position_vector][one_step_backward_y_position_vector] == 0)
+		{
+			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
+		}
 	}
 }
 
@@ -422,25 +438,35 @@ void	rotate_left_camera(t_vars *vars)
 
 int	key_action(int keycode, t_vars *vars)
 {
-	if (keycode == W_KEY)
+	if (keycode == W_KEY || keycode == UP_KEY)
 	{
 		move_forward(vars);
 	}
-	else if (keycode == S_KEY)
+	else if (keycode == S_KEY || keycode == DOWN_KEY)
 	{
-		move_backword(vars);
+		move_backward(vars);
 	}
-	else if (keycode == D_KEY)
+	else if(keycode == D_KEY || keycode == RIGHT_KEY)
 	{
 		rotate_right_camera(vars);
 	}
-	else if (keycode == A_KEY)
+	else if(keycode == A_KEY || keycode == LEFT_KEY)
 	{
 		rotate_left_camera(vars);
 	}
+	// else if (keycode == ESC_KEY)
+	// {
+	// 	close_window(info);
+	// }
+	// else if (keycode == M_KEY)
+	// {
+	// 	info->flag->map *= -1;
+	// }
 	draw_floor_and_ceiling(vars);
 	draw_image(vars);
 	mlx_put_image_to_window(vars->mlx, vars->win, vars->image.img, 0, 0);
+	//minimapの再描画
+	// minimap(info, info->data);
 	clean_image(vars);
 	return (0);
 }

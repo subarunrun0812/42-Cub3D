@@ -6,7 +6,7 @@
 /*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/30 18:15:54 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/02 15:57:31 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,10 @@
 # define A_KEY 0
 # define S_KEY 1
 # define D_KEY 2
+# define LEFT_KEY 123
+# define RIGHT_KEY 124
+# define DOWN_KEY 125
+# define UP_KEY 126
 //キーを押した時の移動距離
 
 # define X_AXIS true
