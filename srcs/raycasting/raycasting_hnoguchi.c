@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 16:22:12 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:25:03 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -515,7 +515,7 @@ int	key_action(int keycode, t_info *info)
 	// minimapの再描画
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	debug_print_mapdata(info);
+	// debug_print_mapdata(info);
 	return (0);
 }
 
@@ -650,7 +650,6 @@ void	initialize_vars(t_info *info)
 	create_xpm_textures(info->texture, info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
-	minimap(info, info->data);
 }
 
 void	raycasting(t_info *info)
@@ -658,6 +657,7 @@ void	raycasting(t_info *info)
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 		info->vars->data->img, 0, 0);
+	minimap(info, info->data);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);
 }
