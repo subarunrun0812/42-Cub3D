@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:04:45 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:38:51 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int mapdata_width_length(char *width)
     return (i);
 }
 
-//文字が一番長い行を求める
+//文字が一番長い列を求める
 int	mapdata_maxwidth_length(t_map *map)
 {
 	int	_y;
@@ -38,6 +38,7 @@ int	mapdata_maxwidth_length(t_map *map)
 	res = 0;
 	while (map->map_data[_y])
 	{
+		_x = 0;
 		while (map->map_data[_y][_x] != '\0' && map->map_data[_y][_x] != '\n')
 		{
 			_x++;
@@ -117,6 +118,12 @@ static void check_space_around_zero(int _y,char **map_data)
             // printf("\x1b[31mbase = %c,i=%d,tmp_j=%d\x1b[0m\n",map_data[_y][tmp_j],_y,tmp_j);
 			while (tmp_j < j + 2)
 			{
+				//前後の行の文字数がmap_data[_y][j]のjより短かったらエラーを出力
+				if (j >= mapdata_width_length(map_data[_y-1]) || j >= mapdata_width_length(map_data[_y+1]))
+				{
+					printf("mapdata[%d]",_y);
+					print_error("hidden space around zero");
+				}
 				if (map_data[_y-1][j] == ' ' || map_data[_y][tmp_j] == ' '
                 || map_data[_y+1][j] == ' ' ||  map_data[_y-1][j] == '\n'
                 || map_data[_y][tmp_j] == '\n' || map_data[_y+1][j] == '\n')

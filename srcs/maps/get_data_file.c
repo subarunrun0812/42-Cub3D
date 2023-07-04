@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file_read.c                                        :+:      :+:    :+:   */
+/*   get_data_file.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/01 15:22:37 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:12:57 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,12 +116,16 @@ void	get_data_file(int fd, t_info *info)
 		if (check_texture_section(str) == 0)
 		{
             count += read_texture(str,info->texture);
+			free(str);
             str = get_next_line(fd);
 			i++;
             // printf("count = %d\n",count);
 		}
         else if (count < 6)
+		{
+			free_texture(info);
             print_error("texture num");
+		}
 		else
 		{
 			if (non_specific_chara(str) == 1)

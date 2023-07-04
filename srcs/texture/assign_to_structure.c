@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 19:06:11 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 19:13:19 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/02 17:39:10 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,10 +57,8 @@ char *assign_to_structure(char **str, char *identifier, t_texture *texture)
     if ('0' <= *path && *path <= '9')
     {
         parse_and_assign_rgb_values(path, identifier, texture);
-        printf("path = %s\n",path);
         free(path);
         path = NULL; // ポインタをNULLに設定
-        printf("path = %s\n",path);
         return (NULL);
     }
     else // テクスチャの.xpmの場合
