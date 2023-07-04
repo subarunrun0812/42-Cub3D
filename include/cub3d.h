@@ -230,7 +230,7 @@ void				check_only_one_nswe(t_map *map);
 int					minimap(t_info *info, t_data *data);
 void				central_map(t_info *info);
 void				range_to_display_with_player(t_info *info, t_data *data);
-void				draw_one_block(t_data *data, int draw_x, int draw_y,
+void				draw_one_block(t_info *info, int draw_x, int draw_y,
 						int color);
 int					mapdata_width_length(char *width);
 int					mapdata_maxwidth_length(t_map *map);
@@ -276,7 +276,7 @@ bool				calculate_nearest_axis(t_ray *ray, t_vars *vars,
 // WINDOW
 // ------------------------------------------------
 
-void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void	my_mlx_pixel_put(t_raydata *raydata, int x, int y, int color);
 int					close_window(t_info *info);
 int					new_window(t_vars *vars);
 

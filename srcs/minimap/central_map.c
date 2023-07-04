@@ -6,13 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:38:48 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:26:48 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
+static void	central_draw_one_block(t_info *info, int draw_x, int draw_y,
 		int color)
 {
 	int	x;
@@ -24,7 +24,7 @@ static void	central_draw_one_block(t_data *data, int draw_x, int draw_y,
 		y = draw_y;
 		while (y < (draw_y + BLOCK_SIZE))
 		{
-			my_mlx_pixel_put(data, x, y, color);
+			my_mlx_pixel_put(info->raydata, x, y, color);
 			y++;
 		}
 		x++;
@@ -49,7 +49,7 @@ void	player_draw_ray(t_info *info, t_vars *vars)
 	// 線の終点の座標を計算
 	end_x = (info->map->player_x + line_length * x_direction);
 	end_y = (info->map->player_y + line_length * y_direction);
-	my_mlx_pixel_put(info->data, end_x, end_y, RED);
+	my_mlx_pixel_put(info->raydata, end_x, end_y, RED);
 }
 
 void draw_ray_player_fov(t_info *info, int start_x, int start_y)
@@ -71,7 +71,7 @@ void draw_ray_player_fov(t_info *info, int start_x, int start_y)
 				+ (info->vars->y_camera_plane * -1)));
 		middle_ray_y = (ray_len * (info->vars->x_direction
 				+ (info->vars->x_camera_plane * -1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->raydata,start_x + (info->map->player_x * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x\
 		,start_y + (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
 		ray_len++;
@@ -84,7 +84,7 @@ void draw_ray_player_fov(t_info *info, int start_x, int start_y)
 				+ (info->vars->y_camera_plane * 1)));
 		middle_ray_y = (ray_len * (info->vars->x_direction
 				+ (info->vars->x_camera_plane * 1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->raydata,start_x + (info->map->player_x * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x\
 		,start_y + (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
 		ray_len++;
@@ -105,7 +105,7 @@ void	draw_ray_player_direction(t_info *info, int start_x, int start_y)
 	{
 		middle_ray_x = (ray_len * info->vars->y_direction);
 		middle_ray_y = (ray_len * info->vars->x_direction);
-		my_mlx_pixel_put(info->data, start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->raydata, start_x + (info->map->player_x * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
 			+ (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
 			+ middle_ray_y, BLACK);
@@ -147,12 +147,12 @@ void	central_map(t_info *info)
 				|| info->map->map_data[y][x] == '3'
 				|| info->map->map_data[y][x] == '4')
 			{
-				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), MAP_GREEN);
 			}
 			else if (info->map->map_data[y][x] == '0')
 			{
-				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), MAP_WHITE);
 			}
 			else if (info->map->map_data[y][x] == 'N'
@@ -160,13 +160,13 @@ void	central_map(t_info *info)
 				|| info->map->map_data[y][x] == 'E'
 				|| info->map->map_data[y][x] == 'W')
 			{
-				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), BLUE);
 				info->map->player_x = x;
 				info->map->player_y = y;
 			}
 			else
-				central_draw_one_block(info->data, start_x + (x * BLOCK_SIZE),
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), MAP_RED);
 			x++;
 		}
