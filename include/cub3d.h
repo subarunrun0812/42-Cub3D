@@ -63,11 +63,13 @@
 # define X_AXIS true
 # define Y_AXIS false
 
+# define X 0
+# define Y 1
+
 //キーを押した時の移動距離
 # define MOVE_DISTANCE 0.5
 // aの絶対値を返す
 # define ABS(a) ((a) < 0 ? -(a) : (a))
-// # define FOV 40
 
 //------------------------------
 //			TEXTURE
@@ -76,16 +78,23 @@
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
 # define TEXTURE_LIST_SIZE 10
-# define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
-# define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
-# define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
-# define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
-# define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
-# define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
-# define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
-# define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
-# define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
-# define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
+#define FLOOR_1 0
+#define FLOOR_2 1
+#define CEILING 2
+#define SOUTH_WALL 3
+#define NORTH_WALL 4
+#define EAST_WALL 5
+#define WEST_WALL 6
+// # define TEXTURE_PATH_BLUE_STONE "./srcs/raycasting/xpm/bluestone.xpm"
+// # define TEXTURE_PATH_COLOR_STONE "./srcs/raycasting/xpm/colorstone.xpm"
+// # define TEXTURE_PATH_EAGLE "./srcs/raycasting/xpm/eagle.xpm"
+// # define TEXTURE_PATH_GREY_STONE "./srcs/raycasting/xpm/greystone.xpm"
+// # define TEXTURE_PATH_MOSSY "./srcs/raycasting/xpm/mossy.xpm"
+// # define TEXTURE_PATH_PURPLE_STONE "./srcs/raycasting/xpm/purplestone.xpm"
+// # define TEXTURE_PATH_RED_BRICK "./srcs/raycasting/xpm/redbrick.xpm"
+// # define TEXTURE_PATH_WOOD "./srcs/raycasting/xpm/wood.xpm"
+// # define TEXTURE_PATH_BARREL "./srcs/raycasting/xpm/barrel.xpm"
+// # define TEXTURE_PATH_PILLAR "./srcs/raycasting/xpm/pillar.xpm"
 
 //------------------------------
 //			MINIMAP
@@ -130,7 +139,13 @@ typedef struct s_data
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
-}					t_data;
+}	t_data;
+
+typedef struct	s_texture_data {
+	t_data	data;
+	int		width;
+	int		height;
+}	t_texture_data;
 
 typedef struct s_rgb
 {
@@ -155,19 +170,18 @@ typedef struct s_vars
 {
 	void			*mlx;
 	void			*win;
-	// key_action
-	double x_position_vector; // posX
-	double y_position_vector; // posY
-	double x_direction;       // dirX
-	double y_direction;       // dirY
+	double			x_position_vector;
+	double 			y_position_vector;
+	double 			x_direction;
+	double 			y_direction;
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
-	double x_camera_plane; // planeX
-	double y_camera_plane; // planeY
-	int screen_width;      // width of the screen
-	int screen_height;     // height of the screen
-	t_data		*data;
-	t_texture		texture_list[TEXTURE_LIST_SIZE];
-}					t_vars;
+	double			x_camera_plane;
+	double 			y_camera_plane;
+	int				screen_width;
+	int 			screen_height;
+  t_data		*data;
+	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
+}				t_vars;
 
 typedef struct s_flag
 {
@@ -189,8 +203,6 @@ typedef struct s_ray
 	// side_distanceに加えるべき距離を表します。
 	double			x_delta_distance;
 	double			y_delta_distance;
-
-	double			begin_ray_vec;
 }					t_ray;
 
 typedef struct s_info
@@ -203,6 +215,31 @@ typedef struct s_info
 	t_ray			*ray;
 	t_texture		*texture;
 }					t_info;
+
+typedef struct s_draw_wall
+{
+	int		side;
+	double	perpendicular_wall_distance;
+	int		line_height;
+	int		start;
+	int		end;
+}	t_draw_wall;
+
+typedef struct s_draw_texture
+{
+	int		list_number;
+	double	wall_x;
+	int		x_coordinate;
+	double	step;
+	double	position;
+}	t_draw_texture;
+
+typedef struct s_draw_background {
+	float	x_move_amount;
+	float	y_move_amount;
+	float	x_coordinate;
+	float	y_coordinate;
+}	t_draw_background;
 
 // init
 void				init(t_info *info, t_map *map, t_vars *vars, t_data *data);
@@ -254,7 +291,7 @@ void				player_move(t_info *info, int keycode);
 // RAYCASTING
 // ------------------------------------------------
 
-int					raycasting(t_info *info);
+void			raycasting(t_info *info);
 void				draw_line(t_ray *ray, t_info *info, int x,
 						double wall_distance, bool side);
 void				my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
