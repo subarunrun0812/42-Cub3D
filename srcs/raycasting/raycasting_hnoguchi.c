@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 16:35:02 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:50:28 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -403,21 +403,23 @@ void	move_forward(char **map, t_vars *vars)
 	int		one_step_forward_y_position_vector;
 	char	distination;
 
-	one_step_forward_x_position_vector = (int)(vars->x_position_vector
-		+ vars->x_direction * MOVE_DISTANCE);
-	one_step_forward_y_position_vector = (int)(vars->y_position_vector
-		+ vars->y_direction * MOVE_DISTANCE);
+	one_step_forward_x_position_vector = vars->x_position_vector
+		+ (vars->x_direction * MOVE_DISTANCE);
+	one_step_forward_y_position_vector = vars->y_position_vector
+		+ (vars->y_direction * MOVE_DISTANCE);
 	distination = map[one_step_forward_x_position_vector][one_step_forward_y_position_vector];
 	if (distination == '1' || distination == '2' || distination == '3'
 		|| distination == '4')
 		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
 	else
 	{
-		if (0 < one_step_forward_x_position_vector)
+		if (0 < one_step_forward_x_position_vector
+			&& 0 < (int)vars->x_position_vector)
 		{
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 		}
-		if (0 < one_step_forward_y_position_vector)
+		if (0 < one_step_forward_y_position_vector
+			&& 0 < (int)vars->y_position_vector)
 		{
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 		}
@@ -430,19 +432,21 @@ void	move_backward(char **map, t_vars *vars)
 	int		one_step_backward_y_position_vector;
 	char	distination;
 
-	one_step_backward_x_position_vector = (int)(vars->x_position_vector
-		- vars->x_direction * MOVE_DISTANCE);
-	one_step_backward_y_position_vector = (int)(vars->y_position_vector
-		- (vars->y_direction * MOVE_DISTANCE));
+	one_step_backward_x_position_vector = vars->x_position_vector
+		- (vars->x_direction * MOVE_DISTANCE);
+	one_step_backward_y_position_vector = vars->y_position_vector
+		- (vars->y_direction * MOVE_DISTANCE);
 	distination = map[one_step_backward_x_position_vector][one_step_backward_y_position_vector];
 	if (distination == '1' || distination == '2' || distination == '3'
 		|| distination == '4')
 		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
 	else
 	{
-		if (0 < one_step_backward_x_position_vector)
+		if (0 < one_step_backward_x_position_vector
+			&& 0 < (int)vars->x_position_vector)
 			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
-		if (0 < one_step_backward_y_position_vector)
+		if (0 < one_step_backward_y_position_vector
+			&& 0 < (int)vars->y_position_vector)
 			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
 	}
 }
@@ -515,7 +519,9 @@ int	key_action(int keycode, t_info *info)
 	// minimapの再描画
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	// debug_print_mapdata(info);
+	debug_print_mapdata(info);
+	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
+		info->vars->y_position_vector);
 	return (0);
 }
 
@@ -630,13 +636,13 @@ void	init_nswe_dirction(char player_direction, t_vars *vars)
 	}
 }
 
-// TODO: initialize_vars.c
 void	initialize_vars(t_info *info)
 {
 	info->vars->mlx = mlx_init();
 	info->vars->win = mlx_new_window(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT,
 		"Cub3d");
-	info->vars->x_position_vector = (double)info->map->player_y;
+	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
+	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
 	info->vars->y_position_vector = (double)info->map->player_x;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 		info->vars);
