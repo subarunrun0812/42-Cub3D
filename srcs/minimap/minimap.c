@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:05:10 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:14:15 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,13 +105,22 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 
 int	minimap(t_info *info, t_data *data)
 {
+	data->img = mlx_new_image(info->vars->mlx,WIN_WIDTH,WIN_HEIGHT);
 	//minimapの画像表示
+	printf("minimap\n");
+	printf("img=%p\n",data->img);
+	printf("bits_per_pixel=%d\n",data->bits_per_pixel);
+	printf("line_length=%d\n",data->line_length);
+	printf("line_endian=%d\n",data->endian);
 	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
 			&data->line_length, &data->endian);
+	printf("addr=%s\n",data->addr);
+	printf("test1\n");
 	if (info->flag->map == CORNER)
 		range_to_display_with_player(info, data);
 	else
 		central_map(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, data->img, 0, 0);
+	printf("end\n");
 	return (0);
 }

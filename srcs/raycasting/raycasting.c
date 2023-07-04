@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 12:13:21 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 13:02:57 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	draw_image(t_vars *vars, t_info *info)
 	x_axis = 0;
 	side = X_AXIS;
 	perpendicular_wall_distance = 0;
-	while (x_axis < vars->screen_width)
+	while (x_axis < WIN_WIDTH)
 	{
 		set_ray_data(&ray, vars, x_axis);
 		side = calculate_nearest_axis(&ray, vars, info);
@@ -61,8 +61,11 @@ int	draw_image(t_vars *vars, t_info *info)
 			perpendicular_wall_distance = ray.y_side_distance
 				- ray.y_delta_distance;
 		}
+		// printf("x_axis=%d\n",x_axis);
+		// printf("WIN_WIDTH=%d\n",WIN_WIDTH);
 		draw_line(&ray, info, x_axis, perpendicular_wall_distance, side);
 		x_axis += 1;
+		// printf("x_axis=%d\n",x_axis);
 	}
 	return (0);
 }
@@ -158,10 +161,13 @@ int	key_action(int keycode, t_info *info)
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
 	updata_pos_map(vars, info,keycode);
-	for (int x = 0; x < vars->screen_width; x++)
-		my_mlx_pixel_put_line(vars->image, x, 0, WIN_HEIGHT, 0x00000000);
+	for (int x = 0; x < WIN_WIDTH; x++)
+	{
+		// printf("x = %d\n",x);
+		my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
+	}
 	draw_image(vars, info);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->image->img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->raydata->img, 0, 0);
 	// minimapの再描画
 	minimap(info, info->data);
 	return (0);
@@ -194,10 +200,10 @@ void	initialize_vars(t_vars *vars, t_info *info)
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
 	init_nswe_dirction(info, info->vars);
-	vars->image->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
-	vars->image->addr = mlx_get_data_addr(vars->image->img,
-		&vars->image->bits_per_pixel, &vars->image->line_length,
-		&vars->image->endian);
+	vars->raydata->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
+	vars->raydata->addr = (unsigned int *)mlx_get_data_addr(vars->raydata->img,
+		&vars->raydata->bits_per_pixel, &vars->raydata->line_length,
+		&vars->raydata->endian);
 	draw_image(vars, info);
 	// my_mlx_pixel_put(info->data, (int)(info->map->player_x + (2
 	// 			* vars->y_direction)), (int)(info->map->player_y + (2
@@ -210,10 +216,13 @@ int	raycasting(t_info *info)
 {
 	initialize_vars(info->vars, info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->image->img, 0, 0);
+		info->vars->raydata->img, 0, 0);
+	printf("test5\n");
 	minimap(info, info->data);
 	// mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info);
+	printf("test6\n");
 	mlx_key_hook(info->vars->win, key_action, info);
+	printf("test7\n");
 	mlx_loop(info->vars->mlx);
 	return (0);
 }

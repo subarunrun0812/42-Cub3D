@@ -6,11 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/07 08:52:51 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/06/28 18:30:12 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:38:13 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "raycaster_direction.h"
+# include "raycaster_direction.h"`
 
 static void	my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, int color)
 {

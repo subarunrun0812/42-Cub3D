@@ -110,60 +110,60 @@
 typedef struct s_map
 {
 	// map_data[y][x]
-	char		**map_data;
-	int			player_x;
-	int			player_y;
-	int			height;
-	int			width;
-}				t_map;
+	char			**map_data;
+	int				player_x;
+	int				player_y;
+	int				height;
+	int				width;
+}					t_map;
 
 typedef struct s_plane
 {
-	double		x;
-	double		y;
-}				t_plane;
+	double			x;
+	double			y;
+}					t_plane;
 
 typedef struct s_data
 {
-	void		*img;
-	char		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-}				t_data;
+	void			*img;
+	char			*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+}					t_data;
 
 typedef struct s_raydata
 {
-	void		*img;
-	unsigned int		*addr;
-	int			bits_per_pixel;
-	int			line_length;
-	int			endian;
-}				t_raydata;
+	void			*img;
+	unsigned int	*addr;
+	int				bits_per_pixel;
+	int				line_length;
+	int				endian;
+}					t_raydata;
 
 typedef struct s_rgb
 {
-	int			red;
-	int			green;
-	int			blue;
-}				t_rgb;
+	int				red;
+	int				green;
+	int				blue;
+}					t_rgb;
 
 typedef struct s_texture
 {
-	char		*no;
-	char		*so;
-	char		*we;
-	char		*ea;
-	char		*f_tex;
-	char		*c_tex;
-	t_rgb		*f_rgb;
-	t_rgb		*c_rgb;
-}				t_texture;
+	char			*no;
+	char			*so;
+	char			*we;
+	char			*ea;
+	char			*f_tex;
+	char			*c_tex;
+	t_rgb			*f_rgb;
+	t_rgb			*c_rgb;
+}					t_texture;
 
 typedef struct s_vars
 {
-	void		*mlx;
-	void		*win;
+	void			*mlx;
+	void			*win;
 	// key_action
 	double x_position_vector; // posX
 	double y_position_vector; // posY
@@ -174,125 +174,127 @@ typedef struct s_vars
 	double y_camera_plane; // planeY
 	int screen_width;      // width of the screen
 	int screen_height;     // height of the screen
-	t_data		*image;
-	t_texture	texture_list[TEXTURE_LIST_SIZE];
-}				t_vars;
+	t_raydata		*raydata;
+	t_texture		texture_list[TEXTURE_LIST_SIZE];
+}					t_vars;
 
 typedef struct s_flag
 {
-	int			map;
-}				t_flag;
+	int				map;
+}					t_flag;
 
 typedef struct s_ray
 {
 	// rayベクトルのx,y成分
-	double		x_direction;
-	double		y_direction;
+	double			x_direction;
+	double			y_direction;
 	// rayのマップ上の現在のブロックのx,y座標
-	int			current_x_in_map;
-	int			current_y_in_map;
+	int				current_x_in_map;
+	int				current_y_in_map;
 	// rayが壁にぶつかるまでのx,y距離
-	double		x_side_distance;
-	double		y_side_distance;
+	double			x_side_distance;
+	double			y_side_distance;
 	// rayが次のx,y方向のブロックの境界に到達するたびに
 	// side_distanceに加えるべき距離を表します。
-	double		x_delta_distance;
-	double		y_delta_distance;
+	double			x_delta_distance;
+	double			y_delta_distance;
 
-	double		begin_ray_vec;
-}				t_ray;
+	double			begin_ray_vec;
+}					t_ray;
 
 typedef struct s_info
 {
-	t_map		*map;
-	t_vars		*vars;
-	t_data		*data;
+	t_map			*map;
+	t_vars			*vars;
+	t_data			*data;
 	t_raydata		*raydata;
-	t_plane		*plane;
-	t_flag		*flag;
-	t_ray		*ray;
-	t_texture	*texture;
-}				t_info;
+	t_plane			*plane;
+	t_flag			*flag;
+	t_ray			*ray;
+	t_texture		*texture;
+}					t_info;
 
 // init
-void			init(t_info *info, t_map *map, t_vars *vars, t_data *data);
-void			init_second(t_info *info, t_flag *flag, t_texture *texture);
+void				init(t_info *info, t_map *map, t_vars *vars, t_data *data);
+void				init_second(t_info *info, t_flag *flag, t_texture *texture);
 
 // ------------------------------------------------
 // FILE
 // ------------------------------------------------
 
 // MAP
-void			read_file(char *path, t_info *info);
-void			get_data_file(int fd, t_info *info);
-void			check_map_wall(t_info *info);
-void			check_only_one_nswe(t_map *map);
-int				minimap(t_info *info, t_data *data);
-void			central_map(t_info *info);
-void			range_to_display_with_player(t_info *info, t_data *data);
-void			draw_one_block(t_data *data, int draw_x, int draw_y, int color);
-int				mapdata_width_length(char *width);
-int				mapdata_maxwidth_length(t_map *map);
-void			updata_pos_map(t_vars *vars, t_info *info,int keycode);
+void				read_file(char *path, t_info *info);
+void				get_data_file(int fd, t_info *info);
+void				check_map_wall(t_info *info);
+void				check_only_one_nswe(t_map *map);
+int					minimap(t_info *info, t_data *data);
+void				central_map(t_info *info);
+void				range_to_display_with_player(t_info *info, t_data *data);
+void				draw_one_block(t_data *data, int draw_x, int draw_y,
+						int color);
+int					mapdata_width_length(char *width);
+int					mapdata_maxwidth_length(t_map *map);
+void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
 
 // FILE
-int				read_texture(char *str, t_texture *texture);
-char			*assign_to_structure(char **str, char *identifier,
-					t_texture *texture);
-void			parse_and_assign_rgb_values(char *path, char *identifier,
-					t_texture *texture);
-void			assign_to_structure_floor(char **str, t_texture *texture);
-void			assign_to_structure_celling(char **str, t_texture *texture);
-void			assign_to_structure_no(char **str, t_texture *texture);
-void			assign_to_structure_so(char **str, t_texture *texture);
-void			assign_to_structure_we(char **str, t_texture *texture);
-void			assign_to_structure_ea(char **str, t_texture *texture);
-int				double_pointer_word_len(char **str);
+int					read_texture(char *str, t_texture *texture);
+char				*assign_to_structure(char **str, char *identifier,
+						t_texture *texture);
+void				parse_and_assign_rgb_values(char *path, char *identifier,
+						t_texture *texture);
+void				assign_to_structure_floor(char **str, t_texture *texture);
+void				assign_to_structure_celling(char **str, t_texture *texture);
+void				assign_to_structure_no(char **str, t_texture *texture);
+void				assign_to_structure_so(char **str, t_texture *texture);
+void				assign_to_structure_we(char **str, t_texture *texture);
+void				assign_to_structure_ea(char **str, t_texture *texture);
+int					double_pointer_word_len(char **str);
 
 // ------------------------------------------------
 // PLAYER
 // ------------------------------------------------
 
-int				key_hook(int keycode, t_vars *vars);
-int				ft_key_hook(int keycode, t_info *info);
-int				player_coordinate(t_info *info);
-void			init_player_coordinate(t_map *map, t_info *info);
-void			player_move(t_info *info, int keycode);
+int					key_hook(int keycode, t_vars *vars);
+int					ft_key_hook(int keycode, t_info *info);
+int					player_coordinate(t_info *info);
+void				init_player_coordinate(t_map *map, t_info *info);
+void				player_move(t_info *info, int keycode);
 
 // ------------------------------------------------
 // RAYCASTING
 // ------------------------------------------------
 
-int				raycasting(t_info *info);
-void			draw_line(t_ray *ray, t_info *info, int x, double wall_distance,
-					bool side);
-void			my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2,
-					int color);
-bool			calculate_nearest_axis(t_ray *ray, t_vars *vars, t_info *info);
+int					raycasting(t_info *info);
+void				draw_line(t_ray *ray, t_info *info, int x,
+						double wall_distance, bool side);
+void				my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
+						unsigned int color);
+bool				calculate_nearest_axis(t_ray *ray, t_vars *vars,
+						t_info *info);
 
 // ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
 
-void			my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int				close_window(t_info *info);
-int				new_window(t_vars *vars);
+void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
+int					close_window(t_info *info);
+int					new_window(t_vars *vars);
 
 // ------------------------------------------------
 // ERROR
 // ------------------------------------------------
 
 // free
-void			free_mapdata(char **map_data, int vertical);
-void			free_texture(t_info *info);
+void				free_mapdata(char **map_data, int vertical);
+void				free_texture(t_info *info);
 
 // print_error
-void			print_error(char *str);
+void				print_error(char *str);
 
 // ------------------------------------------------
 // DEBUG
 // ------------------------------------------------
 
-void			debug_print_mapdata(t_info *info);
+void				debug_print_mapdata(t_info *info);
 
 #endif
