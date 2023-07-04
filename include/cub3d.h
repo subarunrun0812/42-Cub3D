@@ -132,6 +132,15 @@ typedef struct s_data
 	int			endian;
 }				t_data;
 
+typedef struct s_raydata
+{
+	void		*img;
+	unsigned int		*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_raydata;
+
 typedef struct s_rgb
 {
 	int			red;
@@ -198,6 +207,7 @@ typedef struct s_info
 	t_map		*map;
 	t_vars		*vars;
 	t_data		*data;
+	t_raydata		*raydata;
 	t_plane		*plane;
 	t_flag		*flag;
 	t_ray		*ray;

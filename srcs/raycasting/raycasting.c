@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:38:09 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:13:21 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,9 +199,9 @@ void	initialize_vars(t_vars *vars, t_info *info)
 		&vars->image->bits_per_pixel, &vars->image->line_length,
 		&vars->image->endian);
 	draw_image(vars, info);
-	my_mlx_pixel_put(info->data, (int)(info->map->player_x + (2
-				* vars->y_direction)), (int)(info->map->player_y + (2
-				* vars->x_direction)), BLACK);
+	// my_mlx_pixel_put(info->data, (int)(info->map->player_x + (2
+	// 			* vars->y_direction)), (int)(info->map->player_y + (2
+	// 			* vars->x_direction)), BLACK);
 	// printf("\x1b[32mdirection xy=[%f][%f]\x1b[0m\n",vars->x_direction,vars->y_direction);
 	// printf("\x1b[32mcamera_plane xy=[%f][%f]\x1b[0m\n",vars->x_camera_plane,vars->y_camera_plane);
 }

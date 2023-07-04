@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 14:46:52 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:14:59 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	main(int argc, char **argv)
 	t_map map;
 	t_vars vars;
 	t_data data;
+	t_raydata raydata;
 	t_flag flag;
 	t_texture texture;
 	
@@ -43,6 +44,7 @@ int	main(int argc, char **argv)
 		print_error("no map specified.");
 	init(&info, &map, &vars, &data);
 	init_second(&info, &flag, &texture);
+	info.raydata = &raydata;
 	read_file(argv[1], &info);
 	init_player_coordinate(&map,&info);
 	debug_print_mapdata(&info);
