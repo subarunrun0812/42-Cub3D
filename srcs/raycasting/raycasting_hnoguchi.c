@@ -514,10 +514,7 @@ int	key_action(int keycode, t_info *info)
 	clean_image(info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->data->img, 0, 0);
-	// minimapの再描画
-	updata_pos_map(info->vars, info, keycode);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
 	minimap(info, info->data);
 	debug_print_mapdata(info);
 	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
@@ -526,80 +523,49 @@ int	key_action(int keycode, t_info *info)
 }
 
 // TODO: create_xpm_textures.c
-void	create_floor_textures(t_vars *vars)
-{
-	// if (path == NULL)
-	// {
-	// 	return ;
-	// }
-	vars->texture_list[FLOOR_1].data.img = mlx_xpm_file_to_image(vars->mlx,
-		"./srcs/raycasting/xpm/greystone.xpm",
-		&vars->texture_list[FLOOR_1].width,
-		&vars->texture_list[FLOOR_1].height);
-	vars->texture_list[FLOOR_1].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[FLOOR_1].data.img,
-		&vars->texture_list[FLOOR_1].data.bits_per_pixel,
-		&vars->texture_list[FLOOR_1].data.line_length,
-		&vars->texture_list[FLOOR_1].data.endian);
-	vars->texture_list[FLOOR_2].data.img = mlx_xpm_file_to_image(vars->mlx,
-		"./srcs/raycasting/xpm/bluestone.xpm",
-		&vars->texture_list[FLOOR_2].width,
-		&vars->texture_list[FLOOR_2].height);
-	vars->texture_list[FLOOR_2].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[FLOOR_2].data.img,
-		&vars->texture_list[FLOOR_2].data.bits_per_pixel,
-		&vars->texture_list[FLOOR_2].data.line_length,
-		&vars->texture_list[FLOOR_2].data.endian);
-}
-
-void	create_ceiling_textures(char *path, t_vars *vars)
-{
-	// if (path == NULL)
-	// {
-	// 	return ;
-	// }
-	vars->texture_list[CEILING].data.img = mlx_xpm_file_to_image(vars->mlx,
-		path, &vars->texture_list[CEILING].width,
-		&vars->texture_list[CEILING].height);
-	vars->texture_list[CEILING].data.addr = (unsigned int *)mlx_get_data_addr(vars->texture_list[CEILING].data.img,
-		&vars->texture_list[CEILING].data.bits_per_pixel,
-		&vars->texture_list[CEILING].data.line_length,
-		&vars->texture_list[CEILING].data.endian);
-}
-
-void	create_texture(void *mlx, char *path, t_texture_data *texture)
-{
-	if (path != NULL)
-	{
-		return ;
-	}
-	texture->data.img = mlx_xpm_file_to_image(mlx, path, &texture->width,
-		&texture->height);
-	texture->data.addr = (unsigned int *)mlx_get_data_addr(texture->data.img,
-		&texture->data.bits_per_pixel, &texture->data.line_length,
-		&texture->data.endian);
-}
-
 void	exit_create_texture(void *mlx, char *path, t_texture_data *texture)
 {
-	texture->data.img = mlx_xpm_file_to_image(mlx, path, &texture->width,
-		&texture->height);
-	texture->data.addr = (unsigned int *)mlx_get_data_addr(texture->data.img,
-		&texture->data.bits_per_pixel, &texture->data.line_length,
-		&texture->data.endian);
+	texture->data.img = mlx_xpm_file_to_image(mlx, path, &texture->width, &texture->height);
+	if (texture->data.img == NULL)
+	{
+		texture->data.img = NULL;
+		print_error("Failed malloc.");
+	}
+	texture->data.addr = (unsigned int *)mlx_get_data_addr(texture->data.img, &texture->data.bits_per_pixel, &texture->data.line_length, &texture->data.endian);
+}
+
+void	create_texture_floor(void *mlx, t_texture *path, t_texture_data *texture_list)
+{
+	(void)path;
+	// if (path->f_rgb->red != -1)
+	// {
+	// 	texture_list[FLOOR_1].data.img = NULL;
+	// 	texture_list[FLOOR_2].data.img = NULL;
+	// 	return ;
+	// }
+	// exit_create_texture(mlx, path->f_tex, &texture_list[FLOOR_1]);
+	exit_create_texture(mlx, "./srcs/raycasting/xpm/greystone.xpm", &texture_list[FLOOR_1]);
+	exit_create_texture(mlx, "./srcs/raycasting/xpm/bluestone.xpm", &texture_list[FLOOR_2]);
+}
+
+void	create_texture_ceiling(void *mlx, t_texture *path, t_texture_data *texture)
+{
+	(void)path;
+	// if (path->c_rgb->red != -1)
+	// {
+	// 	texture.data.img = NULL;
+	// 	return ;
+	// }
+	// exit_create_texture(mlx, path->c_tex, texture);
+	exit_create_texture(mlx, "./srcs/raycasting/xpm/wood.xpm", texture);
 }
 
 void	create_xpm_textures(t_texture *texture, t_vars *vars)
 {
-	create_floor_textures(vars);
-	create_ceiling_textures("./srcs/raycasting/xpm/wood.xpm", vars);
-	// create_south_and_north_textures(texture, vars);
-	// create_east_and_west_textures(texture, vars);
-	// create_texture(vars->mlx, texture->f_tex, &vars->texture_list[FLOOR_1]);
-	// create_texture(vars->mlx, texture->f_tex, &vars->texture_list[FLOOR_2]);
-	// create_texture(vars->mlx, texture->c_tex, &vars->texture_list[CEILING]);
-	exit_create_texture(vars->mlx, texture->so,
-		&vars->texture_list[SOUTH_WALL]);
-	exit_create_texture(vars->mlx, texture->no,
-		&vars->texture_list[NORTH_WALL]);
+	create_texture_floor(vars->mlx, texture, vars->texture_list);
+	create_texture_ceiling(vars->mlx, texture, &vars->texture_list[CEILING]);
+	exit_create_texture(vars->mlx, texture->so, &vars->texture_list[SOUTH_WALL]);
+	exit_create_texture(vars->mlx, texture->no, &vars->texture_list[NORTH_WALL]);
 	exit_create_texture(vars->mlx, texture->ea, &vars->texture_list[EAST_WALL]);
 	exit_create_texture(vars->mlx, texture->we, &vars->texture_list[WEST_WALL]);
 }
@@ -636,11 +602,47 @@ void	init_nswe_dirction(char player_direction, t_vars *vars)
 	}
 }
 
+void	*exit_mlx_init(void)
+{
+	void	*mlx;
+
+	mlx = mlx_init();
+	if (mlx == NULL)
+	{
+		print_error("Failed malloc.");
+	}
+	return (mlx);
+}
+
+void	*exit_mlx_new_window(void *mlx)
+{
+	void	*window;
+
+	window = mlx_new_window(mlx, WIN_WIDTH, WIN_HEIGHT, "Cub3d");
+	if (window == NULL)
+	{
+		print_error("Failed malloc.");
+	}
+	return (window);
+}
+
+void	*exit_mlx_new_image(void *mlx)
+{
+	void	*image;
+
+	image = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (image == NULL)
+	{
+		print_error("Failed malloc.");
+	}
+	return (image);
+}
+
+// TODO: initialize_vars.c
 void	initialize_vars(t_info *info)
 {
-	info->vars->mlx = mlx_init();
-	info->vars->win = mlx_new_window(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT,
-		"Cub3d");
+	info->vars->mlx = exit_mlx_init();
+	info->vars->win = exit_mlx_new_window(info->vars->mlx);
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
 	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
 	info->vars->y_position_vector = (double)info->map->player_x;
@@ -648,11 +650,8 @@ void	initialize_vars(t_info *info)
 		info->vars);
 	info->vars->screen_width = WIN_WIDTH;
 	info->vars->screen_height = WIN_HEIGHT;
-	info->vars->data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH,
-		WIN_HEIGHT);
-	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img,
-		&info->vars->data->bits_per_pixel, &info->vars->data->line_length,
-		&info->vars->data->endian);
+	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
+	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img, &info->vars->data->bits_per_pixel, &info->vars->data->line_length, &info->vars->data->endian);
 	create_xpm_textures(info->texture, info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
