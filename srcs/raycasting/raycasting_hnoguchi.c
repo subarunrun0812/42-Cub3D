@@ -6,14 +6,15 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 17:47:00 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:50:28 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 // #include "raycasting_hnoguchi.h"
 #include "cub3d.h"
 
-static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsigned int color)
+static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
+		unsigned int color)
 {
 	int				y;
 	unsigned int	*dst;
@@ -30,7 +31,8 @@ static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsi
 // TODO: get_nearest_axis.c
 static bool	is_hit_wall(char **map, t_ray *ray)
 {
-	if ('0' < map[ray->current_x_in_map][ray->current_y_in_map] && map[ray->current_x_in_map][ray->current_y_in_map] <= '9')
+	if ('0' < map[ray->current_x_in_map][ray->current_y_in_map]
+		&& map[ray->current_x_in_map][ray->current_y_in_map] <= '9')
 	{
 		return (true);
 	}
@@ -41,10 +43,12 @@ static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->x_direction < 0)
 	{
-		ray->x_side_distance = (vars->x_position_vector - ray->current_x_in_map) * ray->x_delta_distance;
+		ray->x_side_distance = (vars->x_position_vector - ray->current_x_in_map)
+			* ray->x_delta_distance;
 		return (-1);
 	}
-	ray->x_side_distance = (ray->current_x_in_map + 1.0 - vars->x_position_vector) * ray->x_delta_distance;
+	ray->x_side_distance = (ray->current_x_in_map + 1.0
+		- vars->x_position_vector) * ray->x_delta_distance;
 	return (1);
 }
 
@@ -52,14 +56,16 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->y_direction < 0)
 	{
-		ray->y_side_distance = (vars->y_position_vector - ray->current_y_in_map) * ray->y_delta_distance;
+		ray->y_side_distance = (vars->y_position_vector - ray->current_y_in_map)
+			* ray->y_delta_distance;
 		return (-1);
 	}
-	ray->y_side_distance = (ray->current_y_in_map + 1.0 - vars->y_position_vector) * ray->y_delta_distance;
+	ray->y_side_distance = (ray->current_y_in_map + 1.0
+		- vars->y_position_vector) * ray->y_delta_distance;
 	return (1);
 }
 
-//perform DDA
+// perform DDA
 int	get_nearest_axis(t_ray *ray, t_info *info)
 {
 	int	step_x;
@@ -88,7 +94,8 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 	return (axis);
 }
 
-void	set_draw_background(t_draw_background *draw, t_vars *vars, int y_coordinate, float vertical_position_camera)
+void	set_draw_background(t_draw_background *draw, t_vars *vars,
+		int y_coordinate, float vertical_position_camera)
 {
 	float	ray_direction_left[2];
 	float	ray_direction_right[2];
@@ -99,10 +106,14 @@ void	set_draw_background(t_draw_background *draw, t_vars *vars, int y_coordinate
 	ray_direction_right[X_AXIS] = vars->x_direction + vars->x_camera_plane;
 	ray_direction_right[Y_AXIS] = vars->y_direction + vars->y_camera_plane;
 	row_distance = vertical_position_camera / y_coordinate;
-	draw->x_move_amount = row_distance * (ray_direction_right[X_AXIS] - ray_direction_left[X_AXIS]) / vars->screen_width;
-	draw->y_move_amount = row_distance * (ray_direction_right[Y_AXIS] - ray_direction_left[Y_AXIS]) / vars->screen_width;
-	draw->x_coordinate = vars->x_position_vector + row_distance * ray_direction_left[X_AXIS];
-	draw->y_coordinate = vars->y_position_vector + row_distance * ray_direction_left[Y_AXIS];
+	draw->x_move_amount = row_distance * (ray_direction_right[X_AXIS]
+		- ray_direction_left[X_AXIS]) / vars->screen_width;
+	draw->y_move_amount = row_distance * (ray_direction_right[Y_AXIS]
+		- ray_direction_left[Y_AXIS]) / vars->screen_width;
+	draw->x_coordinate = vars->x_position_vector + row_distance
+		* ray_direction_left[X_AXIS];
+	draw->y_coordinate = vars->y_position_vector + row_distance
+		* ray_direction_left[Y_AXIS];
 }
 
 int	decide_texture_floor(int cell[2])
@@ -117,30 +128,46 @@ int	decide_texture_floor(int cell[2])
 	return (FLOOR_2);
 }
 
-void	put_texture_floor(t_draw_background *draw, t_vars *vars, int coordinate_screen[2], int cell[2])
+void	put_texture_floor(t_draw_background *draw, t_vars *vars,
+		int coordinate_screen[2], int cell[2])
 {
 	int				coordinate_texture[2];
 	int				floor_texture;
 	unsigned int	color;
 
 	floor_texture = decide_texture_floor(cell);
-	coordinate_texture[X_AXIS] = (int)(vars->texture_list[floor_texture].width * (draw->x_coordinate - cell[X_AXIS])) & (vars->texture_list[floor_texture].width - 1);
-	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
-	color = *(vars->texture_list[floor_texture].data.addr + vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
+	coordinate_texture[X_AXIS] = (int)(vars->texture_list[floor_texture].width
+		* (draw->x_coordinate
+			- cell[X_AXIS])) & (vars->texture_list[floor_texture].width - 1);
+	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height
+		* (draw->y_coordinate
+			- cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
+	color = *(vars->texture_list[floor_texture].data.addr
+		+ vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS]
+		+ coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS]) + coordinate_screen[X_AXIS]] = color;
+	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS])
+		+ coordinate_screen[X_AXIS]] = color;
 }
 
-void	put_texture_ceiling(t_draw_background *draw, t_vars *vars, int coordinate_screen[2], int cell[2])
+void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
+		int coordinate_screen[2], int cell[2])
 {
 	int				coordinate_texture[2];
 	unsigned int	color;
 
-	coordinate_texture[X_AXIS] = (int)(vars->texture_list[CEILING].width * (draw->x_coordinate - cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
-	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
-	color = *(vars->texture_list[CEILING].data.addr + vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
+	coordinate_texture[X_AXIS] = (int)(vars->texture_list[CEILING].width
+		* (draw->x_coordinate
+			- cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
+	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height
+		* (draw->y_coordinate
+			- cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
+	color = *(vars->texture_list[CEILING].data.addr
+		+ vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS]
+		+ coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->data->addr[(vars->screen_width * (vars->screen_height - coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
+	vars->data->addr[(vars->screen_width * (vars->screen_height
+			- coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
 }
 
 int	draw_floor_and_ceiling(t_vars *vars)
@@ -152,7 +179,8 @@ int	draw_floor_and_ceiling(t_vars *vars)
 	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
 	while (coordinate_screen[Y_AXIS] < vars->screen_height)
 	{
-		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS] - (vars->screen_height / 2), 0.5 * vars->screen_height);
+		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
+			- (vars->screen_height / 2), 0.5 * vars->screen_height);
 		coordinate_screen[X_AXIS] = 0;
 		while (coordinate_screen[X_AXIS] < vars->screen_width)
 		{
@@ -174,8 +202,10 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	double	x_current_camera;
 
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
-	ray->x_direction = vars->x_direction + (vars->x_camera_plane * x_current_camera);
-	ray->y_direction = vars->y_direction + (vars->y_camera_plane * x_current_camera);
+	ray->x_direction = vars->x_direction + (vars->x_camera_plane
+		* x_current_camera);
+	ray->y_direction = vars->y_direction + (vars->y_camera_plane
+		* x_current_camera);
 	ray->current_x_in_map = (int)vars->x_position_vector;
 	ray->current_y_in_map = (int)vars->y_position_vector;
 	ray->x_side_distance = 0;
@@ -251,29 +281,34 @@ double	get_hit_wall_x(t_draw_wall *wall, t_ray *ray, t_vars *vars)
 	wall_x = 0.0;
 	if (wall->side == X_AXIS)
 	{
-		wall_x = vars->y_position_vector + wall->perpendicular_wall_distance * ray->y_direction;
+		wall_x = vars->y_position_vector + wall->perpendicular_wall_distance
+			* ray->y_direction;
 	}
 	else
 	{
-		wall_x = vars->x_position_vector + wall->perpendicular_wall_distance * ray->x_direction;
+		wall_x = vars->x_position_vector + wall->perpendicular_wall_distance
+			* ray->x_direction;
 	}
 	wall_x -= floor((wall_x));
 	return (wall_x);
 }
 
-int	get_x_coordinate_texture(t_draw_texture *texture,
-		t_draw_wall *wall, t_ray *ray, t_vars *vars)
+int	get_x_coordinate_texture(t_draw_texture *texture, t_draw_wall *wall,
+		t_ray *ray, t_vars *vars)
 {
 	int	x_coordinate_texture;
 
-	x_coordinate_texture = (int)(texture->wall_x * (double)vars->texture_list[texture->list_number].width);
+	x_coordinate_texture = (int)(texture->wall_x
+		* (double)vars->texture_list[texture->list_number].width);
 	if (wall->side == 0 && 0 < ray->x_direction)
 	{
-		x_coordinate_texture = vars->texture_list[texture->list_number].width - x_coordinate_texture - 1;
+		x_coordinate_texture = vars->texture_list[texture->list_number].width
+			- x_coordinate_texture - 1;
 	}
 	if (wall->side == 1 && ray->y_direction < 0)
 	{
-		x_coordinate_texture = vars->texture_list[texture->list_number].width - x_coordinate_texture - 1;
+		x_coordinate_texture = vars->texture_list[texture->list_number].width
+			- x_coordinate_texture - 1;
 	}
 	return (x_coordinate_texture);
 }
@@ -281,22 +316,30 @@ int	get_x_coordinate_texture(t_draw_texture *texture,
 void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 {
 	wall->side = get_nearest_axis(ray, info);
-	wall->perpendicular_wall_distance = get_perpendicular_wall_distance(ray, wall->side);
-	wall->line_height = (int)(info->vars->screen_height / wall->perpendicular_wall_distance);
-	wall->start = get_draw_start_y_coordinate(info->vars->screen_height, wall->line_height);
-	wall->end = get_draw_end_y_coordinate(info->vars->screen_height, wall->line_height);
+	wall->perpendicular_wall_distance = get_perpendicular_wall_distance(ray,
+		wall->side);
+	wall->line_height = (int)(info->vars->screen_height
+		/ wall->perpendicular_wall_distance);
+	wall->start = get_draw_start_y_coordinate(info->vars->screen_height,
+		wall->line_height);
+	wall->end = get_draw_end_y_coordinate(info->vars->screen_height,
+		wall->line_height);
 }
 
-void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall, t_ray *ray, t_vars *vars)
+void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
+		t_ray *ray, t_vars *vars)
 {
 	texture->list_number = decide_draw_texture(ray, vars, wall->side);
 	texture->wall_x = get_hit_wall_x(wall, ray, vars);
 	texture->x_coordinate = get_x_coordinate_texture(texture, wall, ray, vars);
-	texture->step = (1.0 * vars->texture_list[texture->list_number].height) / wall->line_height;
-	texture->position = (wall->start - (vars->screen_height / 2) + (wall->line_height / 2)) * texture->step;
+	texture->step = (1.0 * vars->texture_list[texture->list_number].height)
+		/ wall->line_height;
+	texture->position = (wall->start - (vars->screen_height / 2)
+		+ (wall->line_height / 2)) * texture->step;
 }
 
-void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars , int x_coordinate_screen)
+void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
+		int x_coordinate_screen)
 {
 	unsigned int	color;
 	int				y_coordinate_screen;
@@ -305,14 +348,18 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars , int 
 	y_coordinate_screen = wall->start;
 	while (y_coordinate_screen < wall->end)
 	{
-		y_coordinate_texture = (int)texture->position & (vars->texture_list[texture->list_number].height - 1);
+		y_coordinate_texture = (int)texture->position & (vars->texture_list[texture->list_number].height
+			- 1);
 		texture->position += texture->step;
-		color = *(vars->texture_list[texture->list_number].data.addr + vars->texture_list[texture->list_number].height * y_coordinate_texture + texture->x_coordinate);
+		color = *(vars->texture_list[texture->list_number].data.addr
+			+ vars->texture_list[texture->list_number].height
+			* y_coordinate_texture + texture->x_coordinate);
 		if (wall->side == Y_AXIS)
 		{
 			color = (color >> 1) & 8355711;
 		}
-		vars->data->addr[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
+		vars->data->addr[y_coordinate_screen * vars->screen_width
+			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
 	}
 }
@@ -352,21 +399,27 @@ void	clean_image(t_vars *vars)
 // TODO: key_action.c
 void	move_forward(char **map, t_vars *vars)
 {
-	int	one_step_forward_x_position_vector;
-	int	one_step_forward_y_position_vector;
+	int		one_step_forward_x_position_vector;
+	int		one_step_forward_y_position_vector;
+	char	distination;
 
-	one_step_forward_x_position_vector = (int)(vars->x_position_vector + vars->x_direction * MOVE_DISTANCE);
-	one_step_forward_y_position_vector = (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE);
-	if (0 < one_step_forward_x_position_vector && 0 < (int)vars->y_position_vector)
+	one_step_forward_x_position_vector = vars->x_position_vector
+		+ (vars->x_direction * MOVE_DISTANCE);
+	one_step_forward_y_position_vector = vars->y_position_vector
+		+ (vars->y_direction * MOVE_DISTANCE);
+	distination = map[one_step_forward_x_position_vector][one_step_forward_y_position_vector];
+	if (distination == '1' || distination == '2' || distination == '3'
+		|| distination == '4')
+		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
+	else
 	{
-		if ('0' == map[one_step_forward_x_position_vector][(int)vars->y_position_vector])
+		if (0 < one_step_forward_x_position_vector
+			&& 0 < (int)vars->x_position_vector)
 		{
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 		}
-	}
-	if (0 < (int)(vars->x_position_vector) && 0 < one_step_forward_y_position_vector)
-	{
-		if ('0' == map[(int)vars->x_position_vector][one_step_forward_y_position_vector])
+		if (0 < one_step_forward_y_position_vector
+			&& 0 < (int)vars->y_position_vector)
 		{
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 		}
@@ -375,24 +428,26 @@ void	move_forward(char **map, t_vars *vars)
 
 void	move_backward(char **map, t_vars *vars)
 {
-	int	one_step_backward_x_position_vector;
-	int	one_step_backward_y_position_vector;
+	int		one_step_backward_x_position_vector;
+	int		one_step_backward_y_position_vector;
+	char	distination;
 
-	one_step_backward_x_position_vector = (int)(vars->x_position_vector - vars->x_direction * MOVE_DISTANCE);
-	one_step_backward_y_position_vector = (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
-	if (0 < one_step_backward_x_position_vector && 0 < (int)vars->y_position_vector)
+	one_step_backward_x_position_vector = vars->x_position_vector
+		- (vars->x_direction * MOVE_DISTANCE);
+	one_step_backward_y_position_vector = vars->y_position_vector
+		- (vars->y_direction * MOVE_DISTANCE);
+	distination = map[one_step_backward_x_position_vector][one_step_backward_y_position_vector];
+	if (distination == '1' || distination == '2' || distination == '3'
+		|| distination == '4')
+		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
+	else
 	{
-		if ('0' == map[one_step_backward_x_position_vector][(int)vars->y_position_vector])
-		{
+		if (0 < one_step_backward_x_position_vector
+			&& 0 < (int)vars->x_position_vector)
 			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
-		}
-	}
-	if (0 < (int)vars->x_position_vector && 0 < one_step_backward_y_position_vector)
-	{
-		if ('0' == map[(int)vars->x_position_vector][one_step_backward_y_position_vector])
-		{
+		if (0 < one_step_backward_y_position_vector
+			&& 0 < (int)vars->y_position_vector)
 			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
-		}
 	}
 }
 
@@ -403,10 +458,14 @@ void	rotate_right_camera(t_vars *vars)
 
 	x_old_direction = vars->x_direction;
 	x_old_plane = vars->x_camera_plane;
-	vars->x_direction = vars->x_direction * cos(-MOVE_DISTANCE) - vars->y_direction * sin(-MOVE_DISTANCE);
-	vars->y_direction = x_old_direction * sin(-MOVE_DISTANCE) + vars->y_direction * cos(-MOVE_DISTANCE);
-	vars->x_camera_plane = vars->x_camera_plane * cos(-MOVE_DISTANCE) - vars->y_camera_plane * sin(-MOVE_DISTANCE);
-	vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE) + vars->y_camera_plane * cos(-MOVE_DISTANCE);
+	vars->x_direction = vars->x_direction * cos(-MOVE_DISTANCE)
+		- vars->y_direction * sin(-MOVE_DISTANCE);
+	vars->y_direction = x_old_direction * sin(-MOVE_DISTANCE)
+		+ vars->y_direction * cos(-MOVE_DISTANCE);
+	vars->x_camera_plane = vars->x_camera_plane * cos(-MOVE_DISTANCE)
+		- vars->y_camera_plane * sin(-MOVE_DISTANCE);
+	vars->y_camera_plane = x_old_plane * sin(-MOVE_DISTANCE)
+		+ vars->y_camera_plane * cos(-MOVE_DISTANCE);
 }
 
 void	rotate_left_camera(t_vars *vars)
@@ -416,10 +475,14 @@ void	rotate_left_camera(t_vars *vars)
 
 	x_old_direction = vars->x_direction;
 	x_old_plane = vars->x_camera_plane;
-	vars->x_direction = vars->x_direction * cos(MOVE_DISTANCE) - vars->y_direction * sin(MOVE_DISTANCE);
-	vars->y_direction = x_old_direction * sin(MOVE_DISTANCE) + vars->y_direction * cos(MOVE_DISTANCE);
-	vars->x_camera_plane = vars->x_camera_plane * cos(MOVE_DISTANCE) - vars->y_camera_plane * sin(MOVE_DISTANCE);
-	vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE) + vars->y_camera_plane * cos(MOVE_DISTANCE);
+	vars->x_direction = vars->x_direction * cos(MOVE_DISTANCE)
+		- vars->y_direction * sin(MOVE_DISTANCE);
+	vars->y_direction = x_old_direction * sin(MOVE_DISTANCE) + vars->y_direction
+		* cos(MOVE_DISTANCE);
+	vars->x_camera_plane = vars->x_camera_plane * cos(MOVE_DISTANCE)
+		- vars->y_camera_plane * sin(MOVE_DISTANCE);
+	vars->y_camera_plane = x_old_plane * sin(MOVE_DISTANCE)
+		+ vars->y_camera_plane * cos(MOVE_DISTANCE);
 }
 
 int	key_action(int keycode, t_info *info)
@@ -432,11 +495,11 @@ int	key_action(int keycode, t_info *info)
 	{
 		move_backward(info->map->map_data, info->vars);
 	}
-	else if(keycode == D_KEY || keycode == RIGHT_KEY)
+	else if (keycode == D_KEY || keycode == RIGHT_KEY)
 	{
 		rotate_right_camera(info->vars);
 	}
-	else if(keycode == A_KEY || keycode == LEFT_KEY)
+	else if (keycode == A_KEY || keycode == LEFT_KEY)
 	{
 		rotate_left_camera(info->vars);
 	}
@@ -453,6 +516,9 @@ int	key_action(int keycode, t_info *info)
 	draw_wall(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
 	minimap(info, info->data);
+	debug_print_mapdata(info);
+	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
+		info->vars->y_position_vector);
 	return (0);
 }
 
@@ -504,7 +570,7 @@ void	create_xpm_textures(t_texture *texture, t_vars *vars)
 	exit_create_texture(vars->mlx, texture->we, &vars->texture_list[WEST_WALL]);
 }
 
-void init_nswe_dirction(char player_direction, t_vars *vars)
+void	init_nswe_dirction(char player_direction, t_vars *vars)
 {
 	if (player_direction == NORTH)
 	{
@@ -577,9 +643,11 @@ void	initialize_vars(t_info *info)
 {
 	info->vars->mlx = exit_mlx_init();
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
-	info->vars->x_position_vector = (double)info->map->player_y + 0.5;
+	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
+	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
 	info->vars->y_position_vector = (double)info->map->player_x;
-	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x], info->vars);
+	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
+		info->vars);
 	info->vars->screen_width = WIN_WIDTH;
 	info->vars->screen_height = WIN_HEIGHT;
 	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
@@ -587,13 +655,14 @@ void	initialize_vars(t_info *info)
 	create_xpm_textures(info->texture, info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
-	minimap(info, info->data);
 }
 
 void	raycasting(t_info *info)
 {
 	initialize_vars(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
+		info->vars->data->img, 0, 0);
+	minimap(info, info->data);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);
 }

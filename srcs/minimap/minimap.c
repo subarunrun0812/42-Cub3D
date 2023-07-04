@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 15:01:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:03:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 void	draw_one_block(t_info *info, int draw_x, int draw_y, int color)
 {
-	// printf("draw_one_block\n");
 	int	x;
 	int	y;
 
@@ -33,7 +32,6 @@ void	draw_one_block(t_info *info, int draw_x, int draw_y, int color)
 
 void	range_to_display_with_player(t_info *info, t_data *data)
 {
-	// printf("range_to_display_with_player\n");
 	int		start_i;
 	int		end_i;
 	int		start_j;
@@ -96,7 +94,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	int tmp_x = 0;
 	int tmp_y = 0;
 	
-	// printf("player direction\n");
 	while (ray_len < 30)
 	{
 		tmp_x = (ray_len * info->vars->y_direction);
@@ -105,7 +102,6 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 		,DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y,FUCHSIA);
 		ray_len++;
 	}
-	printf("end\n");
 }
 
 int	minimap(t_info *info, t_data *data)
@@ -119,11 +115,6 @@ int	minimap(t_info *info, t_data *data)
 		range_to_display_with_player(info, data);
 	else
 		central_map(info);
-	printf("test2\n");
-	printf("mlx=%p\n",info->vars->mlx);
-	printf("win=%p\n",info->vars->win);
-	printf("img=%p\n",info->vars->data->img);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
-	printf("end\n");
 	return (0);
 }
