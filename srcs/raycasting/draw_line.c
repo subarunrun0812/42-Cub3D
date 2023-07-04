@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/23 13:30:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/06/24 15:05:58 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 12:54:59 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,5 @@ void	draw_line(t_ray *ray, t_info *info, int x, double wall_distance, bool side)
 	draw_start = calculate_draw_start(info->vars->screen_height, line_height);
 	draw_end = calculate_draw_end(info->vars->screen_height, line_height);
 	color = decide_color(ray, side,info);
-	my_mlx_pixel_put_line(info->vars->image, x, draw_start, draw_end, color);
+	my_mlx_pixel_put_line(info->vars, x, draw_start, draw_end, color);
 }

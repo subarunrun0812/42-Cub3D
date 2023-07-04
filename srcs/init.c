@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:50:28 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:38:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 14:59:57 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	init(t_info *info, t_map *map, t_vars *vars, t_data *data)
 {
 	info->map = map;
 	info->vars = vars;
-	info->vars->image = data;
+	info->vars->data = data;
 	info->data = data;
 	map->map_data = NULL;
 	map->height = 0;
