@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 17:50:28 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 19:25:43 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,27 +170,77 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 			- coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
 }
 
-int	draw_floor_and_ceiling(t_vars *vars)
+void	put_color_floor(t_vars *vars, int coordinate_screen[2], int color)
+{
+	// int				coordinate_texture[2];
+	// int				floor_texture;
+	// unsigned int	color;
+
+	// floor_texture = decide_texture_floor(cell);
+	// coordinate_texture[X_AXIS] = (int)(vars->texture_list[floor_texture].width
+	// 	* (draw->x_coordinate
+	// 		- cell[X_AXIS])) & (vars->texture_list[floor_texture].width - 1);
+	// coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height
+	// 	* (draw->y_coordinate
+	// 		- cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
+	// color = *(vars->texture_list[floor_texture].data.addr
+	// 	+ vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS]
+	// 	+ coordinate_texture[X_AXIS]);
+	color = (color >> 1) & 8355711;
+	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS])
+		+ coordinate_screen[X_AXIS]] = color;
+}
+
+void	put_color_ceiling(t_vars *vars, int coordinate_screen[2], int color)
+{
+	// int				coordinate_texture[2];
+	// unsigned int	color;
+
+	// coordinate_texture[X_AXIS] = (int)(vars->texture_list[CEILING].width
+	// 	* (draw->x_coordinate
+	// 		- cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
+	// coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height
+	// 	* (draw->y_coordinate
+	// 		- cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
+	// color = *(vars->texture_list[CEILING].data.addr
+	// 	+ vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS]
+	// 	+ coordinate_texture[X_AXIS]);
+	color = (color >> 1) & 8355711;
+	vars->data->addr[(vars->screen_width * (vars->screen_height
+			- coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
+}
+
+int	create_trgb_int(int t, int r, int g, int b)
+{
+	return (t << 24 | r << 16 | g << 8 | b);
+}
+
+int	draw_floor_and_ceiling(t_texture *texture, t_vars *vars)
+// int	draw_floor_and_ceiling(t_vars *vars)
 {
 	int					coordinate_screen[2];
-	int					cell[2];
-	t_draw_background	draw;
+	// int					cell[2];
+	// t_draw_background	draw;
 
 	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
 	while (coordinate_screen[Y_AXIS] < vars->screen_height)
 	{
-		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
-			- (vars->screen_height / 2), 0.5 * vars->screen_height);
+		// set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
+		// 	- (vars->screen_height / 2), 0.5 * vars->screen_height);
 		coordinate_screen[X_AXIS] = 0;
 		while (coordinate_screen[X_AXIS] < vars->screen_width)
 		{
-			cell[X_AXIS] = (int)draw.x_coordinate;
-			cell[Y_AXIS] = (int)draw.y_coordinate;
-			put_texture_floor(&draw, vars, coordinate_screen, cell);
-			put_texture_ceiling(&draw, vars, coordinate_screen, cell);
+			// cell[X_AXIS] = (int)draw.x_coordinate;
+			// cell[Y_AXIS] = (int)draw.y_coordinate;
+			// if (texture->f_rgb->red != -1)
+			put_color_floor(vars, coordinate_screen, create_trgb_int(0, texture->f_rgb->red, texture->f_rgb->green, texture->f_rgb->blue));
+			// else
+			// put_texture_floor(&draw, vars, coordinate_screen, cell);
+			// put_texture_ceiling(&draw, vars, coordinate_screen, cell);
+			put_color_ceiling(vars, coordinate_screen, create_trgb_int(0, texture->c_rgb->red, texture->c_rgb->green, texture->c_rgb->blue));
 			coordinate_screen[X_AXIS] += 1;
-			draw.x_coordinate += draw.x_move_amount;
-			draw.y_coordinate += draw.y_move_amount;
+			// draw.x_coordinate += draw.x_move_amount;
+			// draw.y_coordinate += draw.y_move_amount;
 		}
 		coordinate_screen[Y_AXIS] += 1;
 	}
@@ -512,9 +562,11 @@ int	key_action(int keycode, t_info *info)
 		info->flag->map *= -1;
 	}
 	clean_image(info->vars);
-	draw_floor_and_ceiling(info->vars);
+	draw_floor_and_ceiling(info->texture, info->vars);
+	// draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
+	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
 	debug_print_mapdata(info);
 	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
@@ -645,7 +697,7 @@ void	initialize_vars(t_info *info)
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
 	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
-	info->vars->y_position_vector = (double)info->map->player_x;
+	info->vars->y_position_vector = (double)info->map->player_x + 0.000001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 		info->vars);
 	info->vars->screen_width = WIN_WIDTH;
@@ -653,7 +705,8 @@ void	initialize_vars(t_info *info)
 	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
 	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img, &info->vars->data->bits_per_pixel, &info->vars->data->line_length, &info->vars->data->endian);
 	create_xpm_textures(info->texture, info->vars);
-	draw_floor_and_ceiling(info->vars);
+	draw_floor_and_ceiling(info->texture, info->vars);
+	// draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
 }
 
