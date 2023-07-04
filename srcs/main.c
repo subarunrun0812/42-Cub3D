@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 14:59:47 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 16:01:28 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,6 @@ int	main(int argc, char **argv)
 	init_second(&info, &flag, &texture);
 	read_file(argv[1], &info);
 	init_player_coordinate(&map,&info);
-	debug_print_mapdata(&info);
 	raycasting(&info);
 	free_texture(&info);
 	// exit(0);

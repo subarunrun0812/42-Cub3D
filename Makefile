@@ -36,15 +36,15 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
           $(PLAYER_DIR)/coordinates.c\
           $(RAYCASTING_DIR)/raycasting_hnoguchi.c\
-          $(RAYCASTING_DIR)/my_mlx_pixel_put_line.c\
-          $(RAYCASTING_DIR)/calculate_nearest_axis.c\
-          $(RAYCASTING_DIR)/draw_line.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
           $(GNL_DIR)/get_next_line.c\
           $(GNL_DIR)/get_next_line_utils.c
 
+        #   $(RAYCASTING_DIR)/my_mlx_pixel_put_line.c\
+        #   $(RAYCASTING_DIR)/calculate_nearest_axis.c\
+        #   $(RAYCASTING_DIR)/draw_line.c\
           # $(RAYCASTING_DIR)/raycasting.c
 
 GNL_DIR = ./srcs/get_next_line

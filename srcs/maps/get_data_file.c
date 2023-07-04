@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 12:12:57 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:22:02 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,5 +157,5 @@ void	get_data_file(int fd, t_info *info)
     printf("texture->celling->red=%d\n",info->texture->c_rgb->red);
     printf("texture->celling->green=%d\n",info->texture->c_rgb->green);
     printf("texture->celling->blue=%d\n",info->texture->c_rgb->blue);
-    printf("\x1b[0m\n");
+    printf("\x1b[0m\n");		
 }
