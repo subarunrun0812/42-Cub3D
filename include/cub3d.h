@@ -135,7 +135,7 @@ typedef struct s_plane
 typedef struct s_data
 {
 	void			*img;
-	// char		*addr;
+	char			*addr_char;
 	unsigned int	*addr;
 	int				bits_per_pixel;
 	int				line_length;
@@ -202,31 +202,6 @@ typedef struct s_ray
 	double		begin_ray_vec;
 }				t_ray;
 
-typedef struct s_draw_wall
-{
-	int		side;
-	double	perpendicular_wall_distance;
-	int		line_height;
-	int		start;
-	int		end;
-}	t_draw_wall;
-
-struct s_draw_texture
-{
-	int		list_number;
-	double	wall_x;
-	int		x_coordinate;
-	double	step;
-	double	position;
-}	t_draw_texture;
-
-struct s_draw_background {
-	float	x_move_amount;
-	float	y_move_amount;
-	float	x_coordinate;
-	float	y_coordinate;
-}	t_draw_texture;
-
 typedef struct s_info
 {
 	t_map		*map;
@@ -237,6 +212,31 @@ typedef struct s_info
 	t_ray		*ray;
 	t_texture	*texture;
 }				t_info;
+
+typedef struct s_draw_wall
+{
+	int		side;
+	double	perpendicular_wall_distance;
+	int		line_height;
+	int		start;
+	int		end;
+}	t_draw_wall;
+
+typedef struct s_draw_texture
+{
+	int		list_number;
+	double	wall_x;
+	int		x_coordinate;
+	double	step;
+	double	position;
+}	t_draw_texture;
+
+typedef struct s_draw_background {
+	float	x_move_amount;
+	float	y_move_amount;
+	float	x_coordinate;
+	float	y_coordinate;
+}	t_draw_background;
 
 // init
 void			init(t_info *info, t_map *map, t_vars *vars, t_data *data);
@@ -287,11 +287,10 @@ void			player_move(t_info *info, int keycode);
 // RAYCASTING
 // ------------------------------------------------
 
-int				raycasting(t_info *info);
+void			raycasting(t_info *info);
 void			draw_line(t_ray *ray, t_info *info, int x, double wall_distance,
 					bool side);
-void			my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2,
-					int color);
+void			my_mlx_pixel_put_line(t_data *data, int x, int y1, int y2, unsigned int color);
 bool			calculate_nearest_axis(t_ray *ray, t_vars *vars, t_info *info);
 
 // ------------------------------------------------
