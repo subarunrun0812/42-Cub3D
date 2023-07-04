@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_hnoguchi.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 14:58:24 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:16:34 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsi
 	y = y1;
 	while (y <= y2)
 	{
-		dst = vars->image->addr + (y * vars->screen_width + x);
+		dst = vars->data->addr + (y * vars->screen_width + x);
 		*dst = color;
 		y += 1;
 	}
@@ -128,7 +128,7 @@ void	put_texture_floor(t_draw_background *draw, t_vars *vars, int coordinate_scr
 	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
 	color = *(vars->texture_list[floor_texture].data.addr + vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->image->addr[(vars->screen_width * coordinate_screen[Y_AXIS]) + coordinate_screen[X_AXIS]] = color;
+	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS]) + coordinate_screen[X_AXIS]] = color;
 }
 
 void	put_texture_ceiling(t_draw_background *draw, t_vars *vars, int coordinate_screen[2], int cell[2])
@@ -140,7 +140,7 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars, int coordinate_s
 	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height * (draw->y_coordinate - cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
 	color = *(vars->texture_list[CEILING].data.addr + vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->image->addr[(vars->screen_width * (vars->screen_height - coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
+	vars->data->addr[(vars->screen_width * (vars->screen_height - coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
 }
 
 int	draw_floor_and_ceiling(t_vars *vars)
@@ -312,7 +312,7 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars , int 
 		{
 			color = (color >> 1) & 8355711;
 		}
-		vars->image->addr[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
+		vars->data->addr[y_coordinate_screen * vars->screen_width + x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
 	}
 }
@@ -450,7 +450,7 @@ int	key_action(int keycode, t_info *info)
 	// }
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
 	//minimapの再描画
 	minimap(info, info->data);
 	clean_image(info->vars);
@@ -623,8 +623,8 @@ void	initialize_vars(t_info *info)
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x], info->vars);
 	info->vars->screen_width = WIN_WIDTH;
 	info->vars->screen_height = WIN_HEIGHT;
-	info->vars->image->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
-	info->vars->image->addr = (unsigned int *)mlx_get_data_addr(info->vars->image->img, &info->vars->image->bits_per_pixel, &info->vars->image->line_length, &info->vars->image->endian);
+	info->vars->data->img = mlx_new_image(info->vars->mlx, WIN_WIDTH, WIN_HEIGHT);
+	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img, &info->vars->data->bits_per_pixel, &info->vars->data->line_length, &info->vars->data->endian);
 	create_xpm_textures(info->texture, info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
@@ -634,7 +634,7 @@ void	initialize_vars(t_info *info)
 void	raycasting(t_info *info)
 {
 	initialize_vars(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->image->img, 0, 0);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);
 }
