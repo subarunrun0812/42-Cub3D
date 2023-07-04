@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 15:16:34 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:56:01 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2, unsi
 // TODO: get_nearest_axis.c
 static bool	is_hit_wall(char **map, t_ray *ray)
 {
-	if (0 < map[ray->current_x_in_map][ray->current_y_in_map])
+	if ('0' < map[ray->current_x_in_map][ray->current_y_in_map] && map[ray->current_x_in_map][ray->current_y_in_map] <= '9')
 	{
 		return (true);
 	}
@@ -359,14 +359,14 @@ void	move_forward(char **map, t_vars *vars)
 	one_step_forward_y_position_vector = (int)(vars->y_position_vector + vars->y_direction * MOVE_DISTANCE);
 	if (0 < one_step_forward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
-		if (map[one_step_forward_x_position_vector][(int)vars->y_position_vector] == '0')
+		if ('0' == map[one_step_forward_x_position_vector][(int)vars->y_position_vector])
 		{
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 		}
 	}
 	if (0 < (int)(vars->x_position_vector) && 0 < one_step_forward_y_position_vector)
 	{
-		if (map[(int)vars->x_position_vector][one_step_forward_y_position_vector] == '0')
+		if ('0' == map[(int)vars->x_position_vector][one_step_forward_y_position_vector])
 		{
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 		}
@@ -382,14 +382,14 @@ void	move_backward(char **map, t_vars *vars)
 	one_step_backward_y_position_vector = (int)(vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE));
 	if (0 < one_step_backward_x_position_vector && 0 < (int)vars->y_position_vector)
 	{
-		if (map[one_step_backward_x_position_vector][(int)vars->y_position_vector] == '0')
+		if ('0' == map[one_step_backward_x_position_vector][(int)vars->y_position_vector])
 		{
 			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
 		}
 	}
 	if (0 < (int)vars->x_position_vector && 0 < one_step_backward_y_position_vector)
 	{
-		if (map[(int)vars->x_position_vector][one_step_backward_y_position_vector] == '0')
+		if ('0' == map[(int)vars->x_position_vector][one_step_backward_y_position_vector])
 		{
 			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
 		}
@@ -440,20 +440,20 @@ int	key_action(int keycode, t_info *info)
 	{
 		rotate_left_camera(info->vars);
 	}
-	// else if (keycode == ESC_KEY)
-	// {
-	// 	close_window(info);
-	// }
-	// else if (keycode == M_KEY)
-	// {
-	// 	info->flag->map *= -1;
-	// }
+	else if (keycode == ESC_KEY)
+	{
+		close_window(info);
+	}
+	else if (keycode == M_KEY)
+	{
+		info->flag->map *= -1;
+	}
+	clean_image(info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
 	//minimapの再描画
 	minimap(info, info->data);
-	clean_image(info->vars);
 	return (0);
 }
 
@@ -500,55 +500,6 @@ void	create_ceiling_textures(char *path, t_vars *vars)
 			&vars->texture_list[CEILING].data.line_length,
 			&vars->texture_list[CEILING].data.endian);
 }
-
-// void	create_south_and_north_textures(t_texture *texture, t_vars *vars)
-// {
-// 	vars->texture_list[SOUTH_WALL].data.img
-// 		= mlx_xpm_file_to_image(
-// 			vars->mlx, texture->so,
-// 			&vars->texture_list[SOUTH_WALL].width,
-// 			&vars->texture_list[SOUTH_WALL].height);
-// 	vars->texture_list[SOUTH_WALL].data.addr
-// 		= (unsigned int *)mlx_get_data_addr(
-// 			vars->texture_list[SOUTH_WALL].data.img,
-// 			&vars->texture_list[SOUTH_WALL].data.bits_per_pixel,
-// 			&vars->texture_list[SOUTH_WALL].data.line_length,
-// 			&vars->texture_list[SOUTH_WALL].data.endian);
-// 	vars->texture_list[NORTH_WALL].data.img
-// 		= mlx_xpm_file_to_image(
-// 			vars->mlx, texture->no,
-// 			&vars->texture_list[NORTH_WALL].width,
-// 			&vars->texture_list[NORTH_WALL].height);
-// 	vars->texture_list[NORTH_WALL].data.addr
-// 		= (unsigned int *)mlx_get_data_addr(
-// 			vars->texture_list[NORTH_WALL].data.img,
-// 			&vars->texture_list[NORTH_WALL].data.bits_per_pixel,
-// 			&vars->texture_list[NORTH_WALL].data.line_length,
-// 			&vars->texture_list[NORTH_WALL].data.endian);
-// }
-// 
-// void	create_east_and_west_textures(t_texture *texture, t_vars *vars)
-// {
-// 	vars->texture_list[EAST_WALL].data.img = mlx_xpm_file_to_image(
-// 			vars->mlx, texture->ea,
-// 			&vars->texture_list[EAST_WALL].width,
-// 			&vars->texture_list[EAST_WALL].height);
-// 	vars->texture_list[EAST_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
-// 			vars->texture_list[EAST_WALL].data.img,
-// 			&vars->texture_list[EAST_WALL].data.bits_per_pixel,
-// 			&vars->texture_list[EAST_WALL].data.line_length,
-// 			&vars->texture_list[EAST_WALL].data.endian);
-// 	vars->texture_list[WEST_WALL].data.img = mlx_xpm_file_to_image(
-// 			vars->mlx,
-// 			texture->we,
-// 			&vars->texture_list[WEST_WALL].width,
-// 			&vars->texture_list[WEST_WALL].height);
-// 	vars->texture_list[WEST_WALL].data.addr = (unsigned int *)mlx_get_data_addr(
-// 			vars->texture_list[WEST_WALL].data.img,
-// 			&vars->texture_list[WEST_WALL].data.bits_per_pixel,
-// 			&vars->texture_list[WEST_WALL].data.line_length,
-// 			&vars->texture_list[WEST_WALL].data.endian);
-// }
 
 void	create_texture(void *mlx, char *path, t_texture_data *texture)
 {
