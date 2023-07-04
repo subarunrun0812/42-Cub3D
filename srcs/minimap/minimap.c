@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 14:50:43 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:01:08 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	draw_one_block(t_info *info, int draw_x, int draw_y, int color)
 		y = (draw_y * BLOCK_SIZE);
 		while (y < ((draw_y * BLOCK_SIZE) + BLOCK_SIZE))
 		{
-			my_mlx_pixel_put(info->raydata, x, y, color);
+			my_mlx_pixel_put(info->data, x, y, color);
 			y++;
 		}
 		x++;
@@ -101,7 +101,7 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	{
 		tmp_x = (ray_len * info->vars->y_direction);
 		tmp_y = (ray_len * info->vars->x_direction);
-		my_mlx_pixel_put(info->raydata, DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_x\
+		my_mlx_pixel_put(info->data, DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_x\
 		,DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y,FUCHSIA);
 		ray_len++;
 	}
@@ -111,10 +111,10 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 int	minimap(t_info *info, t_data *data)
 {
 	(void)data;
-	// info->raydata->img = mlx_new_image(info->vars->mlx,WIN_WIDTH,WIN_HEIGHT);
+	// info->data->img = mlx_new_image(info->vars->mlx,WIN_WIDTH,WIN_HEIGHT);
 	//minimapの画像表示
-	info->raydata->addr = (unsigned int *)mlx_get_data_addr(info->raydata->img, &info->raydata->bits_per_pixel,
-			&info->raydata->line_length, &info->raydata->endian);
+	info->data->addr = (unsigned int *)mlx_get_data_addr(info->data->img, &info->data->bits_per_pixel,
+			&info->data->line_length, &info->data->endian);
 	if (info->flag->map == CORNER)
 		range_to_display_with_player(info, data);
 	else
@@ -122,8 +122,8 @@ int	minimap(t_info *info, t_data *data)
 	printf("test2\n");
 	printf("mlx=%p\n",info->vars->mlx);
 	printf("win=%p\n",info->vars->win);
-	printf("img=%p\n",info->vars->raydata->img);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->raydata->img, 0, 0);
+	printf("img=%p\n",info->vars->data->img);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img, 0, 0);
 	printf("end\n");
 	return (0);
 }

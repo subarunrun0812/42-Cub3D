@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 13:02:57 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 14:59:06 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ int	key_action(int keycode, t_info *info)
 		my_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
 	}
 	draw_image(vars, info);
-	mlx_put_image_to_window(vars->mlx, vars->win, vars->raydata->img, 0, 0);
+	mlx_put_image_to_window(vars->mlx, vars->win, vars->data->img, 0, 0);
 	// minimapの再描画
 	minimap(info, info->data);
 	return (0);
@@ -200,14 +200,11 @@ void	initialize_vars(t_vars *vars, t_info *info)
 	vars->screen_width = WIN_WIDTH;
 	vars->screen_height = WIN_HEIGHT;
 	init_nswe_dirction(info, info->vars);
-	vars->raydata->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
-	vars->raydata->addr = (unsigned int *)mlx_get_data_addr(vars->raydata->img,
-		&vars->raydata->bits_per_pixel, &vars->raydata->line_length,
-		&vars->raydata->endian);
+	vars->data->img = mlx_new_image(vars->mlx, WIN_WIDTH, WIN_HEIGHT);
+	vars->data->addr = (unsigned int *)mlx_get_data_addr(vars->data->img,
+		&vars->data->bits_per_pixel, &vars->data->line_length,
+		&vars->data->endian);
 	draw_image(vars, info);
-	// my_mlx_pixel_put(info->data, (int)(info->map->player_x + (2
-	// 			* vars->y_direction)), (int)(info->map->player_y + (2
-	// 			* vars->x_direction)), BLACK);
 	// printf("\x1b[32mdirection xy=[%f][%f]\x1b[0m\n",vars->x_direction,vars->y_direction);
 	// printf("\x1b[32mcamera_plane xy=[%f][%f]\x1b[0m\n",vars->x_camera_plane,vars->y_camera_plane);
 }
@@ -216,10 +213,9 @@ int	raycasting(t_info *info)
 {
 	initialize_vars(info->vars, info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->raydata->img, 0, 0);
+		info->vars->data->img, 0, 0);
 	printf("test5\n");
 	minimap(info, info->data);
-	// mlx_hook(info->vars->win, ON_DESTROY, 1L << 2, &close_window, info);
 	printf("test6\n");
 	mlx_key_hook(info->vars->win, key_action, info);
 	printf("test7\n");

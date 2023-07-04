@@ -126,20 +126,11 @@ typedef struct s_plane
 typedef struct s_data
 {
 	void			*img;
-	char			*addr;
-	int				bits_per_pixel;
-	int				line_length;
-	int				endian;
-}					t_data;
-
-typedef struct s_raydata
-{
-	void			*img;
 	unsigned int	*addr;
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
-}					t_raydata;
+}					t_data;
 
 typedef struct s_rgb
 {
@@ -174,7 +165,7 @@ typedef struct s_vars
 	double y_camera_plane; // planeY
 	int screen_width;      // width of the screen
 	int screen_height;     // height of the screen
-	t_raydata		*raydata;
+	t_data		*data;
 	t_texture		texture_list[TEXTURE_LIST_SIZE];
 }					t_vars;
 
@@ -207,7 +198,6 @@ typedef struct s_info
 	t_map			*map;
 	t_vars			*vars;
 	t_data			*data;
-	t_raydata		*raydata;
 	t_plane			*plane;
 	t_flag			*flag;
 	t_ray			*ray;
@@ -276,7 +266,7 @@ bool				calculate_nearest_axis(t_ray *ray, t_vars *vars,
 // WINDOW
 // ------------------------------------------------
 
-void	my_mlx_pixel_put(t_raydata *raydata, int x, int y, int color);
+void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int					close_window(t_info *info);
 int					new_window(t_vars *vars);
 
