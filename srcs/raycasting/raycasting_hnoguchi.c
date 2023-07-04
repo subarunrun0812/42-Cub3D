@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_hnoguchi.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hnoguchi <hnoguchi@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
 /*   Updated: 2023/07/04 15:56:01 by hnoguchi         ###   ########.fr       */

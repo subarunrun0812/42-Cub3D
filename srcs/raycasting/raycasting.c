@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/18 16:00:41 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 14:59:06 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 15:15:36 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,16 +209,13 @@ void	initialize_vars(t_vars *vars, t_info *info)
 	// printf("\x1b[32mcamera_plane xy=[%f][%f]\x1b[0m\n",vars->x_camera_plane,vars->y_camera_plane);
 }
 
-int	raycasting(t_info *info)
+void	raycasting(t_info *info)
 {
 	initialize_vars(info->vars, info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 		info->vars->data->img, 0, 0);
-	printf("test5\n");
 	minimap(info, info->data);
-	printf("test6\n");
 	mlx_key_hook(info->vars->win, key_action, info);
-	printf("test7\n");
 	mlx_loop(info->vars->mlx);
-	return (0);
+	return ;
 }
