@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 17:50:28 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/04 17:58:23 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -643,7 +643,7 @@ void	initialize_vars(t_info *info)
 		"Cub3d");
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
 	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
-	info->vars->y_position_vector = (double)info->map->player_x;
+	info->vars->y_position_vector = (double)info->map->player_x + 0.000001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 		info->vars);
 	info->vars->screen_width = WIN_WIDTH;
