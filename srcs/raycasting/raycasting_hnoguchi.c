@@ -6,12 +6,54 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 16:05:08 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 16:03:07 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// #include "raycasting_hnoguchi.h"
 #include "cub3d.h"
+
+void	destroy_window(t_vars *vars)
+{
+	if (vars->mlx != NULL && vars->win != NULL)
+	{
+		mlx_destroy_window(vars->mlx, vars->win);
+	}
+}
+
+void	destroy_textures(t_vars *vars)
+{
+	int	i;
+
+	i = 0;
+	if (vars->mlx == NULL)
+	{
+		return ;
+	}
+	while (i < TEXTURE_LIST_SIZE)
+	{
+		if (vars->texture_list[i].data.img != NULL)
+		{
+			mlx_destroy_image(vars->mlx, vars->texture_list[i].data.img);
+		}
+		i += 1;
+	}
+}
+
+// void	destroy_display(t_vars *vars)
+// {
+// 	if (vars->mlx != NULL)
+// 	{
+// 		mlx_destroy_display(vars->mlx);
+// 	}
+// }
+
+void	end_raycasting(t_info *info)
+{
+	destroy_window(info->vars);
+	destroy_textures(info->vars);
+	// destroy_display(info->vars);
+	free(info->vars->mlx);
+}
 
 static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
 		unsigned int color)
@@ -757,4 +799,5 @@ void	raycasting(t_info *info)
 	minimap(info, info->data);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);
+	end_raycasting(info);
 }

@@ -169,8 +169,6 @@ typedef struct s_vars
 	double 			y_camera_plane;
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
-	int				screen_width;
-	int 			screen_height;
 	t_data			*data;
 	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
 }				t_vars;
