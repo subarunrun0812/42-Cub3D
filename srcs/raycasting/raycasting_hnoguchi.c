@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 13:38:12 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:48:22 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -729,8 +729,8 @@ void	initialize_vars(t_info *info)
 	info->vars->mlx = exit_mlx_init();
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
-	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
-	info->vars->y_position_vector = (double)info->map->player_x + 0.000001;
+	info->vars->x_position_vector = (double)info->map->player_y + 0.500001;
+	info->vars->y_position_vector = (double)info->map->player_x + 0.500001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 						info->vars);
 	//TODO:screen_width,heightを削除する
