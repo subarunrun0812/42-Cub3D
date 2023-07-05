@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/05 13:58:47 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 14:03:25 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,12 @@ int	main(int argc, char **argv)
 }
 
 
-#define DEBUG_LEAKS_CMD_LEN (32)
-
-__attribute__((destructor))
-static void    destructor(void) {
-    char    cmd[DEBUG_LEAKS_CMD_LEN];
-
-    snprintf(cmd, DEBUG_LEAKS_CMD_LEN, "leaks %d", getpid());
-    system(cmd);
-}
+// #define DEBUG_LEAKS_CMD_LEN (32)
+// 
+// __attribute__((destructor))
+// static void    destructor(void) {
+//     char    cmd[DEBUG_LEAKS_CMD_LEN];
+// 
+//     snprintf(cmd, DEBUG_LEAKS_CMD_LEN, "leaks %d", getpid());
+//     system(cmd);
+// }
