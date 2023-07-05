@@ -167,9 +167,11 @@ typedef struct s_vars
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
 	double			x_camera_plane;
 	double 			y_camera_plane;
+	unsigned int	floor_color;
+	unsigned int	ceiling_color;
 	int				screen_width;
 	int 			screen_height;
-  t_data		*data;
+	t_data			*data;
 	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
 }				t_vars;
 

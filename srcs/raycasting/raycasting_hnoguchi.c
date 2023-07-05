@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 13:01:38 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 13:38:12 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,7 +173,31 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 		+ coordinate_screen[X_AXIS]] = color;
 }
 
-int	draw_floor_and_ceiling(t_vars *vars)
+unsigned int	create_rgb(int r, int g, int b)
+{
+	unsigned int	rgb;
+
+	rgb = 0;
+	printf("r : [%d]\ng : [%d]\nb : [%d]\n", r, g, b);
+	if (r < 0 || 255 < r)
+	{
+		r = 0;
+	}
+	if (g < 0 || 255 < g)
+	{
+		g = 0;
+	}
+	if (b < 0 || 255 < b)
+	{
+		b = 0;
+	}
+	rgb |= (r & 0xFF) << 16;
+	rgb |= (g & 0xFF) << 8;
+	rgb |= (b & 0xFF);
+	return (rgb);
+}
+
+int	draw_texture_floor(t_vars *vars)
 {
 	int					coordinate_screen[2];
 	int					cell[2];
@@ -190,6 +214,33 @@ int	draw_floor_and_ceiling(t_vars *vars)
 			cell[X_AXIS] = (int)draw.x_coordinate;
 			cell[Y_AXIS] = (int)draw.y_coordinate;
 			put_texture_floor(&draw, vars, coordinate_screen, cell);
+			// put_texture_ceiling(&draw, vars, coordinate_screen, cell);
+			coordinate_screen[X_AXIS] += 1;
+			draw.x_coordinate += draw.x_move_amount;
+			draw.y_coordinate += draw.y_move_amount;
+		}
+		coordinate_screen[Y_AXIS] += 1;
+	}
+	return (0);
+}
+
+int	draw_texture_ceiling(t_vars *vars)
+{
+	int					coordinate_screen[2];
+	int					cell[2];
+	t_draw_background	draw;
+
+	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
+	while (coordinate_screen[Y_AXIS] < vars->screen_height)
+	{
+		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
+			- (vars->screen_height / 2), 0.5 * vars->screen_height);
+		coordinate_screen[X_AXIS] = 0;
+		while (coordinate_screen[X_AXIS] < vars->screen_width)
+		{
+			cell[X_AXIS] = (int)draw.x_coordinate;
+			cell[Y_AXIS] = (int)draw.y_coordinate;
+			// put_texture_floor(&draw, vars, coordinate_screen, cell);
 			put_texture_ceiling(&draw, vars, coordinate_screen, cell);
 			coordinate_screen[X_AXIS] += 1;
 			draw.x_coordinate += draw.x_move_amount;
@@ -198,6 +249,35 @@ int	draw_floor_and_ceiling(t_vars *vars)
 		coordinate_screen[Y_AXIS] += 1;
 	}
 	return (0);
+}
+
+void	try_draw_texture_floor_and_ceiling(t_vars *vars)
+{
+	if (vars->texture_list[FLOOR_1].data.img != NULL)
+	{
+		draw_texture_floor(vars);
+	}
+	if (vars->texture_list[CEILING].data.img != NULL)
+	{
+		draw_texture_ceiling(vars);
+	}
+}
+
+void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color, unsigned int ceiling_color)
+{
+	int	x_axis;
+	int	y_axis_center;
+
+	x_axis = 0;
+	y_axis_center = (vars->screen_height / 2) - 1;
+	while (x_axis < vars->screen_width)
+	{
+		texture_mlx_pixel_put_line(vars, x_axis, 0, y_axis_center, floor_color);
+		texture_mlx_pixel_put_line(vars, x_axis, (y_axis_center - 1), (vars->screen_height - 1), ceiling_color);
+		x_axis += 1;
+	}
+	printf("floor   : [%d]\n", floor_color);
+	printf("ceiling : [%d]\n", ceiling_color);
 }
 
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
@@ -394,7 +474,7 @@ void	clean_image(t_vars *vars)
 	x = 0;
 	while (x < vars->screen_width)
 	{
-		texture_mlx_pixel_put_line(vars, x, 0, WIN_HEIGHT, 0x00000000);
+		texture_mlx_pixel_put_line(vars, x, 0, (WIN_HEIGHT - 1), 0x00000000);
 		x += 1;
 	}
 }
@@ -514,8 +594,8 @@ int	key_action(int keycode, t_info *info)
 	{
 		info->flag->map *= -1;
 	}
-	clean_image(info->vars);
-	draw_floor_and_ceiling(info->vars);
+	draw_color_floor_and_ceiling(info->vars, info->vars->floor_color, info->vars->ceiling_color);
+	try_draw_texture_floor_and_ceiling(info->vars);
 	draw_wall(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 			info->vars->data->img, 0, 0);
@@ -540,36 +620,35 @@ void	exit_create_texture(void *mlx, char *path, t_texture_data *texture)
 	texture->data.addr = (unsigned int *)mlx_get_data_addr(texture->data.img, &texture->data.bits_per_pixel, &texture->data.line_length, &texture->data.endian);
 }
 
-void	create_texture_floor(void *mlx, t_texture *path, t_texture_data *texture_list)
+void	create_texture_floor(void *mlx, char *path, t_texture_data *texture_list)
 {
-	(void)path;
-	// if (path->f_rgb->red != -1)
-	// {
-	// 	texture_list[FLOOR_1].data.img = NULL;
-	// 	texture_list[FLOOR_2].data.img = NULL;
-	// 	return ;
-	// }
-	// exit_create_texture(mlx, path->f_tex, &texture_list[FLOOR_1]);
-	exit_create_texture(mlx, "./srcs/raycasting/xpm/greystone.xpm", &texture_list[FLOOR_1]);
+	if (path == NULL)
+	{
+		texture_list[FLOOR_1].data.img = NULL;
+		texture_list[FLOOR_1].data.addr = NULL;
+		texture_list[FLOOR_2].data.img = NULL;
+		texture_list[FLOOR_2].data.addr = NULL;
+		return ;
+	}
+	exit_create_texture(mlx, path, &texture_list[FLOOR_1]);
 	exit_create_texture(mlx, "./srcs/raycasting/xpm/bluestone.xpm", &texture_list[FLOOR_2]);
 }
 
-void	create_texture_ceiling(void *mlx, t_texture *path, t_texture_data *texture)
+void	create_texture_ceiling(void *mlx, char *path, t_texture_data *texture)
 {
-	(void)path;
-	// if (path->c_rgb->red != -1)
-	// {
-	// 	texture.data.img = NULL;
-	// 	return ;
-	// }
-	// exit_create_texture(mlx, path->c_tex, texture);
-	exit_create_texture(mlx, "./srcs/raycasting/xpm/wood.xpm", texture);
+	if (path == NULL)
+	{
+		texture->data.img = NULL;
+		texture->data.addr = NULL;
+		return ;
+	}
+	exit_create_texture(mlx, path, texture);
 }
 
 void	create_xpm_textures(t_texture *texture, t_vars *vars)
 {
-	create_texture_floor(vars->mlx, texture, vars->texture_list);
-	create_texture_ceiling(vars->mlx, texture, &vars->texture_list[CEILING]);
+	create_texture_floor(vars->mlx, texture->f_tex, vars->texture_list);
+	create_texture_ceiling(vars->mlx, texture->c_tex, &vars->texture_list[CEILING]);
 	exit_create_texture(vars->mlx, texture->so, &vars->texture_list[SOUTH_WALL]);
 	exit_create_texture(vars->mlx, texture->no, &vars->texture_list[NORTH_WALL]);
 	exit_create_texture(vars->mlx, texture->ea, &vars->texture_list[EAST_WALL]);
@@ -658,10 +737,20 @@ void	initialize_vars(t_info *info)
 	//理由:構造体のメンバ変数screen_*にマクロ変数のWIN_*を代入しているため、このメンバ変数を定義する必要はない
 	info->vars->screen_width = WIN_WIDTH;
 	info->vars->screen_height = WIN_HEIGHT;
+	printf("fr : [%d]\n", info->texture->f_rgb->red);
+	printf("fg : [%d]\n", info->texture->f_rgb->green);
+	printf("fb : [%d]\n", info->texture->f_rgb->blue);
+	printf("cr : [%d]\n", info->texture->c_rgb->red);
+	printf("cg : [%d]\n", info->texture->c_rgb->green);
+	printf("cb : [%d]\n", info->texture->c_rgb->blue);
+	info->vars->floor_color = create_rgb(info->texture->f_rgb->red, info->texture->f_rgb->green, info->texture->f_rgb->blue);
+	info->vars->ceiling_color = create_rgb(info->texture->c_rgb->red, info->texture->c_rgb->green, info->texture->c_rgb->blue);
 	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
 	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img, &info->vars->data->bits_per_pixel, &info->vars->data->line_length, &info->vars->data->endian);
+	clean_image(info->vars);
 	create_xpm_textures(info->texture, info->vars);
-	draw_floor_and_ceiling(info->vars);
+	draw_color_floor_and_ceiling(info->vars, info->vars->floor_color, info->vars->ceiling_color);
+	try_draw_texture_floor_and_ceiling(info->vars);
 	draw_wall(info);
 }
 
