@@ -318,8 +318,8 @@ void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color, unsign
 		texture_mlx_pixel_put_line(vars, x_axis, (y_axis_center - 1), (WIN_HEIGHT - 1), ceiling_color);
 		x_axis += 1;
 	}
-	printf("floor   : [%d]\n", floor_color);
-	printf("ceiling : [%d]\n", ceiling_color);
+	// printf("floor   : [%d]\n", floor_color);
+	// printf("ceiling : [%d]\n", ceiling_color);
 }
 
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
@@ -375,11 +375,11 @@ int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 	return (SOUTH_WALL);
 }
 
-int	get_draw_start_y_coordinate(int screen_height, int line_height)
+int	get_draw_start_y_coordinate(int line_height)
 {
 	int	start;
 
-	start = (-line_height / 2) + (screen_height / 2);
+	start = (-line_height / 2) + (WIN_HEIGHT / 2);
 	if (start < 0)
 	{
 		return (0);
@@ -387,14 +387,14 @@ int	get_draw_start_y_coordinate(int screen_height, int line_height)
 	return (start);
 }
 
-int	get_draw_end_y_coordinate(int screen_height, int line_height)
+int	get_draw_end_y_coordinate(int line_height)
 {
 	int	end;
 
-	end = (line_height / 2) + (screen_height / 2);
-	if (screen_height <= end)
+	end = (line_height / 2) + (WIN_HEIGHT / 2);
+	if (WIN_HEIGHT <= end)
 	{
-		return (screen_height - 1);
+		return (WIN_HEIGHT - 1);
 	}
 	return (end);
 }
@@ -445,10 +445,8 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 																		wall->side);
 	wall->line_height = (int)(WIN_HEIGHT
 			/ wall->perpendicular_wall_distance);
-	wall->start = get_draw_start_y_coordinate(WIN_HEIGHT,
-												wall->line_height);
-	wall->end = get_draw_end_y_coordinate(WIN_HEIGHT,
-											wall->line_height);
+	wall->start = get_draw_start_y_coordinate(wall->line_height);
+	wall->end = get_draw_end_y_coordinate(wall->line_height);
 }
 
 void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
@@ -533,9 +531,10 @@ void	move_forward(char **map, t_vars *vars)
 	one_step_forward_y_position_vector = vars->y_position_vector
 		+ (vars->y_direction * MOVE_DISTANCE);
 	distination = map[one_step_forward_x_position_vector][one_step_forward_y_position_vector];
+	//TODO:2~4の条件式を消す
 	if (distination == '1' || distination == '2' || distination == '3'
 		|| distination == '4')
-		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
+		printf("\x1b[33mCrashing into a wall!!!!!\x1b[0m\n");
 	else
 	{
 		if (0 < one_step_forward_x_position_vector
@@ -645,8 +644,8 @@ int	key_action(int keycode, t_info *info)
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
 	// debug_print_mapdata(info);
-	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
-			info->vars->y_position_vector);
+	// printf("map_data[%f][%f]\n", info->vars->x_position_vector,
+			// info->vars->y_position_vector);
 	return (0);
 }
 
@@ -771,12 +770,10 @@ void	initialize_vars(t_info *info)
 	info->vars->mlx = exit_mlx_init();
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
-	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
-	info->vars->y_position_vector = (double)info->map->player_x + 0.000001;
+	info->vars->x_position_vector = (double)info->map->player_y + 0.500001;
+	info->vars->y_position_vector = (double)info->map->player_x + 0.500001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 						info->vars);
-	//TODO:screen_width,heightを削除する
-	//理由:構造体のメンバ変数screen_*にマクロ変数のWIN_*を代入しているため、このメンバ変数を定義する必要はない
 	printf("fr : [%d]\n", info->texture->f_rgb->red);
 	printf("fg : [%d]\n", info->texture->f_rgb->green);
 	printf("fb : [%d]\n", info->texture->f_rgb->blue);

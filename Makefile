@@ -4,12 +4,10 @@ CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
 LIBS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 SOURCES_DIR = ./srcs
 LIBFT_DIR = ./srcs/libft
-MAPS_DIR = $(SOURCES_DIR)/maps
+FILE_READ_DIR = $(SOURCES_DIR)/file_read
 RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
 WINDOW_DIR = $(SOURCES_DIR)/window
-PLAYER_DIR = $(SOURCES_DIR)/player
 MINIMAP_DIR = $(SOURCES_DIR)/minimap
-TEXTURE_DIR = $(SOURCES_DIR)/texture
 
 # SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
 # SOURCES = $(RAYCASTING_DIR)/xpm_image.c
@@ -22,30 +20,25 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
-          $(TEXTURE_DIR)/read_texture.c\
-          $(TEXTURE_DIR)/assign_to_structure.c\
-          $(TEXTURE_DIR)/assign_to_structure_floor_celling.c\
-          $(TEXTURE_DIR)/assign_to_structure_nswe.c\
-          $(TEXTURE_DIR)/assign_to_structure_rgb.c\
-          $(MAPS_DIR)/read_file.c\
-          $(MAPS_DIR)/get_data_file.c\
-          $(MAPS_DIR)/check_map_wall.c\
-          $(MAPS_DIR)/check_only_one_nswe.c\
+          $(FILE_READ_DIR)/assign_to_structure.c\
+          $(FILE_READ_DIR)/assign_to_structure_floor_celling.c\
+          $(FILE_READ_DIR)/assign_to_structure_nswe.c\
+          $(FILE_READ_DIR)/assign_to_structure_rgb.c\
+          $(FILE_READ_DIR)/read_file.c\
+          $(FILE_READ_DIR)/get_data_file.c\
+          $(FILE_READ_DIR)/check_map_wall.c\
+          $(FILE_READ_DIR)/check_only_one_nswe.c\
+          $(FILE_READ_DIR)/read_texture.c\
           $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/central_map.c\
+          $(MINIMAP_DIR)/player_coordinates.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
-          $(PLAYER_DIR)/coordinates.c\
           $(RAYCASTING_DIR)/raycasting_hnoguchi.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
           $(GNL_DIR)/get_next_line.c\
           $(GNL_DIR)/get_next_line_utils.c
-
-        #   $(RAYCASTING_DIR)/my_mlx_pixel_put_line.c\
-        #   $(RAYCASTING_DIR)/calculate_nearest_axis.c\
-        #   $(RAYCASTING_DIR)/draw_line.c\
-          # $(RAYCASTING_DIR)/raycasting.c
 
 GNL_DIR = ./srcs/get_next_line
 GNL = $(GNL_DIR)/get_next_line.a
@@ -55,8 +48,8 @@ MINILIBX	 = $(MINILIBX_DIR)/libmlx.a
 
 INCLUDE = -I include -I $(LIBFT_DIR) -I $(GNL_DIR) -I $(MINILIBX_DIR)
 
-VPATH = $(SOURCES_DIR):$(MAPS_DIR):$(RAYCASTING_DIR):$(GNL_DIR) \
-		$(WINDOW_DIR):$(PLAYER_DIR):$(MINIMAP_DIR):$(TEXTURE_DIR)
+VPATH = $(SOURCES_DIR):$(FILE_READ_DIR):$(RAYCASTING_DIR):$(GNL_DIR) \
+		$(WINDOW_DIR):$(MINIMAP_DIR)
 
 OBJS_DIR = objs
 OBJS = $(addprefix $(OBJS_DIR)/, $(notdir $(SOURCES:.c=.o)))
