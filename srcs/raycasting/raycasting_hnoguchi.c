@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 16:03:07 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/05 19:22:21 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,24 +47,24 @@ void	destroy_textures(t_vars *vars)
 // 	}
 // }
 
-void	end_raycasting(t_info *info)
+void	destruct_raycasting(t_info *info)
 {
 	destroy_window(info->vars);
 	destroy_textures(info->vars);
-	// destroy_display(info->vars);
 	free(info->vars->mlx);
 }
 
-static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
+// TODO: texture_mlx_pixel_put_line.c
+void	texture_mlx_pixel_put_line(t_vars *vars, int x_axis, int y_axis[2],
 		unsigned int color)
 {
 	int				y;
 	unsigned int	*dst;
 
-	y = y1;
-	while (y <= y2)
+	y = y_axis[0];
+	while (y <= y_axis[1])
 	{
-		dst = vars->data->addr + (y * WIN_WIDTH + x);
+		dst = vars->data->addr + (y * WIN_WIDTH + x_axis);
 		*dst = color;
 		y += 1;
 	}
@@ -248,15 +248,14 @@ int	draw_texture_floor(t_vars *vars)
 	coordinate_screen[Y_AXIS] = (WIN_HEIGHT / 2) - 1;
 	while (coordinate_screen[Y_AXIS] < WIN_HEIGHT)
 	{
-		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
-				- (WIN_HEIGHT / 2), 0.5 * WIN_HEIGHT);
+		set_draw_background(&draw, vars,
+			coordinate_screen[Y_AXIS] - (WIN_HEIGHT / 2), 0.5 * WIN_HEIGHT);
 		coordinate_screen[X_AXIS] = 0;
 		while (coordinate_screen[X_AXIS] < WIN_WIDTH)
 		{
 			cell[X_AXIS] = (int)draw.x_coordinate;
 			cell[Y_AXIS] = (int)draw.y_coordinate;
 			put_texture_floor(&draw, vars, coordinate_screen, cell);
-			// put_texture_ceiling(&draw, vars, coordinate_screen, cell);
 			coordinate_screen[X_AXIS] += 1;
 			draw.x_coordinate += draw.x_move_amount;
 			draw.y_coordinate += draw.y_move_amount;
@@ -282,7 +281,6 @@ int	draw_texture_ceiling(t_vars *vars)
 		{
 			cell[X_AXIS] = (int)draw.x_coordinate;
 			cell[Y_AXIS] = (int)draw.y_coordinate;
-			// put_texture_floor(&draw, vars, coordinate_screen, cell);
 			put_texture_ceiling(&draw, vars, coordinate_screen, cell);
 			coordinate_screen[X_AXIS] += 1;
 			draw.x_coordinate += draw.x_move_amount;
@@ -305,21 +303,24 @@ void	try_draw_texture_floor_and_ceiling(t_vars *vars)
 	}
 }
 
-void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color, unsigned int ceiling_color)
+void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color
+		, unsigned int ceiling_color)
 {
 	int	x_axis;
-	int	y_axis_center;
+	int	y_axis_floor[2];
+	int	y_axis_ceiling[2];
 
 	x_axis = 0;
-	y_axis_center = (WIN_HEIGHT / 2) - 1;
+	y_axis_floor[0] = 0;
+	y_axis_floor[1] = (WIN_HEIGHT / 2) - 1;
+	y_axis_ceiling[0] = y_axis_floor[1];
+	y_axis_ceiling[1] = WIN_HEIGHT - 1;
 	while (x_axis < WIN_WIDTH)
 	{
-		texture_mlx_pixel_put_line(vars, x_axis, 0, y_axis_center, floor_color);
-		texture_mlx_pixel_put_line(vars, x_axis, (y_axis_center - 1), (WIN_HEIGHT - 1), ceiling_color);
+		texture_mlx_pixel_put_line(vars, x_axis, y_axis_floor, floor_color);
+		texture_mlx_pixel_put_line(vars, x_axis, y_axis_ceiling, ceiling_color);
 		x_axis += 1;
 	}
-	// printf("floor   : [%d]\n", floor_color);
-	// printf("ceiling : [%d]\n", ceiling_color);
 }
 
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
@@ -441,8 +442,8 @@ int	get_x_coordinate_texture(t_draw_texture *texture, t_draw_wall *wall,
 void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 {
 	wall->side = get_nearest_axis(ray, info);
-	wall->perpendicular_wall_distance = get_perpendicular_wall_distance(ray,
-																		wall->side);
+	wall->perpendicular_wall_distance
+		= get_perpendicular_wall_distance(ray, wall->side);
 	wall->line_height = (int)(WIN_HEIGHT
 			/ wall->perpendicular_wall_distance);
 	wall->start = get_draw_start_y_coordinate(wall->line_height);
@@ -471,7 +472,9 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
 	y_coordinate_screen = wall->start;
 	while (y_coordinate_screen < wall->end)
 	{
-		y_coordinate_texture = (int)texture->position & (vars->texture_list[texture->list_number].height
+		y_coordinate_texture
+			= (int)texture->position
+			& (vars->texture_list[texture->list_number].height
 				- 1);
 		texture->position += texture->step;
 		color = *(vars->texture_list[texture->list_number].data.addr
@@ -510,11 +513,14 @@ int	draw_wall(t_info *info)
 void	clean_image(t_vars *vars)
 {
 	int	x;
+	int	y_axis[2];
 
 	x = 0;
+	y_axis[0] = 0;
+	y_axis[1] = WIN_HEIGHT - 1;
 	while (x < WIN_WIDTH)
 	{
-		texture_mlx_pixel_put_line(vars, x, 0, (WIN_HEIGHT - 1), 0x00000000);
+		texture_mlx_pixel_put_line(vars, x, y_axis, 0x00000000);
 		x += 1;
 	}
 }
@@ -522,55 +528,51 @@ void	clean_image(t_vars *vars)
 // TODO: key_action.c
 void	move_forward(char **map, t_vars *vars)
 {
-	int		one_step_forward_x_position_vector;
-	int		one_step_forward_y_position_vector;
+	int		one_forward_x_pos_vec;
+	int		one_forward_y_pos_vec;
 	char	distination;
 
-	one_step_forward_x_position_vector = vars->x_position_vector
+	one_forward_x_pos_vec = vars->x_position_vector
 		+ (vars->x_direction * MOVE_DISTANCE);
-	one_step_forward_y_position_vector = vars->y_position_vector
+	one_forward_y_pos_vec = vars->y_position_vector
 		+ (vars->y_direction * MOVE_DISTANCE);
-	distination = map[one_step_forward_x_position_vector][one_step_forward_y_position_vector];
-	//TODO:2~4の条件式を消す
-	if (distination == '1' || distination == '2' || distination == '3'
-		|| distination == '4')
-		printf("\x1b[33mCrashing into a wall!!!!!\x1b[0m\n");
+	distination
+		= map[one_forward_x_pos_vec][one_forward_y_pos_vec];
+	if (distination == '1')
+		return ;
 	else
 	{
-		if (0 < one_step_forward_x_position_vector
-			&& 0 < (int)vars->x_position_vector)
+		if (0 < one_forward_x_pos_vec && 0 < (int)vars->x_position_vector)
 		{
 			vars->x_position_vector += vars->x_direction * MOVE_DISTANCE;
 		}
-		if (0 < one_step_forward_y_position_vector
-			&& 0 < (int)vars->y_position_vector)
+		if (0 < one_forward_y_pos_vec && 0 < (int)vars->y_position_vector)
 		{
 			vars->y_position_vector += vars->y_direction * MOVE_DISTANCE;
 		}
 	}
 }
 
+// printf("\x1b[33mCrashing into a wall!!!!!\x1b[0m\n");
+
 void	move_backward(char **map, t_vars *vars)
 {
-	int		one_step_backward_x_position_vector;
-	int		one_step_backward_y_position_vector;
+	int		one_backward_x_pos_vec;
+	int		one_backward_y_pos_vec;
 	char	distination;
 
-	one_step_backward_x_position_vector = vars->x_position_vector
-		- (vars->x_direction * MOVE_DISTANCE);
-	one_step_backward_y_position_vector = vars->y_position_vector
-		- (vars->y_direction * MOVE_DISTANCE);
-	distination = map[one_step_backward_x_position_vector][one_step_backward_y_position_vector];
-	if (distination == '1' || distination == '2' || distination == '3'
-		|| distination == '4')
-		printf("\x1b[31m壁に衝突!!!!!\x1b[0m\n");
+	one_backward_x_pos_vec
+		= vars->x_position_vector - (vars->x_direction * MOVE_DISTANCE);
+	one_backward_y_pos_vec
+		= vars->y_position_vector - (vars->y_direction * MOVE_DISTANCE);
+	distination = map[one_backward_x_pos_vec][one_backward_y_pos_vec];
+	if (distination == '1')
+		return ;
 	else
 	{
-		if (0 < one_step_backward_x_position_vector
-			&& 0 < (int)vars->x_position_vector)
+		if (0 < one_backward_x_pos_vec && 0 < (int)vars->x_position_vector)
 			vars->x_position_vector -= vars->x_direction * MOVE_DISTANCE;
-		if (0 < one_step_backward_y_position_vector
-			&& 0 < (int)vars->y_position_vector)
+		if (0 < one_backward_y_pos_vec && 0 < (int)vars->y_position_vector)
 			vars->y_position_vector -= vars->y_direction * MOVE_DISTANCE;
 	}
 }
@@ -612,56 +614,59 @@ void	rotate_left_camera(t_vars *vars)
 int	key_action(int keycode, t_info *info)
 {
 	if (keycode == W_KEY || keycode == UP_KEY)
-	{
 		move_forward(info->map->map_data, info->vars);
-	}
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
-	{
 		move_backward(info->map->map_data, info->vars);
-	}
 	else if (keycode == D_KEY || keycode == RIGHT_KEY)
-	{
 		rotate_right_camera(info->vars);
-	}
 	else if (keycode == A_KEY || keycode == LEFT_KEY)
-	{
 		rotate_left_camera(info->vars);
-	}
 	else if (keycode == ESC_KEY)
-	{
 		close_window(info);
-	}
 	else if (keycode == M_KEY)
-	{
 		info->flag->map *= -1;
-	}
-	draw_color_floor_and_ceiling(info->vars, info->vars->floor_color, info->vars->ceiling_color);
+	draw_color_floor_and_ceiling(info->vars,
+		info->vars->floor_color, info->vars->ceiling_color);
 	try_draw_texture_floor_and_ceiling(info->vars);
 	draw_wall(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-			info->vars->data->img, 0, 0);
-	// minimapの再描画
+		info->vars->data->img, 0, 0);
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	// debug_print_mapdata(info);
-	// printf("map_data[%f][%f]\n", info->vars->x_position_vector,
-			// info->vars->y_position_vector);
+	printf("key_code %d", keycode);
 	return (0);
 }
 
+// debug_print_mapdata(info);
+// printf("map_data[%f][%f]\n", info->vars->x_position_vector,
+		// info->vars->y_position_vector);
+
 // TODO: create_xpm_textures.c
-void	exit_create_texture(void *mlx, char *path, t_texture_data *texture)
+void	exit_create_texture(t_info *info,
+		char *path, t_texture_data *texture)
 {
-	texture->data.img = mlx_xpm_file_to_image(mlx, path, &texture->width, &texture->height);
+	texture->data.img
+		= mlx_xpm_file_to_image(info->vars->mlx, path,
+			&texture->width, &texture->height);
 	if (texture->data.img == NULL)
 	{
-		texture->data.img = NULL;
-		print_error("Failed malloc.");
+		destruct_raycasting(info);
+		print_error("small texture.");
 	}
-	texture->data.addr = (unsigned int *)mlx_get_data_addr(texture->data.img, &texture->data.bits_per_pixel, &texture->data.line_length, &texture->data.endian);
+	texture->data.addr
+		= (unsigned int *)mlx_get_data_addr(texture->data.img,
+			&texture->data.bits_per_pixel,
+			&texture->data.line_length,
+			&texture->data.endian);
+	if (texture->width != 64 || texture->height != 64)
+	{
+		destruct_raycasting(info);
+		print_error("small texture.");
+	}
 }
 
-void	create_texture_floor(void *mlx, char *path, t_texture_data *texture_list)
+void	create_texture_floor(t_info *info,
+		char *path, t_texture_data *texture_list)
 {
 	if (path == NULL)
 	{
@@ -671,11 +676,13 @@ void	create_texture_floor(void *mlx, char *path, t_texture_data *texture_list)
 		texture_list[FLOOR_2].data.addr = NULL;
 		return ;
 	}
-	exit_create_texture(mlx, path, &texture_list[FLOOR_1]);
-	exit_create_texture(mlx, "./srcs/raycasting/xpm/bluestone.xpm", &texture_list[FLOOR_2]);
+	exit_create_texture(info, path, &texture_list[FLOOR_1]);
+	exit_create_texture(info,
+		"./srcs/raycasting/xpm/bluestone.xpm", &texture_list[FLOOR_2]);
 }
 
-void	create_texture_ceiling(void *mlx, char *path, t_texture_data *texture)
+void	create_texture_ceiling(t_info *info,
+		char *path, t_texture_data *texture)
 {
 	if (path == NULL)
 	{
@@ -683,48 +690,86 @@ void	create_texture_ceiling(void *mlx, char *path, t_texture_data *texture)
 		texture->data.addr = NULL;
 		return ;
 	}
-	exit_create_texture(mlx, path, texture);
+	exit_create_texture(info, path, texture);
 }
 
-void	create_xpm_textures(t_texture *texture, t_vars *vars)
+void	initialize_texture_list(t_texture_data *texture_list)
 {
-	create_texture_floor(vars->mlx, texture->f_tex, vars->texture_list);
-	create_texture_ceiling(vars->mlx, texture->c_tex, &vars->texture_list[CEILING]);
-	exit_create_texture(vars->mlx, texture->so, &vars->texture_list[SOUTH_WALL]);
-	exit_create_texture(vars->mlx, texture->no, &vars->texture_list[NORTH_WALL]);
-	exit_create_texture(vars->mlx, texture->ea, &vars->texture_list[EAST_WALL]);
-	exit_create_texture(vars->mlx, texture->we, &vars->texture_list[WEST_WALL]);
+	int	i;
+
+	i = 0;
+	while (i < TEXTURE_LIST_SIZE)
+	{
+		texture_list[i].data.img = NULL;
+		i += 1;
+	}
+}
+
+void	create_xpm_textures(t_texture *texture, t_info *info)
+{
+	initialize_texture_list(info->vars->texture_list);
+	create_texture_floor(info, texture->f_tex, info->vars->texture_list);
+	create_texture_ceiling(info,
+		texture->c_tex, &info->vars->texture_list[CEILING]);
+	exit_create_texture(info,
+		texture->so, &info->vars->texture_list[SOUTH_WALL]);
+	exit_create_texture(info,
+		texture->no, &info->vars->texture_list[NORTH_WALL]);
+	exit_create_texture(info,
+		texture->ea, &info->vars->texture_list[EAST_WALL]);
+	exit_create_texture(info,
+		texture->we, &info->vars->texture_list[WEST_WALL]);
+}
+
+void	set_north_player_direction(t_vars *vars)
+{
+	vars->x_direction = -1.0;
+	vars->y_direction = 0.0;
+	vars->x_camera_plane = 0.0;
+	vars->y_camera_plane = 0.66;
+}
+
+void	set_south_player_direction(t_vars *vars)
+{
+	vars->x_direction = 1.0;
+	vars->y_direction = 0.0;
+	vars->x_camera_plane = 0.0;
+	vars->y_camera_plane = -0.66;
+}
+
+void	set_east_player_direction(t_vars *vars)
+{
+	vars->x_direction = 0.0;
+	vars->y_direction = 1.0;
+	vars->x_camera_plane = 0.66;
+	vars->y_camera_plane = 0.0;
+}
+
+void	set_west_player_direction(t_vars *vars)
+{
+	vars->x_direction = 0.0;
+	vars->y_direction = -1.0;
+	vars->x_camera_plane = -0.66;
+	vars->y_camera_plane = 0.0;
 }
 
 void	init_nswe_dirction(char player_direction, t_vars *vars)
 {
 	if (player_direction == NORTH)
 	{
-		vars->x_direction = -1.0;
-		vars->y_direction = 0.0;
-		vars->x_camera_plane = 0.0;
-		vars->y_camera_plane = 0.66;
+		set_north_player_direction(vars);
 	}
 	else if (player_direction == SOUTH)
 	{
-		vars->x_direction = 1.0;
-		vars->y_direction = 0.0;
-		vars->x_camera_plane = 0.0;
-		vars->y_camera_plane = -0.66;
+		set_south_player_direction(vars);
 	}
 	else if (player_direction == EAST)
 	{
-		vars->x_direction = 0.0;
-		vars->y_direction = 1.0;
-		vars->x_camera_plane = 0.66;
-		vars->y_camera_plane = 0.0;
+		set_east_player_direction(vars);
 	}
 	else if (player_direction == WEST)
 	{
-		vars->x_direction = 0.0;
-		vars->y_direction = -1.0;
-		vars->x_camera_plane = -0.66;
-		vars->y_camera_plane = 0.0;
+		set_west_player_direction(vars);
 	}
 }
 
@@ -764,40 +809,49 @@ void	*exit_mlx_new_image(void *mlx)
 	return (image);
 }
 
-// TODO: initialize_vars.c
 void	initialize_vars(t_info *info)
 {
 	info->vars->mlx = exit_mlx_init();
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
-	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
 	info->vars->x_position_vector = (double)info->map->player_y + 0.500001;
 	info->vars->y_position_vector = (double)info->map->player_x + 0.500001;
-	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
-						info->vars);
-	printf("fr : [%d]\n", info->texture->f_rgb->red);
-	printf("fg : [%d]\n", info->texture->f_rgb->green);
-	printf("fb : [%d]\n", info->texture->f_rgb->blue);
-	printf("cr : [%d]\n", info->texture->c_rgb->red);
-	printf("cg : [%d]\n", info->texture->c_rgb->green);
-	printf("cb : [%d]\n", info->texture->c_rgb->blue);
-	info->vars->floor_color = create_rgb(info->texture->f_rgb->red, info->texture->f_rgb->green, info->texture->f_rgb->blue);
-	info->vars->ceiling_color = create_rgb(info->texture->c_rgb->red, info->texture->c_rgb->green, info->texture->c_rgb->blue);
+	init_nswe_dirction
+		(info->map->map_data[info->map->player_y][info->map->player_x],
+		info->vars);
+	info->vars->floor_color
+		= create_rgb(info->texture->f_rgb->red,
+			info->texture->f_rgb->green, info->texture->f_rgb->blue);
+	info->vars->ceiling_color
+		= create_rgb(info->texture->c_rgb->red,
+			info->texture->c_rgb->green, info->texture->c_rgb->blue);
 	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
-	info->vars->data->addr = (unsigned int *)mlx_get_data_addr(info->vars->data->img, &info->vars->data->bits_per_pixel, &info->vars->data->line_length, &info->vars->data->endian);
+	info->vars->data->addr
+		= (unsigned int *)mlx_get_data_addr(info->vars->data->img,
+			&info->vars->data->bits_per_pixel,
+			&info->vars->data->line_length,
+			&info->vars->data->endian);
 	clean_image(info->vars);
-	create_xpm_textures(info->texture, info->vars);
-	draw_color_floor_and_ceiling(info->vars, info->vars->floor_color, info->vars->ceiling_color);
+	create_xpm_textures(info->texture, info);
+	draw_color_floor_and_ceiling(info->vars,
+		info->vars->floor_color, info->vars->ceiling_color);
 	try_draw_texture_floor_and_ceiling(info->vars);
 	draw_wall(info);
+}
+
+int	close_window(t_info *info)
+{
+	mlx_loop_end(info->vars->mlx);
+	return (0);
 }
 
 void	raycasting(t_info *info)
 {
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-			info->vars->data->img, 0, 0);
+		info->vars->data->img, 0, 0);
 	minimap(info, info->data);
 	mlx_key_hook(info->vars->win, key_action, info);
+	mlx_hook(info->vars->win, ON_DESTROY, 1L<<ON_DESTROY, close_window, info);
 	mlx_loop(info->vars->mlx);
-	end_raycasting(info);
+	destruct_raycasting(info);
 }
