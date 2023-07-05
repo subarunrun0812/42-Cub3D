@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 14:48:22 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 15:40:39 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static void	texture_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
 	y = y1;
 	while (y <= y2)
 	{
-		dst = vars->data->addr + (y * vars->screen_width + x);
+		dst = vars->data->addr + (y * WIN_WIDTH + x);
 		*dst = color;
 		y += 1;
 	}
@@ -107,9 +107,9 @@ void	set_draw_background(t_draw_background *draw, t_vars *vars,
 	ray_direction_right[Y_AXIS] = vars->y_direction + vars->y_camera_plane;
 	row_distance = vertical_position_camera / y_coordinate;
 	draw->x_move_amount = row_distance * (ray_direction_right[X_AXIS]
-			- ray_direction_left[X_AXIS]) / vars->screen_width;
+			- ray_direction_left[X_AXIS]) / WIN_WIDTH;
 	draw->y_move_amount = row_distance * (ray_direction_right[Y_AXIS]
-			- ray_direction_left[Y_AXIS]) / vars->screen_width;
+			- ray_direction_left[Y_AXIS]) / WIN_WIDTH;
 	draw->x_coordinate = vars->x_position_vector + row_distance
 		* ray_direction_left[X_AXIS];
 	draw->y_coordinate = vars->y_position_vector + row_distance
@@ -148,7 +148,7 @@ void	put_texture_floor(t_draw_background *draw, t_vars *vars,
 			+ vars->texture_list[floor_texture].width
 			* coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS])
+	vars->data->addr[(WIN_WIDTH * coordinate_screen[Y_AXIS])
 		+ coordinate_screen[X_AXIS]] = color;
 }
 
@@ -168,7 +168,7 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 			+ vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS]
 			+ coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
-	vars->data->addr[(vars->screen_width * (vars->screen_height
+	vars->data->addr[(WIN_WIDTH * (WIN_HEIGHT
 				- coordinate_screen[Y_AXIS]))
 		+ coordinate_screen[X_AXIS]] = color;
 }
@@ -203,13 +203,13 @@ int	draw_texture_floor(t_vars *vars)
 	int					cell[2];
 	t_draw_background	draw;
 
-	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
-	while (coordinate_screen[Y_AXIS] < vars->screen_height)
+	coordinate_screen[Y_AXIS] = (WIN_HEIGHT / 2) - 1;
+	while (coordinate_screen[Y_AXIS] < WIN_HEIGHT)
 	{
 		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
-				- (vars->screen_height / 2), 0.5 * vars->screen_height);
+				- (WIN_HEIGHT / 2), 0.5 * WIN_HEIGHT);
 		coordinate_screen[X_AXIS] = 0;
-		while (coordinate_screen[X_AXIS] < vars->screen_width)
+		while (coordinate_screen[X_AXIS] < WIN_WIDTH)
 		{
 			cell[X_AXIS] = (int)draw.x_coordinate;
 			cell[Y_AXIS] = (int)draw.y_coordinate;
@@ -230,13 +230,13 @@ int	draw_texture_ceiling(t_vars *vars)
 	int					cell[2];
 	t_draw_background	draw;
 
-	coordinate_screen[Y_AXIS] = (vars->screen_height / 2) - 1;
-	while (coordinate_screen[Y_AXIS] < vars->screen_height)
+	coordinate_screen[Y_AXIS] = (WIN_HEIGHT / 2) - 1;
+	while (coordinate_screen[Y_AXIS] < WIN_HEIGHT)
 	{
 		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
-			- (vars->screen_height / 2), 0.5 * vars->screen_height);
+			- (WIN_HEIGHT / 2), 0.5 * WIN_HEIGHT);
 		coordinate_screen[X_AXIS] = 0;
-		while (coordinate_screen[X_AXIS] < vars->screen_width)
+		while (coordinate_screen[X_AXIS] < WIN_WIDTH)
 		{
 			cell[X_AXIS] = (int)draw.x_coordinate;
 			cell[Y_AXIS] = (int)draw.y_coordinate;
@@ -269,11 +269,11 @@ void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color, unsign
 	int	y_axis_center;
 
 	x_axis = 0;
-	y_axis_center = (vars->screen_height / 2) - 1;
-	while (x_axis < vars->screen_width)
+	y_axis_center = (WIN_HEIGHT / 2) - 1;
+	while (x_axis < WIN_WIDTH)
 	{
 		texture_mlx_pixel_put_line(vars, x_axis, 0, y_axis_center, floor_color);
-		texture_mlx_pixel_put_line(vars, x_axis, (y_axis_center - 1), (vars->screen_height - 1), ceiling_color);
+		texture_mlx_pixel_put_line(vars, x_axis, (y_axis_center - 1), (WIN_HEIGHT - 1), ceiling_color);
 		x_axis += 1;
 	}
 	printf("floor   : [%d]\n", floor_color);
@@ -284,7 +284,7 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
 	double	x_current_camera;
 
-	x_current_camera = 2 * x / (double)vars->screen_width - 1;
+	x_current_camera = 2 * x / (double)WIN_WIDTH - 1;
 	ray->x_direction = vars->x_direction + (vars->x_camera_plane
 			* x_current_camera);
 	ray->y_direction = vars->y_direction + (vars->y_camera_plane
@@ -333,11 +333,11 @@ int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 	return (SOUTH_WALL);
 }
 
-int	get_draw_start_y_coordinate(int screen_height, int line_height)
+int	get_draw_start_y_coordinate(int line_height)
 {
 	int	start;
 
-	start = (-line_height / 2) + (screen_height / 2);
+	start = (-line_height / 2) + (WIN_HEIGHT / 2);
 	if (start < 0)
 	{
 		return (0);
@@ -345,14 +345,14 @@ int	get_draw_start_y_coordinate(int screen_height, int line_height)
 	return (start);
 }
 
-int	get_draw_end_y_coordinate(int screen_height, int line_height)
+int	get_draw_end_y_coordinate(int line_height)
 {
 	int	end;
 
-	end = (line_height / 2) + (screen_height / 2);
-	if (screen_height <= end)
+	end = (line_height / 2) + (WIN_HEIGHT / 2);
+	if (WIN_HEIGHT <= end)
 	{
-		return (screen_height - 1);
+		return (WIN_HEIGHT - 1);
 	}
 	return (end);
 }
@@ -401,12 +401,10 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 	wall->side = get_nearest_axis(ray, info);
 	wall->perpendicular_wall_distance = get_perpendicular_wall_distance(ray,
 																		wall->side);
-	wall->line_height = (int)(info->vars->screen_height
+	wall->line_height = (int)(WIN_HEIGHT
 			/ wall->perpendicular_wall_distance);
-	wall->start = get_draw_start_y_coordinate(info->vars->screen_height,
-												wall->line_height);
-	wall->end = get_draw_end_y_coordinate(info->vars->screen_height,
-											wall->line_height);
+	wall->start = get_draw_start_y_coordinate(wall->line_height);
+	wall->end = get_draw_end_y_coordinate(wall->line_height);
 }
 
 void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
@@ -417,7 +415,7 @@ void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
 	texture->x_coordinate = get_x_coordinate_texture(texture, wall, ray, vars);
 	texture->step = (1.0 * vars->texture_list[texture->list_number].height)
 		/ wall->line_height;
-	texture->position = (wall->start - (vars->screen_height / 2)
+	texture->position = (wall->start - (WIN_HEIGHT / 2)
 			+ (wall->line_height / 2)) * texture->step;
 }
 
@@ -441,7 +439,7 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
 		{
 			color = (color >> 1) & 8355711;
 		}
-		vars->data->addr[y_coordinate_screen * vars->screen_width
+		vars->data->addr[y_coordinate_screen * WIN_WIDTH
 			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
 	}
@@ -455,7 +453,7 @@ int	draw_wall(t_info *info)
 	t_draw_texture	texture;
 
 	x_coordinate_screen = 0;
-	while (x_coordinate_screen < info->vars->screen_width)
+	while (x_coordinate_screen < WIN_WIDTH)
 	{
 		set_ray_data(&ray, info->vars, x_coordinate_screen);
 		set_draw_wall_data(&wall, &ray, info);
@@ -472,7 +470,7 @@ void	clean_image(t_vars *vars)
 	int	x;
 
 	x = 0;
-	while (x < vars->screen_width)
+	while (x < WIN_WIDTH)
 	{
 		texture_mlx_pixel_put_line(vars, x, 0, (WIN_HEIGHT - 1), 0x00000000);
 		x += 1;
@@ -733,10 +731,8 @@ void	initialize_vars(t_info *info)
 	info->vars->y_position_vector = (double)info->map->player_x + 0.500001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
 						info->vars);
-	//TODO:screen_width,heightを削除する
+	//TODO:WIN_WIDTH,heightを削除する
 	//理由:構造体のメンバ変数screen_*にマクロ変数のWIN_*を代入しているため、このメンバ変数を定義する必要はない
-	info->vars->screen_width = WIN_WIDTH;
-	info->vars->screen_height = WIN_HEIGHT;
 	printf("fr : [%d]\n", info->texture->f_rgb->red);
 	printf("fg : [%d]\n", info->texture->f_rgb->green);
 	printf("fb : [%d]\n", info->texture->f_rgb->blue);
