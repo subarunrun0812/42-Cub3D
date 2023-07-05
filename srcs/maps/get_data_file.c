@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 15:22:02 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 13:58:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,6 @@ void	get_data_file(int fd, t_info *info)
 	int		flag;
 	int		count;
 	int		i;
-    t_rgb   f_rgb;
-    t_rgb   c_rgb;
-
-    info->texture->f_rgb = &f_rgb;
-    info->texture->c_rgb = &c_rgb;
 	str = get_next_line(fd);
 	if (!str)
 	{
