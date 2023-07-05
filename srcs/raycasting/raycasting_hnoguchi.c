@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 17:58:23 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:14:02 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -519,7 +519,7 @@ int	key_action(int keycode, t_info *info)
 	// minimapの再描画
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	debug_print_mapdata(info);
+	// debug_print_mapdata(info);
 	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
 		info->vars->y_position_vector);
 	return (0);

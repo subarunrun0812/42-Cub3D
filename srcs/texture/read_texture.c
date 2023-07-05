@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 14:17:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 15:39:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:50:13 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	read_texture(char *str, t_texture *texture)
 		else if (ft_strncmp(identifier, "C", 2) == 0)
 			assign_to_structure_celling(&str, texture);
 		else
-			print_error("texture");
+			print_error("texture identifier");
 		while (*str == ' ' || *str == '\t')
 			str++;
 		res++;
