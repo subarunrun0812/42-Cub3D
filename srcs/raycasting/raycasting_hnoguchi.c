@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/04 17:50:28 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 13:01:38 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 		return (-1);
 	}
 	ray->x_side_distance = (ray->current_x_in_map + 1.0
-		- vars->x_position_vector) * ray->x_delta_distance;
+			- vars->x_position_vector) * ray->x_delta_distance;
 	return (1);
 }
 
@@ -61,7 +61,7 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 		return (-1);
 	}
 	ray->y_side_distance = (ray->current_y_in_map + 1.0
-		- vars->y_position_vector) * ray->y_delta_distance;
+			- vars->y_position_vector) * ray->y_delta_distance;
 	return (1);
 }
 
@@ -107,9 +107,9 @@ void	set_draw_background(t_draw_background *draw, t_vars *vars,
 	ray_direction_right[Y_AXIS] = vars->y_direction + vars->y_camera_plane;
 	row_distance = vertical_position_camera / y_coordinate;
 	draw->x_move_amount = row_distance * (ray_direction_right[X_AXIS]
-		- ray_direction_left[X_AXIS]) / vars->screen_width;
+			- ray_direction_left[X_AXIS]) / vars->screen_width;
 	draw->y_move_amount = row_distance * (ray_direction_right[Y_AXIS]
-		- ray_direction_left[Y_AXIS]) / vars->screen_width;
+			- ray_direction_left[Y_AXIS]) / vars->screen_width;
 	draw->x_coordinate = vars->x_position_vector + row_distance
 		* ray_direction_left[X_AXIS];
 	draw->y_coordinate = vars->y_position_vector + row_distance
@@ -137,14 +137,16 @@ void	put_texture_floor(t_draw_background *draw, t_vars *vars,
 
 	floor_texture = decide_texture_floor(cell);
 	coordinate_texture[X_AXIS] = (int)(vars->texture_list[floor_texture].width
-		* (draw->x_coordinate
-			- cell[X_AXIS])) & (vars->texture_list[floor_texture].width - 1);
+			* (draw->x_coordinate
+				- cell[X_AXIS])) & (vars->texture_list[floor_texture].width
+			- 1);
 	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[floor_texture].height
-		* (draw->y_coordinate
-			- cell[Y_AXIS])) & (vars->texture_list[floor_texture].height - 1);
+			* (draw->y_coordinate
+				- cell[Y_AXIS])) & (vars->texture_list[floor_texture].height
+			- 1);
 	color = *(vars->texture_list[floor_texture].data.addr
-		+ vars->texture_list[floor_texture].width * coordinate_texture[Y_AXIS]
-		+ coordinate_texture[X_AXIS]);
+			+ vars->texture_list[floor_texture].width
+			* coordinate_texture[Y_AXIS] + coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
 	vars->data->addr[(vars->screen_width * coordinate_screen[Y_AXIS])
 		+ coordinate_screen[X_AXIS]] = color;
@@ -157,17 +159,18 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 	unsigned int	color;
 
 	coordinate_texture[X_AXIS] = (int)(vars->texture_list[CEILING].width
-		* (draw->x_coordinate
-			- cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
+			* (draw->x_coordinate
+				- cell[X_AXIS])) & (vars->texture_list[CEILING].width - 1);
 	coordinate_texture[Y_AXIS] = (int)(vars->texture_list[CEILING].height
-		* (draw->y_coordinate
-			- cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
+			* (draw->y_coordinate
+				- cell[Y_AXIS])) & (vars->texture_list[CEILING].height - 1);
 	color = *(vars->texture_list[CEILING].data.addr
-		+ vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS]
-		+ coordinate_texture[X_AXIS]);
+			+ vars->texture_list[CEILING].height * coordinate_texture[Y_AXIS]
+			+ coordinate_texture[X_AXIS]);
 	color = (color >> 1) & 8355711;
 	vars->data->addr[(vars->screen_width * (vars->screen_height
-			- coordinate_screen[Y_AXIS])) + coordinate_screen[X_AXIS]] = color;
+				- coordinate_screen[Y_AXIS]))
+		+ coordinate_screen[X_AXIS]] = color;
 }
 
 int	draw_floor_and_ceiling(t_vars *vars)
@@ -180,7 +183,7 @@ int	draw_floor_and_ceiling(t_vars *vars)
 	while (coordinate_screen[Y_AXIS] < vars->screen_height)
 	{
 		set_draw_background(&draw, vars, coordinate_screen[Y_AXIS]
-			- (vars->screen_height / 2), 0.5 * vars->screen_height);
+				- (vars->screen_height / 2), 0.5 * vars->screen_height);
 		coordinate_screen[X_AXIS] = 0;
 		while (coordinate_screen[X_AXIS] < vars->screen_width)
 		{
@@ -203,9 +206,9 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 
 	x_current_camera = 2 * x / (double)vars->screen_width - 1;
 	ray->x_direction = vars->x_direction + (vars->x_camera_plane
-		* x_current_camera);
+			* x_current_camera);
 	ray->y_direction = vars->y_direction + (vars->y_camera_plane
-		* x_current_camera);
+			* x_current_camera);
 	ray->current_x_in_map = (int)vars->x_position_vector;
 	ray->current_y_in_map = (int)vars->y_position_vector;
 	ray->x_side_distance = 0;
@@ -299,7 +302,7 @@ int	get_x_coordinate_texture(t_draw_texture *texture, t_draw_wall *wall,
 	int	x_coordinate_texture;
 
 	x_coordinate_texture = (int)(texture->wall_x
-		* (double)vars->texture_list[texture->list_number].width);
+			* (double)vars->texture_list[texture->list_number].width);
 	if (wall->side == 0 && 0 < ray->x_direction)
 	{
 		x_coordinate_texture = vars->texture_list[texture->list_number].width
@@ -317,13 +320,13 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 {
 	wall->side = get_nearest_axis(ray, info);
 	wall->perpendicular_wall_distance = get_perpendicular_wall_distance(ray,
-		wall->side);
+																		wall->side);
 	wall->line_height = (int)(info->vars->screen_height
-		/ wall->perpendicular_wall_distance);
+			/ wall->perpendicular_wall_distance);
 	wall->start = get_draw_start_y_coordinate(info->vars->screen_height,
-		wall->line_height);
+												wall->line_height);
 	wall->end = get_draw_end_y_coordinate(info->vars->screen_height,
-		wall->line_height);
+											wall->line_height);
 }
 
 void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
@@ -335,7 +338,7 @@ void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
 	texture->step = (1.0 * vars->texture_list[texture->list_number].height)
 		/ wall->line_height;
 	texture->position = (wall->start - (vars->screen_height / 2)
-		+ (wall->line_height / 2)) * texture->step;
+			+ (wall->line_height / 2)) * texture->step;
 }
 
 void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
@@ -349,11 +352,11 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
 	while (y_coordinate_screen < wall->end)
 	{
 		y_coordinate_texture = (int)texture->position & (vars->texture_list[texture->list_number].height
-			- 1);
+				- 1);
 		texture->position += texture->step;
 		color = *(vars->texture_list[texture->list_number].data.addr
-			+ vars->texture_list[texture->list_number].height
-			* y_coordinate_texture + texture->x_coordinate);
+				+ vars->texture_list[texture->list_number].height
+				* y_coordinate_texture + texture->x_coordinate);
 		if (wall->side == Y_AXIS)
 		{
 			color = (color >> 1) & 8355711;
@@ -514,11 +517,14 @@ int	key_action(int keycode, t_info *info)
 	clean_image(info->vars);
 	draw_floor_and_ceiling(info->vars);
 	draw_wall(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->vars->data->img, 0, 0);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
+			info->vars->data->img, 0, 0);
+	// minimapの再描画
+	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	debug_print_mapdata(info);
+	// debug_print_mapdata(info);
 	printf("map_data[%f][%f]\n", info->vars->x_position_vector,
-		info->vars->y_position_vector);
+			info->vars->y_position_vector);
 	return (0);
 }
 
@@ -645,9 +651,11 @@ void	initialize_vars(t_info *info)
 	info->vars->win = exit_mlx_new_window(info->vars->mlx);
 	//ゲーム開始時は整数値のためそのまま真っ直ぐに進むと壁がすり抜けて見えてしまうバグがあるため、初期値の値を僅かに増やした。
 	info->vars->x_position_vector = (double)info->map->player_y + 0.000001;
-	info->vars->y_position_vector = (double)info->map->player_x;
+	info->vars->y_position_vector = (double)info->map->player_x + 0.000001;
 	init_nswe_dirction(info->map->map_data[info->map->player_y][info->map->player_x],
-		info->vars);
+						info->vars);
+	//TODO:screen_width,heightを削除する
+	//理由:構造体のメンバ変数screen_*にマクロ変数のWIN_*を代入しているため、このメンバ変数を定義する必要はない
 	info->vars->screen_width = WIN_WIDTH;
 	info->vars->screen_height = WIN_HEIGHT;
 	info->vars->data->img = exit_mlx_new_image(info->vars->mlx);
@@ -661,7 +669,7 @@ void	raycasting(t_info *info)
 {
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->data->img, 0, 0);
+			info->vars->data->img, 0, 0);
 	minimap(info, info->data);
 	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_loop(info->vars->mlx);

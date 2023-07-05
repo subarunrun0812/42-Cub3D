@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 19:06:11 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 16:46:02 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/05 12:56:33 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ char	*assign_to_structure(char **str, char *identifier, t_texture *texture)
 	}
 	path[i] = '\0';
 	// RGBのカラーコードの場合
-	if ('0' <= *path && *path <= '9')
+	if (('0' <= *path && *path <= '9' )|| ((ft_strncmp(identifier, "floor", 6) == 0) && *path == '\0') || \
+		((ft_strncmp(identifier, "celling", 8) == 0) && *path == '\0'))
 	{
 		parse_and_assign_rgb_values(path, identifier, texture);
 		free(path);
