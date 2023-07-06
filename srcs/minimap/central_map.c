@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 16:02:16 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:42:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,10 +120,7 @@ void	central_map(t_info *info)
 		{
 			if (info->map->map_data[y][x] == ' ')
 				;
-			else if (info->map->map_data[y][x] == '1'
-				|| info->map->map_data[y][x] == '2'
-				|| info->map->map_data[y][x] == '3'
-				|| info->map->map_data[y][x] == '4')
+			else if (info->map->map_data[y][x] == '1')
 			{
 				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), MAP_GREEN);
