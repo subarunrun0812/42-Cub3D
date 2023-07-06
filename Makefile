@@ -22,8 +22,6 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
           $(FILE_READ_DIR)/assign_to_structure.c\
-          $(FILE_READ_DIR)/assign_to_structure_floor_celling.c\
-          $(FILE_READ_DIR)/assign_to_structure_nswe.c\
           $(FILE_READ_DIR)/assign_to_structure_rgb.c\
           $(FILE_READ_DIR)/read_file.c\
           $(FILE_READ_DIR)/get_data_file.c\

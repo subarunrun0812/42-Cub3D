@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 14:17:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 17:12:07 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:16:42 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,17 +42,17 @@ int	read_texture(char *str, t_texture *texture)
 	{
 		read_texture_identifier(&str, identifier);
 		if (ft_strncmp(identifier, "NO", 3) == 0)
-			assign_to_structure_no(&str, texture);
+			texture->no = assign_to_structure(&str, "no", texture);
 		else if (ft_strncmp(identifier, "SO", 3) == 0)
-			assign_to_structure_so(&str, texture);
+			texture->so = assign_to_structure(&str, "so", texture);
 		else if (ft_strncmp(identifier, "WE", 3) == 0)
-			assign_to_structure_we(&str, texture);
+			texture->we = assign_to_structure(&str, "we", texture);
 		else if (ft_strncmp(identifier, "EA", 3) == 0)
-			assign_to_structure_ea(&str, texture);
+			texture->ea = assign_to_structure(&str, "ea", texture);
 		else if (ft_strncmp(identifier, "F", 2) == 0)
-			assign_to_structure_floor(&str, texture);
+			texture->f_tex = assign_to_structure(&str, "floor", texture);
 		else if (ft_strncmp(identifier, "C", 2) == 0)
-			assign_to_structure_celling(&str, texture);
+			texture->c_tex = assign_to_structure(&str, "celling", texture);
 		else
 			print_error("texture identifier");
 		check_spaces_skip(&str);

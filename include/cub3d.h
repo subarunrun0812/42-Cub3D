@@ -273,12 +273,6 @@ char				*assign_to_structure(char **str, char *identifier,
 						t_texture *texture);
 void				parse_and_assign_rgb_values(char *path, char *identifier,
 						t_texture *texture);
-void				assign_to_structure_floor(char **str, t_texture *texture);
-void				assign_to_structure_celling(char **str, t_texture *texture);
-void				assign_to_structure_no(char **str, t_texture *texture);
-void				assign_to_structure_so(char **str, t_texture *texture);
-void				assign_to_structure_we(char **str, t_texture *texture);
-void				assign_to_structure_ea(char **str, t_texture *texture);
 int					first_word_len(char **str);
 
 // ------------------------------------------------
