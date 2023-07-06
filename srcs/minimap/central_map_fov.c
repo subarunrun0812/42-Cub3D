@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:36:53 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:41:04 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 19:42:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,9 @@ static void	draw_single_fov(t_info *info, int start_x, int start_y,
 	while (ray_len < 100)
 	{
 		middle_ray_x = (ray_len * (info->vars->y_dir + (info->vars->y_cam_plane
-					* direction_multiplier)));
+						* direction_multiplier)));
 		middle_ray_y = (ray_len * (info->vars->x_dir + (info->vars->x_cam_plane
-					* direction_multiplier)));
+						* direction_multiplier)));
 		my_mlx_pixel_put(info->data, start_x + (info->map->x_player * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
 			+ (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))

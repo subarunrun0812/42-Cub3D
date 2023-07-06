@@ -254,24 +254,16 @@ void				init_second(t_info *info, t_flag *flag, t_texture *texture);
 // FILE
 // ------------------------------------------------
 
-
 // MAP
+
 void				read_file(char *path, t_info *info);
 void				get_data_file(int fd, t_info *info);
 void				check_map_wall(t_info *info);
 void				check_only_one_nswe(t_map *map);
-void	draw_ray_player_fov(t_info *info, int start_x, int start_y);
-int					minimap(t_info *info, t_data *data);
-void				central_map(t_info *info);
-void				corner_map(t_info *info, t_data *data);
-void				corner_draw_one_block(t_info *info, int draw_x, int draw_y,
-						int color);
 int					mapdata_width_length(char *width);
 int					maxwidth_length(t_map *map);
 void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
 char				**map_str_add(char **array, char *new);
-void				central_draw_one_block(t_info *info, int draw_x, int draw_y,
-						int color);
 
 // FILE
 int					check_num(char *num_str);
@@ -286,16 +278,22 @@ char				*assign_to_structure(char **str, char *identifier,
 void				parse_and_assign_rgb_values(char *path, char *identifier,
 						t_texture *texture);
 int					first_word_len(char **str);
-
 int					mapdata_width_length(char *width);
-
 int					skip_new_line(char **map_data);
 int					skip_space_width(char **map_data, int _y);
-
 
 // ------------------------------------------------
 // MINIMAP
 // ------------------------------------------------
+
+int					minimap(t_info *info, t_data *data);
+void				central_draw_one_block(t_info *info, int draw_x, int draw_y,
+						int color);
+void				draw_ray_player_fov(t_info *info, int start_x, int start_y);
+void				central_map(t_info *info);
+void				corner_map(t_info *info, t_data *data);
+void				corner_draw_one_block(t_info *info, int draw_x, int draw_y,
+						int color);
 
 // ------------------------------------------------
 // PLAYER
