@@ -6,13 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:25:18 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 19:41:20 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-int	get_draw_color(t_info *info, int i, int j)
+static int	get_draw_color(t_info *info, int i, int j)
 {
 	char	pos;
 
@@ -34,7 +34,7 @@ int	get_draw_color(t_info *info, int i, int j)
 		return (MAP_RED);
 }
 
-void	draw_corner_map(t_info *info, int end_i, int end_j)
+static void	draw_corner_map(t_info *info, int end_i, int end_j)
 {
 	int	i;
 	int	j;
@@ -52,14 +52,14 @@ void	draw_corner_map(t_info *info, int end_i, int end_j)
 		while (j < end_j)
 		{
 			color = get_draw_color(info, i, j);
-			draw_one_block(info, j - start_j, i - start_i, color);
+			corner_draw_one_block(info, j - start_j, i - start_i, color);
 			j++;
 		}
 		i++;
 	}
 }
 
-void	draw_ray(t_info *info, int ray_len)
+static void	draw_ray(t_info *info, int ray_len)
 {
 	int	tmp_x;
 	int	tmp_y;

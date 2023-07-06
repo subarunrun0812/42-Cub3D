@@ -26,6 +26,7 @@
 //			COLODR
 //------------------------------
 
+# define NO_COLOR 0
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
 # define GREEN 0x00008000
@@ -253,15 +254,17 @@ void				init_second(t_info *info, t_flag *flag, t_texture *texture);
 // FILE
 // ------------------------------------------------
 
+
 // MAP
 void				read_file(char *path, t_info *info);
 void				get_data_file(int fd, t_info *info);
 void				check_map_wall(t_info *info);
 void				check_only_one_nswe(t_map *map);
+void	draw_ray_player_fov(t_info *info, int start_x, int start_y);
 int					minimap(t_info *info, t_data *data);
 void				central_map(t_info *info);
 void				corner_map(t_info *info, t_data *data);
-void				draw_one_block(t_info *info, int draw_x, int draw_y,
+void				corner_draw_one_block(t_info *info, int draw_x, int draw_y,
 						int color);
 int					mapdata_width_length(char *width);
 int					maxwidth_length(t_map *map);
@@ -288,6 +291,11 @@ int					mapdata_width_length(char *width);
 
 int					skip_new_line(char **map_data);
 int					skip_space_width(char **map_data, int _y);
+
+
+// ------------------------------------------------
+// MINIMAP
+// ------------------------------------------------
 
 // ------------------------------------------------
 // PLAYER
