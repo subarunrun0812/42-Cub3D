@@ -267,6 +267,8 @@ int					mapdata_width_length(char *width);
 int					maxwidth_length(t_map *map);
 void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
 char				**map_str_add(char **array, char *new);
+void				central_draw_one_block(t_info *info, int draw_x, int draw_y,
+						int color);
 
 // FILE
 int					check_num(char *num_str);
