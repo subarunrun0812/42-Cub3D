@@ -109,6 +109,10 @@
 # define EAST 'E'
 # define WEST 'W'
 
+typedef struct s_info	t_info;
+
+extern t_info			*g_info;
+
 typedef struct s_map
 {
 	// map_data[y][x]
@@ -195,7 +199,7 @@ typedef struct s_ray
 	double			y_delta_dist;
 }					t_ray;
 
-typedef struct s_info
+struct s_info
 {
 	t_map			*map;
 	t_vars			*vars;
@@ -203,7 +207,7 @@ typedef struct s_info
 	t_flag			*flag;
 	t_ray			*ray;
 	t_texture		*texture;
-}					t_info;
+};
 
 typedef struct s_draw_wall
 {
@@ -296,12 +300,30 @@ void				player_move(t_info *info, int keycode);
 // ------------------------------------------------
 
 void				raycasting(t_info *info);
-void				draw_line(t_ray *ray, t_info *info, int x,
-						double wall_distance, bool side);
-void				my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
+void				clean_image(t_vars *vars);
+void				create_xpm_textures(t_texture *texture, t_info *info);
+void				destruct_raycasting(t_info *info);
+void				draw_color_floor_and_ceil(t_vars *vars,
+						unsigned int floor_col, unsigned int ceil_col);
+int					draw_wall(t_info *info);
+void				*exit_mlx_new_image(void *mlx);
+void				*exit_mlx_new_window(void *mlx);
+void				*exit_mlx_init(void);
+int					get_nearest_axis(t_ray *ray, t_info *info);
+void				init_nswe_dirction(char player_dir, t_vars *vars);
+int					key_action(int keycode, t_info *info);
+void				my_mlx_pixel_put_line(t_vars *vars, int x_axis, int y_axis[2],
 						unsigned int color);
-bool				calculate_nearest_axis(t_ray *ray, t_vars *vars,
-						t_info *info);
+int					mouse_action(int mousecode, t_info *info);
+void				put_texture_ceil(t_draw_background *draw, t_vars *vars,
+						int coord_screen[2], int cell[2]);
+void				put_texture_floor(t_draw_background *draw, t_vars *vars,
+						int coord_screen[2], int cell[2]);
+void				set_draw_texture_data(t_draw_texture *texture,
+						t_draw_wall *wall, t_ray *ray, t_vars *vars);
+void				set_draw_wall_data(t_draw_wall *wall,
+						t_ray *ray, t_info *info);
+void				try_draw_texture_floor_and_ceil(t_vars *vars);
 
 // ------------------------------------------------
 // WINDOW
