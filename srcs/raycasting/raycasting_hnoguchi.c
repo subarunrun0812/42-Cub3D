@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_hnoguchi.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 19:22:21 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/06 09:41:31 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -721,6 +721,7 @@ void	create_xpm_textures(t_texture *texture, t_info *info)
 		texture->we, &info->vars->texture_list[WEST_WALL]);
 }
 
+//TODO:北南、東西、で関数をまとめれそう
 void	set_north_player_direction(t_vars *vars)
 {
 	vars->x_direction = -1.0;
