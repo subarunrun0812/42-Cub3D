@@ -31,6 +31,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(FILE_READ_DIR)/mapdata_stradd.c\
           $(FILE_READ_DIR)/mapdata_utils.c\
           $(FILE_READ_DIR)/read_texture.c\
+          $(FILE_READ_DIR)/rgb_utils.c\
           $(FILE_READ_DIR)/utils.c\
           $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/central_map.c\

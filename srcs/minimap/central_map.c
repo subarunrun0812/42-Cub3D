@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 17:19:28 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:14:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,25 +99,18 @@ mapの縦横の大きさか描画スタート地点を決める
 */
 void	central_map(t_info *info)
 {
-	int x;
-	int y;
-	int start_x;
-	int start_y;
-	int end_x;
-	int end_y;
+	int	x;
+	int	y;
+	int	start_x;
+	int	start_y;
 
-	//描画開始地点を求める
-	start_x = (WIN_WIDTH / 2) - ((mapdata_maxwidth_length(info->map)
-			* BLOCK_SIZE) / 2);
+	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(info->map) * BLOCK_SIZE) / 2);
 	start_y = (WIN_HEIGHT / 2) - (((info->map->height) * BLOCK_SIZE) / 2);
-	end_y = info->map->height;
 	y = 0;
-
-	while (y < end_y)
+	while (y < info->map->height)
 	{
 		x = 0;
-		end_x = mapdata_width_length(info->map->map_data[y]);
-		while (x < end_x + 1)
+		while (x < mapdata_width_length(info->map->map_data[y]) + 1)
 		{
 			if (info->map->map_data[y][x] == ' ')
 				;
@@ -150,6 +143,5 @@ void	central_map(t_info *info)
 	}
 	draw_ray_player_direction(info, start_x, start_y);
 	draw_ray_player_fov(info, start_x, start_y);
-
 	return ;
 }

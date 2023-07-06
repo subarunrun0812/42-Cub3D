@@ -1,25 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   rgb_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/06 16:54:32 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:16:37 by susasaki         ###   ########.fr       */
+/*   Created: 2023/07/06 18:15:30 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/06 18:15:46 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-// 空白が続くまで単語を読み取る
-int	first_word_len(char **str)
+// rgbの引数が数値であるかチェックする
+int	check_num(char *num_str)
 {
 	int	i;
 
 	i = 0;
-	while ((*str)[i] != ' ' && ((*str)[i] != '\t') && ((*str)[i] != '\0')
-		&& ((*str)[i] != '\n'))
-		i++;
-	return (i);
+	while (num_str[i] != '\0')
+	{
+		if (('0' <= num_str[i] && num_str[i] <= '9') || (num_str[i] == '-'
+				|| num_str[i] != '+'))
+			i++;
+		else
+			return (-1);
+	}
+	return (0);
 }

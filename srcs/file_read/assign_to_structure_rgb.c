@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:16:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 16:59:20 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:14:40 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,23 +48,16 @@ static int	assign_rgb_value(char *num_str, t_texture *texture,
 
 	if (*num_str == '\0')
 	{
-		printf("\x1b[31mMissing argument\n\x1b[0m");
 		free(num_str);
 		return (-1);
 	}
 	if (check_num(num_str) == -1)
-	{
-		print_error("The rgb value is not numeric.");
 		rgb = 255;
-	}
 	else
 		rgb = ft_atoi(num_str);
 	free(num_str);
 	if (rgb < 0 || 255 < rgb)
-	{
-		printf("\x1b[31mOut of range rgb value\n\x1b[0m");
 		rgb = 255;
-	}
 	if (ft_strncmp(identifier, "floor", 6) == 0)
 		set_rgb_values(texture->f_rgb, rgb, index);
 	else if (ft_strncmp(identifier, "celling", 8) == 0)
@@ -112,9 +105,7 @@ void	parse_and_assign_rgb_values(char *path, char *identifier,
 		num_str = (char *)malloc(sizeof(char) * (first_word_len(&path) + 1));
 		j = 0;
 		while (path[i] != ',' && path[i] != '\0')
-		{
 			num_str[j++] = path[i++];
-		}
 		num_str[j] = '\0';
 		if (assign_rgb_value(num_str, texture, identifier, rgb_index) == 0)
 			rgb_index++;
