@@ -1,23 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   assign_to_structure_floor_celling.c                :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/30 16:49:35 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 16:49:06 by susasaki         ###   ########.fr       */
+/*   Created: 2023/07/06 16:54:32 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/06 17:01:01 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	assign_to_structure_floor(char **str, t_texture *texture)
+// 空白が続くまで単語を読み取る
+int	first_word_len(char **str)
 {
-	texture->f_tex = assign_to_structure(str, "floor", texture);
-}
+	int	i;
 
-void	assign_to_structure_celling(char **str, t_texture *texture)
-{
-	texture->c_tex = assign_to_structure(str, "celling", texture);
+	i = 0;
+	while ((*str)[i] != ' ' && ((*str)[i] != '\t') && ((*str)[i] != '\0')
+		&& ((*str)[i] != '\n'))
+		i++;
+	return (i);
 }

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 19:06:11 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/05 12:56:33 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:56:35 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ static void	xpm_filename_check(char *filename)
 	return ;
 }
 
-void init_rgb_values(t_rgb *rgb)
+void	init_rgb_values(t_rgb *rgb)
 {
-    rgb->red = -1;
-    rgb->green = -1;
-    rgb->blue = -1;
+	rgb->red = -1;
+	rgb->green = -1;
+	rgb->blue = -1;
 }
 
 // 壁のtexture、床天井の色をファイルから読み取り
@@ -47,7 +47,7 @@ char	*assign_to_structure(char **str, char *identifier, t_texture *texture)
 	i = 0;
 	while (**str == ' ' || **str == '\t')
 		(*str)++;
-	path = (char *)malloc(sizeof(char) * (double_pointer_word_len(str) + 1));
+	path = (char *)malloc(sizeof(char) * (first_word_len(str) + 1));
 	while (**str != ' ' && **str != '\t' && **str != '\0' && **str != '\n')
 	{
 		path[i] = **str;
@@ -56,16 +56,15 @@ char	*assign_to_structure(char **str, char *identifier, t_texture *texture)
 		(*str)++;
 	}
 	path[i] = '\0';
-	// RGBのカラーコードの場合
-	if (('0' <= *path && *path <= '9' )|| ((ft_strncmp(identifier, "floor", 6) == 0) && *path == '\0') || \
-		((ft_strncmp(identifier, "celling", 8) == 0) && *path == '\0'))
+	if (('0' <= *path && *path <= '9') || ((ft_strncmp(identifier, "floor",
+					6) == 0) && *path == '\0') || ((ft_strncmp(identifier,
+					"celling", 8) == 0) && *path == '\0'))
 	{
 		parse_and_assign_rgb_values(path, identifier, texture);
 		free(path);
-		path = NULL; // ポインタをNULLに設定
 		return (NULL);
 	}
-	else // テクスチャの.xpmの場合
+	else
 	{
 		xpm_filename_check(path);
 		if (ft_strncmp(identifier, "floor", 6) == 0)

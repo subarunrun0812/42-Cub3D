@@ -279,7 +279,7 @@ void				assign_to_structure_no(char **str, t_texture *texture);
 void				assign_to_structure_so(char **str, t_texture *texture);
 void				assign_to_structure_we(char **str, t_texture *texture);
 void				assign_to_structure_ea(char **str, t_texture *texture);
-int					double_pointer_word_len(char **str);
+int					first_word_len(char **str);
 
 // ------------------------------------------------
 // PLAYER
