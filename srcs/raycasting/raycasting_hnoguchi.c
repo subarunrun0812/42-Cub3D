@@ -6,12 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 11:26:46 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/06 14:39:36 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+// TODO: destruct_raycasting.c
 void	destroy_window(t_vars *vars)
 {
 	if (vars->mlx != NULL && vars->win != NULL)
@@ -20,6 +21,7 @@ void	destroy_window(t_vars *vars)
 	}
 }
 
+// TODO: destruct_raycasting.c
 void	destroy_textures(t_vars *vars)
 {
 	int	i;
@@ -39,14 +41,7 @@ void	destroy_textures(t_vars *vars)
 	}
 }
 
-// void	destroy_display(t_vars *vars)
-// {
-// 	if (vars->mlx != NULL)
-// 	{
-// 		mlx_destroy_display(vars->mlx);
-// 	}
-// }
-
+// TODO: destruct_raycasting.c
 void	destruct_raycasting(t_info *info)
 {
 	destroy_window(info->vars);
@@ -81,6 +76,7 @@ static bool	is_hit_wall(char **map, t_ray *ray)
 	return (false);
 }
 
+// TODO: get_nearest_axis.c
 static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->x_direction < 0)
@@ -94,6 +90,7 @@ static int	calculate_step_x_direction(t_ray *ray, t_vars *vars)
 	return (1);
 }
 
+// TODO: get_nearest_axis.c
 static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 {
 	if (ray->y_direction < 0)
@@ -107,6 +104,7 @@ static int	calculate_step_y_direction(t_ray *ray, t_vars *vars)
 	return (1);
 }
 
+// TODO: get_nearest_axis.c
 // perform DDA
 int	get_nearest_axis(t_ray *ray, t_info *info)
 {
@@ -136,6 +134,7 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 	return (axis);
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 void	set_draw_background(t_draw_background *draw, t_vars *vars,
 		int y_coordinate, float vertical_position_camera)
 {
@@ -158,6 +157,7 @@ void	set_draw_background(t_draw_background *draw, t_vars *vars,
 		* ray_direction_left[Y_AXIS];
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 int	decide_texture_floor(int cell[2])
 {
 	int	checker_board_pattern;
@@ -170,6 +170,7 @@ int	decide_texture_floor(int cell[2])
 	return (FLOOR_2);
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 void	put_texture_floor(t_draw_background *draw, t_vars *vars,
 		int coordinate_screen[2], int cell[2])
 {
@@ -194,6 +195,7 @@ void	put_texture_floor(t_draw_background *draw, t_vars *vars,
 		+ coordinate_screen[X_AXIS]] = color;
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 		int coordinate_screen[2], int cell[2])
 {
@@ -215,30 +217,7 @@ void	put_texture_ceiling(t_draw_background *draw, t_vars *vars,
 		+ coordinate_screen[X_AXIS]] = color;
 }
 
-unsigned int	create_rgb(int r, int g, int b)
-{
-	unsigned int	rgb;
-
-	rgb = 0;
-	printf("r : [%d]\ng : [%d]\nb : [%d]\n", r, g, b);
-	if (r < 0 || 255 < r)
-	{
-		r = 0;
-	}
-	if (g < 0 || 255 < g)
-	{
-		g = 0;
-	}
-	if (b < 0 || 255 < b)
-	{
-		b = 0;
-	}
-	rgb |= (r & 0xFF) << 16;
-	rgb |= (g & 0xFF) << 8;
-	rgb |= (b & 0xFF);
-	return (rgb);
-}
-
+// TODO: try_draw_texture_floor_and_ceiling.c
 int	draw_texture_floor(t_vars *vars)
 {
 	int					coordinate_screen[2];
@@ -265,6 +244,7 @@ int	draw_texture_floor(t_vars *vars)
 	return (0);
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 int	draw_texture_ceiling(t_vars *vars)
 {
 	int					coordinate_screen[2];
@@ -291,6 +271,7 @@ int	draw_texture_ceiling(t_vars *vars)
 	return (0);
 }
 
+// TODO: try_draw_texture_floor_and_ceiling.c
 void	try_draw_texture_floor_and_ceiling(t_vars *vars)
 {
 	if (vars->texture_list[FLOOR_1].data.img != NULL)
@@ -303,6 +284,7 @@ void	try_draw_texture_floor_and_ceiling(t_vars *vars)
 	}
 }
 
+// TODO: draw_color_floor_and_ceiling.c
 void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color
 		, unsigned int ceiling_color)
 {
@@ -322,7 +304,7 @@ void	draw_color_floor_and_ceiling(t_vars *vars, unsigned int floor_color
 		x_axis += 1;
 	}
 }
-
+// TODO: draw_wall.c
 void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 {
 	double	x_current_camera;
@@ -350,6 +332,7 @@ void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 		ray->y_delta_distance = ABS(1 / ray->y_direction);
 }
 
+// TODO: draw_wall.c
 double	get_perpendicular_wall_distance(t_ray *ray, int side)
 {
 	if (side == X_AXIS)
@@ -359,6 +342,7 @@ double	get_perpendicular_wall_distance(t_ray *ray, int side)
 	return (ray->y_side_distance - ray->y_delta_distance);
 }
 
+// TODO: set_draw_texture_data.c
 int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 {
 	if (side == Y_AXIS)
@@ -376,6 +360,7 @@ int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 	return (SOUTH_WALL);
 }
 
+// TODO: draw_wall.c
 int	get_draw_start_y_coordinate(int line_height)
 {
 	int	start;
@@ -388,6 +373,7 @@ int	get_draw_start_y_coordinate(int line_height)
 	return (start);
 }
 
+// TODO: draw_wall.c
 int	get_draw_end_y_coordinate(int line_height)
 {
 	int	end;
@@ -400,6 +386,7 @@ int	get_draw_end_y_coordinate(int line_height)
 	return (end);
 }
 
+// TODO: set_draw_texture_data.c
 double	get_hit_wall_x(t_draw_wall *wall, t_ray *ray, t_vars *vars)
 {
 	double	wall_x;
@@ -419,6 +406,7 @@ double	get_hit_wall_x(t_draw_wall *wall, t_ray *ray, t_vars *vars)
 	return (wall_x);
 }
 
+// TODO: set_draw_texture_data.c
 int	get_x_coordinate_texture(t_draw_texture *texture, t_draw_wall *wall,
 		t_ray *ray, t_vars *vars)
 {
@@ -439,6 +427,7 @@ int	get_x_coordinate_texture(t_draw_texture *texture, t_draw_wall *wall,
 	return (x_coordinate_texture);
 }
 
+// TODO: draw_wall.c
 void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 {
 	wall->side = get_nearest_axis(ray, info);
@@ -450,6 +439,7 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 	wall->end = get_draw_end_y_coordinate(wall->line_height);
 }
 
+// TODO: set_draw_texture_data.c
 void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
 		t_ray *ray, t_vars *vars)
 {
@@ -462,6 +452,7 @@ void	set_draw_texture_data(t_draw_texture *texture, t_draw_wall *wall,
 			+ (wall->line_height / 2)) * texture->step;
 }
 
+// TODO: draw_wall.c
 void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
 		int x_coordinate_screen)
 {
@@ -490,6 +481,7 @@ void	put_texture(t_draw_texture *texture, t_draw_wall *wall, t_vars *vars,
 	}
 }
 
+// TODO: draw_wall.c
 int	draw_wall(t_info *info)
 {
 	int				x_coordinate_screen;
@@ -555,6 +547,7 @@ void	move_forward(char **map, t_vars *vars)
 
 // printf("\x1b[33mCrashing into a wall!!!!!\x1b[0m\n");
 
+// TODO: key_action.c
 void	move_backward(char **map, t_vars *vars)
 {
 	int		one_backward_x_pos_vec;
@@ -577,6 +570,7 @@ void	move_backward(char **map, t_vars *vars)
 	}
 }
 
+// TODO: key_action.c
 void	rotate_right_camera(t_vars *vars)
 {
 	double	x_old_direction;
@@ -594,6 +588,7 @@ void	rotate_right_camera(t_vars *vars)
 		+ vars->y_camera_plane * cos(-MOVE_DISTANCE);
 }
 
+// TODO: key_action.c
 void	rotate_left_camera(t_vars *vars)
 {
 	double	x_old_direction;
@@ -611,6 +606,7 @@ void	rotate_left_camera(t_vars *vars)
 		+ vars->y_camera_plane * cos(MOVE_DISTANCE);
 }
 
+// TODO: key_action.c
 int	key_action(int keycode, t_info *info)
 {
 	if (keycode == W_KEY || keycode == UP_KEY)
@@ -633,7 +629,6 @@ int	key_action(int keycode, t_info *info)
 		info->vars->data->img, 0, 0);
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	printf("key_code %d", keycode);
 	return (0);
 }
 
@@ -665,6 +660,7 @@ void	exit_create_texture(t_info *info,
 	}
 }
 
+// TODO: create_xpm_textures.c
 void	create_texture_floor(t_info *info,
 		char *path, t_texture_data *texture_list)
 {
@@ -681,6 +677,7 @@ void	create_texture_floor(t_info *info,
 		"./srcs/raycasting/xpm/bluestone.xpm", &texture_list[FLOOR_2]);
 }
 
+// TODO: create_xpm_textures.c
 void	create_texture_ceiling(t_info *info,
 		char *path, t_texture_data *texture)
 {
@@ -693,6 +690,7 @@ void	create_texture_ceiling(t_info *info,
 	exit_create_texture(info, path, texture);
 }
 
+// TODO: create_xpm_textures.c
 void	initialize_texture_list(t_texture_data *texture_list)
 {
 	int	i;
@@ -705,6 +703,7 @@ void	initialize_texture_list(t_texture_data *texture_list)
 	}
 }
 
+// TODO: create_xpm_textures.c
 void	create_xpm_textures(t_texture *texture, t_info *info)
 {
 	initialize_texture_list(info->vars->texture_list);
@@ -721,6 +720,7 @@ void	create_xpm_textures(t_texture *texture, t_info *info)
 		texture->we, &info->vars->texture_list[WEST_WALL]);
 }
 
+// TODO: init_nswe_dirction.c
 void	set_north_player_direction(t_vars *vars)
 {
 	vars->x_direction = -1.0;
@@ -729,6 +729,7 @@ void	set_north_player_direction(t_vars *vars)
 	vars->y_camera_plane = 0.66;
 }
 
+// TODO: init_nswe_dirction.c
 void	set_south_player_direction(t_vars *vars)
 {
 	vars->x_direction = 1.0;
@@ -737,6 +738,7 @@ void	set_south_player_direction(t_vars *vars)
 	vars->y_camera_plane = -0.66;
 }
 
+// TODO: init_nswe_dirction.c
 void	set_east_player_direction(t_vars *vars)
 {
 	vars->x_direction = 0.0;
@@ -745,6 +747,7 @@ void	set_east_player_direction(t_vars *vars)
 	vars->y_camera_plane = 0.0;
 }
 
+// TODO: init_nswe_dirction.c
 void	set_west_player_direction(t_vars *vars)
 {
 	vars->x_direction = 0.0;
@@ -753,6 +756,7 @@ void	set_west_player_direction(t_vars *vars)
 	vars->y_camera_plane = 0.0;
 }
 
+// TODO: init_nswe_dirction.c
 void	init_nswe_dirction(char player_direction, t_vars *vars)
 {
 	if (player_direction == NORTH)
@@ -773,6 +777,7 @@ void	init_nswe_dirction(char player_direction, t_vars *vars)
 	}
 }
 
+// TODO: exit_mlx.c
 void	*exit_mlx_init(void)
 {
 	void	*mlx;
@@ -785,6 +790,7 @@ void	*exit_mlx_init(void)
 	return (mlx);
 }
 
+// TODO: exit_mlx.c
 void	*exit_mlx_new_window(void *mlx)
 {
 	void	*window;
@@ -797,6 +803,7 @@ void	*exit_mlx_new_window(void *mlx)
 	return (window);
 }
 
+// TODO: exit_mlx.c
 void	*exit_mlx_new_image(void *mlx)
 {
 	void	*image;
@@ -809,6 +816,31 @@ void	*exit_mlx_new_image(void *mlx)
 	return (image);
 }
 
+// TODO: initialize_vars.c
+unsigned int	create_rgb(int r, int g, int b)
+{
+	unsigned int	rgb;
+
+	rgb = 0;
+	if (r < 0 || 255 < r)
+	{
+		r = 0;
+	}
+	if (g < 0 || 255 < g)
+	{
+		g = 0;
+	}
+	if (b < 0 || 255 < b)
+	{
+		b = 0;
+	}
+	rgb |= (r & 0xFF) << 16;
+	rgb |= (g & 0xFF) << 8;
+	rgb |= (b & 0xFF);
+	return (rgb);
+}
+
+// TODO: initialize_vars.c
 void	initialize_vars(t_info *info)
 {
 	info->vars->mlx = exit_mlx_init();
@@ -838,20 +870,36 @@ void	initialize_vars(t_info *info)
 	draw_wall(info);
 }
 
-// int	close_window(t_info *info)
-// {
-// 	mlx_loop_end(info->vars->mlx);
-// 	return (0);
-// }
+// TODO: mouse_action.c
+int	mouse_action(int keycode, t_info *info)
+{
+	if (keycode == L_CLICK)
+		rotate_left_camera(info->vars);
+	else if (keycode == R_CLICK)
+		rotate_right_camera(info->vars);
+	else
+		return (-1);
+	draw_color_floor_and_ceiling(info->vars,
+		info->vars->floor_color, info->vars->ceiling_color);
+	try_draw_texture_floor_and_ceiling(info->vars);
+	draw_wall(info);
+	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
+		info->vars->data->img, 0, 0);
+	updata_pos_map(info->vars, info, keycode);
+	minimap(info, info->data);
+	return (0);
+}
 
+// TODO: raycasting.c
 void	raycasting(t_info *info)
 {
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 		info->vars->data->img, 0, 0);
 	minimap(info, info->data);
-	mlx_key_hook(info->vars->win, key_action, info);
 	mlx_hook(info->vars->win, ON_DESTROY, 1L<<ON_DESTROY, close_window, info);
+	mlx_key_hook(info->vars->win, key_action, info);
+	mlx_mouse_hook(info->vars->win, mouse_action, &info);
 	mlx_loop(info->vars->mlx);
 	destruct_raycasting(info);
 }
