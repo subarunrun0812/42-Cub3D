@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 14:53:02 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:02:32 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,8 +80,8 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'W')
 			{
 				draw_one_block(info, j - start_j, i - start_i, BLUE);
-				info->map->player_x = j;
-				info->map->player_y = i;
+				info->map->x_player = j;
+				info->map->y_player = i;
 			}
 			else
 				draw_one_block(info, j - start_j, i - start_i, MAP_RED);

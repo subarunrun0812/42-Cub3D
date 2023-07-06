@@ -115,8 +115,8 @@ typedef struct s_map
 {
 	// map_data[y][x]
 	char			**map_data;
-	int				player_x;
-	int				player_y;
+	int				x_player;
+	int				y_player;
 	int				height;
 	int				width;
 }					t_map;
@@ -188,12 +188,12 @@ typedef struct s_ray
 	int				x_map;
 	int				y_map;
 	// rayが座標上の整数値に当たるまでのx,y距離
-	double			x_side_distance;
-	double			y_side_distance;
+	double			x_side_dist;
+	double			y_side_dist;
 	// rayが次のx,y方向のブロックの境界に到達するたびに
 	// side_distanceに加えるべき距離を表します。
-	double			x_delta_distance;
-	double			y_delta_distance;
+	double			x_delta_dist;
+	double			y_delta_dist;
 }					t_ray;
 
 typedef struct s_info
@@ -210,39 +210,40 @@ typedef struct s_draw_wall
 {
 	// rayが衝突した軸がx軸かy軸か判定する。
 	int		side;
-	// playerの現在位置からそのrayが衝突した壁までの距離
-	double	perpendicular_wall_distance;
+	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
+	double	wall_dist;
 	// 描画する壁の高さ
 	int		line_height;
 	// 壁の描画を開始する画面のy座標
-	int		start;
+	int		start_y;
 	// 壁の描画を終了する画面のy座標
-	int		end;
+	int		end_y;
 }	t_draw_wall;
 
 typedef struct s_draw_texture
 {
 	// 描画する壁のテクスチャ
-	int		list_number;
+	int		index;
 	// 描画する壁（テクスチャ）のx軸上の位置
 	double	wall_x;
 	// 描画する壁のx座標
-	int		x_coordinate;
+	int		x_coord;
 	// 描画する壁の間隔
-	double	step;
+	double	span;
 	// 現在描画する壁の位置
-	double	position;
+	double	current_pos;
 }	t_draw_texture;
 
+
 typedef struct s_draw_background {
-	// 描画するテクスチャの間隔(x軸)
-	float	x_move_amount;
-	// 描画するテクスチャの間隔(y軸)
-	float	y_move_amount;
+	// 描画するテクスチャの列の間隔(x軸)
+	float	x_span;
+	// 描画するテクスチャの行の間隔(y軸)
+	float	y_span;
 	// 描画するテクスチャのx座標
-	float	x_coordinate;
+	float	x_coord;
 	// 描画するテクスチャのy座標
-	float	y_coordinate;
+	float	y_coord;
 }	t_draw_background;
 
 // init

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   coordinates.c                                      :+:      :+:    :+:   */
+/*   player_coordinates.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/02 17:44:59 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:02:38 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ void init_player_coordinate(t_map *map,t_info *info)
             if (map->map_data[_y][_x] == 'N' || map->map_data[_y][_x] == 'S'
             || map->map_data[_y][_x] == 'W' || map->map_data[_y][_x] == 'E')
             {
-				info->map->player_y = _y;
-                info->map->player_x = _x;
+				info->map->y_player = _y;
+                info->map->x_player = _x;
                 return ;
             }
             _x++;

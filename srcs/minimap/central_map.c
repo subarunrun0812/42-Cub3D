@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 14:58:11 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:02:16 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,9 @@ void draw_ray_player_fov(t_info *info, int start_x, int start_y)
 				+ (info->vars->y_cam_plane * -1)));
 		middle_ray_y = (ray_len * (info->vars->x_dir
 				+ (info->vars->x_cam_plane * -1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->data,start_x + (info->map->x_player * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x\
-		,start_y + (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
+		,start_y + (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
 		ray_len++;
 	}
 	ray_len = 0;
@@ -63,9 +63,9 @@ void draw_ray_player_fov(t_info *info, int start_x, int start_y)
 				+ (info->vars->y_cam_plane * 1)));
 		middle_ray_y = (ray_len * (info->vars->x_dir
 				+ (info->vars->x_cam_plane * 1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->data,start_x + (info->map->x_player * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x\
-		,start_y + (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
+		,start_y + (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
 		ray_len++;
 	}
 }
@@ -83,9 +83,9 @@ void	draw_ray_player_direction(t_info *info, int start_x, int start_y)
 	{
 		middle_ray_x = (ray_len * info->vars->y_dir);
 		middle_ray_y = (ray_len * info->vars->x_dir);
-		my_mlx_pixel_put(info->data, start_x + (info->map->player_x * BLOCK_SIZE
+		my_mlx_pixel_put(info->data, start_x + (info->map->x_player * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
-			+ (info->map->player_y * BLOCK_SIZE + (BLOCK_SIZE / 2))
+			+ (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))
 			+ middle_ray_y, BLACK);
 		ray_len++;
 	}
@@ -140,8 +140,8 @@ void	central_map(t_info *info)
 			{
 				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
 					start_y + (y * BLOCK_SIZE), BLUE);
-				info->map->player_x = x;
-				info->map->player_y = y;
+				info->map->x_player = x;
+				info->map->y_player = y;
 			}
 			else
 				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
