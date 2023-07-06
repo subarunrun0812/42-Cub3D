@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/05 19:22:21 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/06 11:26:46 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -838,11 +838,11 @@ void	initialize_vars(t_info *info)
 	draw_wall(info);
 }
 
-int	close_window(t_info *info)
-{
-	mlx_loop_end(info->vars->mlx);
-	return (0);
-}
+// int	close_window(t_info *info)
+// {
+// 	mlx_loop_end(info->vars->mlx);
+// 	return (0);
+// }
 
 void	raycasting(t_info *info)
 {
