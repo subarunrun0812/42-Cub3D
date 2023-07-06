@@ -14,18 +14,25 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
-          $(FILE_READ_DIR)/assign_to_structure.c\
-          $(FILE_READ_DIR)/assign_to_structure_floor_celling.c\
-          $(FILE_READ_DIR)/assign_to_structure_nswe.c\
           $(FILE_READ_DIR)/assign_to_structure_rgb.c\
+          $(FILE_READ_DIR)/assign_to_structure.c\
           $(FILE_READ_DIR)/read_file.c\
-          $(FILE_READ_DIR)/get_data_file.c\
-          $(FILE_READ_DIR)/check_map_wall.c\
           $(FILE_READ_DIR)/check_only_one_nswe.c\
+          $(FILE_READ_DIR)/get_data_file.c\
+          $(FILE_READ_DIR)/handle_texture.c\
+          $(FILE_READ_DIR)/mapdata_check.c\
+          $(FILE_READ_DIR)/mapdata_stradd.c\
+          $(FILE_READ_DIR)/mapdata_utils.c\
           $(FILE_READ_DIR)/read_texture.c\
-          $(MINIMAP_DIR)/minimap.c\
+          $(FILE_READ_DIR)/rgb_utils.c\
+          $(FILE_READ_DIR)/utils.c\
+          $(MINIMAP_DIR)/central_map_fov.c\
           $(MINIMAP_DIR)/central_map.c\
+          $(MINIMAP_DIR)/map_utils.c\
+          $(MINIMAP_DIR)/corner_map.c\
+          $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/player_coordinates.c\
+
           $(MINIMAP_DIR)/updata_pos_map.c\
 		  $(RAYCASTING_DIR)/clean_image.c\
 		  $(RAYCASTING_DIR)/draw_wall.c\

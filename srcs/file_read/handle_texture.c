@@ -1,41 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   check_only_one_nswe.c                              :+:      :+:    :+:   */
+/*   handle_texture.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/06/24 15:04:16 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 17:31:00 by susasaki         ###   ########.fr       */
+/*   Created: 2023/07/06 17:45:16 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/06 17:56:50 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-void	check_only_one_nswe(t_map *map)
+int	check_texture_section(char *str)
 {
 	int	i;
-	int	j;
-	int	count;
 
 	i = 0;
-	count = 0;
-	while (i < map->height)
-	{
-		j = 0;
-		while (map->map_data[i][j])
-		{
-			if (map->map_data[i][j] == 'N' || map->map_data[i][j] == 'S'
-				|| map->map_data[i][j] == 'W' || map->map_data[i][j] == 'E')
-				count++;
-			j++;
-		}
+	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\0')
 		i++;
-	}
-	if (count > 1 || count == 0)
+	if ('0' <= str[i] && str[i] <= '9')
+		return (-1);
+	return (0);
+}
+
+void	handle_texture_part(int fd, char **str, t_info *info, int *count)
+{
+	if (check_texture_section(*str) == 0)
 	{
-		print_error("Incorrect number of NSWE");
-		exit(1);
+		*count += read_texture(*str, info->texture);
+		free(*str);
+		*str = get_next_line(fd);
 	}
-	return ;
+	else if (*count < 6)
+	{
+		free_texture(info);
+		print_error("texture num");
+	}
 }

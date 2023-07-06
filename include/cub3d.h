@@ -26,6 +26,7 @@
 //			COLODR
 //------------------------------
 
+# define NO_COLOR 0
 # define WHITE 0x00FFFFFF
 # define BLACK 0x00000000
 # define GREEN 0x00008000
@@ -258,32 +259,45 @@ void				init_second(t_info *info, t_flag *flag, t_texture *texture);
 // ------------------------------------------------
 
 // MAP
+
 void				read_file(char *path, t_info *info);
 void				get_data_file(int fd, t_info *info);
 void				check_map_wall(t_info *info);
 void				check_only_one_nswe(t_map *map);
-int					minimap(t_info *info, t_data *data);
-void				central_map(t_info *info);
-void				range_to_display_with_player(t_info *info, t_data *data);
-void				draw_one_block(t_info *info, int draw_x, int draw_y,
-						int color);
 int					mapdata_width_length(char *width);
-int					mapdata_maxwidth_length(t_map *map);
+int					maxwidth_length(t_map *map);
 void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
+char				**map_str_add(char **array, char *new);
 
 // FILE
+int					check_num(char *num_str);
+void				init_rgb_values(t_rgb *rgb);
+int					check_num(char *num_str);
+int					check_texture_section(char *str);
+void				handle_texture_part(int fd, char **str, t_info *info,
+						int *count);
 int					read_texture(char *str, t_texture *texture);
 char				*assign_to_structure(char **str, char *identifier,
 						t_texture *texture);
 void				parse_and_assign_rgb_values(char *path, char *identifier,
 						t_texture *texture);
-void				assign_to_structure_floor(char **str, t_texture *texture);
-void				assign_to_structure_celling(char **str, t_texture *texture);
-void				assign_to_structure_no(char **str, t_texture *texture);
-void				assign_to_structure_so(char **str, t_texture *texture);
-void				assign_to_structure_we(char **str, t_texture *texture);
-void				assign_to_structure_ea(char **str, t_texture *texture);
-int					double_pointer_word_len(char **str);
+int					first_word_len(char **str);
+int					mapdata_width_length(char *width);
+int					skip_new_line(char **map_data);
+int					skip_space_width(char **map_data, int _y);
+
+// ------------------------------------------------
+// MINIMAP
+// ------------------------------------------------
+
+int					minimap(t_info *info, t_data *data);
+void				central_draw_one_block(t_info *info, int draw_x, int draw_y,
+						int color);
+void				draw_ray_player_fov(t_info *info, int start_x, int start_y);
+void				central_map(t_info *info);
+void				corner_map(t_info *info, t_data *data);
+void				corner_draw_one_block(t_info *info, int draw_x, int draw_y,
+						int color);
 
 // ------------------------------------------------
 // PLAYER
