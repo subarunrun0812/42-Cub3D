@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/30 19:06:11 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:01:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:38:38 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,25 @@ static void	xpm_filename_check(char *filename)
 	return ;
 }
 
-void	init_rgb_values(t_rgb *rgb)
+void	process_texture_path(char *path, char *identifier, t_texture *texture)
 {
-	rgb->red = -1;
-	rgb->green = -1;
-	rgb->blue = -1;
+	xpm_filename_check(path);
+	if (ft_strncmp(identifier, "floor", 6) == 0)
+		init_rgb_values(texture->f_rgb);
+	else if (ft_strncmp(identifier, "celling", 8) == 0)
+		init_rgb_values(texture->c_rgb);
+	if (open(path, O_RDONLY) == -1)
+	{
+		perror("open() texture path");
+		print_error("open");
+	}
+}
+
+char	*process_rgb_values(char *path, char *identifier, t_texture *texture)
+{
+	parse_and_assign_rgb_values(path, identifier, texture);
+	free(path);
+	return (NULL);
 }
 
 // 壁のtexture、床天井の色をファイルから読み取り
@@ -59,23 +73,8 @@ char	*assign_to_structure(char **str, char *identifier, t_texture *texture)
 	if (('0' <= *path && *path <= '9') || ((ft_strncmp(identifier, "floor",
 					6) == 0) && *path == '\0') || ((ft_strncmp(identifier,
 					"celling", 8) == 0) && *path == '\0'))
-	{
-		parse_and_assign_rgb_values(path, identifier, texture);
-		free(path);
-		return (NULL);
-	}
+		return (process_rgb_values(path, identifier, texture));
 	else
-	{
-		xpm_filename_check(path);
-		if (ft_strncmp(identifier, "floor", 6) == 0)
-			init_rgb_values(texture->f_rgb);
-		else if (ft_strncmp(identifier, "celling", 8) == 0)
-			init_rgb_values(texture->c_rgb);
-		if (open(path, O_RDONLY) == -1)
-		{
-			perror("open() texture path");
-			print_error("open");
-		}
-	}
+		process_texture_path(path, identifier, texture);
 	return (path);
 }

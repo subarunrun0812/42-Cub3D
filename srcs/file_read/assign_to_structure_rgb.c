@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/01 15:16:02 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:14:40 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:40:52 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,6 @@ static void	set_rgb_values(t_rgb *rgb_struct, int rgb, int index)
 		rgb_struct->green = rgb;
 	else if (index == 2)
 		rgb_struct->blue = rgb;
-}
-
-// rgbの引数が数値であるかチェックする
-static int	check_num(char *num_str)
-{
-	int	i;
-
-	i = 0;
-	while (num_str[i] != '\0')
-	{
-		if (('0' <= num_str[i] && num_str[i] <= '9') || (num_str[i] == '-'
-				|| num_str[i] != '+'))
-			i++;
-		else
-			return (-1);
-	}
-	return (0);
 }
 
 // RGB値を取得し、適切な場所に設定する関数

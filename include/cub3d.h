@@ -270,6 +270,8 @@ char				**map_str_add(char **array, char *new);
 
 // FILE
 int					check_num(char *num_str);
+void				init_rgb_values(t_rgb *rgb);
+int					check_num(char *num_str);
 int					check_texture_section(char *str);
 void				handle_texture_part(int fd, char **str, t_info *info,
 						int *count);

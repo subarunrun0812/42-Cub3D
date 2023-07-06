@@ -21,8 +21,8 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
-          $(FILE_READ_DIR)/assign_to_structure.c\
           $(FILE_READ_DIR)/assign_to_structure_rgb.c\
+          $(FILE_READ_DIR)/assign_to_structure.c\
           $(FILE_READ_DIR)/read_file.c\
           $(FILE_READ_DIR)/check_only_one_nswe.c\
           $(FILE_READ_DIR)/get_data_file.c\
