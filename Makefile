@@ -30,6 +30,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(FILE_READ_DIR)/check_map_wall.c\
           $(FILE_READ_DIR)/check_only_one_nswe.c\
           $(FILE_READ_DIR)/read_texture.c\
+          $(FILE_READ_DIR)/utils.c\
           $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/central_map.c\
           $(MINIMAP_DIR)/player_coordinates.c\
