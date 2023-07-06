@@ -26,7 +26,9 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(FILE_READ_DIR)/read_file.c\
           $(FILE_READ_DIR)/check_only_one_nswe.c\
           $(FILE_READ_DIR)/get_data_file.c\
+          $(FILE_READ_DIR)/handle_texture.c\
           $(FILE_READ_DIR)/mapdata_check.c\
+          $(FILE_READ_DIR)/mapdata_stradd.c\
           $(FILE_READ_DIR)/mapdata_utils.c\
           $(FILE_READ_DIR)/read_texture.c\
           $(FILE_READ_DIR)/utils.c\

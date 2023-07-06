@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 17:19:09 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:01:44 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,69 +27,6 @@ static int	non_specific_chara(char *str)
 	return (0);
 }
 
-//新しい行を追加する
-static char	*check_n(char *str)
-{
-	int		i;
-	char	*res;
-
-	if (ft_strchr(str, '\n'))
-		return (str);
-	res = (char *)malloc(sizeof(char) * ft_strlen(str) + 2);
-	if (!res)
-		return (NULL);
-	i = 0;
-	while (str[i] != '\n' && str[i] != '\0')
-	{
-		res[i] = str[i];
-		i++;
-	}
-	res[i++] = '\n';
-	res[i] = '\0';
-	free(str);
-	return (res);
-}
-
-// 2次元の文字列配列に新しい行を追加する
-static char	**map_str_add(char **array, char *new)
-{
-	char	**res;
-	int		i;
-	int		vertical;
-
-	vertical = 0;
-	while (array && array[vertical] != NULL)
-		vertical++;
-	res = (char **)malloc(sizeof(char *) * (vertical + 2));
-	if (!res)
-		print_error("map");
-	i = 0;
-	while (i < vertical)
-	{
-		res[i] = array[i];
-		i++;
-	}
-	new = check_n(new);
-	if (!new)
-		print_error("check_n()");
-	res[i++] = new;
-	res[i] = NULL;
-	free(array);
-	return (res);
-}
-
-int	check_texture_section(char *str)
-{
-	int	i;
-
-	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\0')
-		i++;
-	if ('0' <= str[i] && str[i] <= '9')
-		return (-1);
-	return (0);
-}
-
 void	get_data_file(int fd, t_info *info)
 {
 	char	*str;
@@ -99,9 +36,7 @@ void	get_data_file(int fd, t_info *info)
 
 	str = get_next_line(fd);
 	if (!str)
-	{
 		print_error("get_next_line");
-	}
 	flag = 0;
 	i = 0;
 	count = 0;
@@ -122,10 +57,7 @@ void	get_data_file(int fd, t_info *info)
 		else
 		{
 			if (non_specific_chara(str) == 1)
-			{
-				printf("\x1b[31mstr = %s\x1b[0m\n", str);
 				flag = 1;
-			}
 			info->map->map_data = map_str_add(info->map->map_data, str);
 			str = get_next_line(fd);
 			i++;
@@ -138,18 +70,3 @@ void	get_data_file(int fd, t_info *info)
 		}
 	}
 }
-
-// printf("\x1b[32m");
-// printf("texture->no=%s\n",info->texture->no);
-// printf("texture->so=%s\n",info->texture->so);
-// printf("texture->we=%s\n",info->texture->we);
-// printf("texture->ea=%s\n",info->texture->ea);
-// printf("texture->f_tex=%s\n",info->texture->f_tex);
-// printf("texture->c_tex=%s\n",info->texture->c_tex);
-// printf("texture->floor->red=%d\n",info->texture->f_rgb->red);
-// printf("texture->floor->green=%d\n",info->texture->f_rgb->green);
-// printf("texture->floor->blue=%d\n",info->texture->f_rgb->blue);
-// printf("texture->celling->red=%d\n",info->texture->c_rgb->red);
-// printf("texture->celling->green=%d\n",info->texture->c_rgb->green);
-// printf("texture->celling->blue=%d\n",info->texture->c_rgb->blue);
-// printf("\x1b[0m\n");

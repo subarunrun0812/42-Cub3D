@@ -266,8 +266,12 @@ void				draw_one_block(t_info *info, int draw_x, int draw_y,
 int					mapdata_width_length(char *width);
 int					mapdata_maxwidth_length(t_map *map);
 void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
+char				**map_str_add(char **array, char *new);
 
 // FILE
+int					check_texture_section(char *str);
+void				handle_texture_part(int fd, char **str, t_info *info,
+						int *count);
 int					read_texture(char *str, t_texture *texture);
 char				*assign_to_structure(char **str, char *identifier,
 						t_texture *texture);
