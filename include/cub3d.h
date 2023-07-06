@@ -55,11 +55,9 @@
 # define RIGHT_KEY 124
 # define DOWN_KEY 125
 # define UP_KEY 126
-//mouse
+// mouse
 # define L_CLICK 1
 # define R_CLICK 2
-
-
 
 //------------------------------
 //			RAYCASTING
@@ -72,7 +70,7 @@
 # define Y 1
 
 //キーを押した時の移動距離
-# define MOVE_DISTANCE 0.5
+# define MOVE_DIST 0.5
 // aの絶対値を返す関数
 # define ABS(a) ((a) < 0 ? -(a) : (a))
 
@@ -83,13 +81,13 @@
 # define TEXTURE_WIDTH 64
 # define TEXTURE_HEIGHT 64
 # define TEXTURE_LIST_SIZE 10
-#define FLOOR_1 0
-#define FLOOR_2 1
-#define CEILING 2
-#define SOUTH_WALL 3
-#define NORTH_WALL 4
-#define EAST_WALL 5
-#define WEST_WALL 6
+# define FLOOR_1 0
+# define FLOOR_2 1
+# define CEILING 2
+# define SOUTH_WALL 3
+# define NORTH_WALL 4
+# define EAST_WALL 5
+# define WEST_WALL 6
 
 //------------------------------
 //			MINIMAP
@@ -106,26 +104,20 @@
 # define FALSE 1
 # define CORNER 1
 # define CENTRAL -1
-# define NORTH 'N' //北
-# define SOUTH 'S' //南
-# define EAST 'E'  //東
-# define WEST 'W'  //西
+# define NORTH 'N'
+# define SOUTH 'S'
+# define EAST 'E'
+# define WEST 'W'
 
 typedef struct s_map
 {
 	// map_data[y][x]
 	char			**map_data;
-	int				player_x;
-	int				player_y;
+	int				x_player;
+	int				y_player;
 	int				height;
 	int				width;
 }					t_map;
-
-typedef struct s_plane
-{
-	double			x;
-	double			y;
-}					t_plane;
 
 typedef struct s_data
 {
@@ -134,13 +126,14 @@ typedef struct s_data
 	int				bits_per_pixel;
 	int				line_length;
 	int				endian;
-}	t_data;
+}					t_data;
 
-typedef struct	s_texture_data {
-	t_data	data;
-	int		width;
-	int		height;
-}	t_texture_data;
+typedef struct s_texture_data
+{
+	t_data			data;
+	int				width;
+	int				height;
+}					t_texture_data;
 
 typedef struct s_rgb
 {
@@ -165,18 +158,20 @@ typedef struct s_vars
 {
 	void			*mlx;
 	void			*win;
-	double			x_position_vector;
-	double 			y_position_vector;
-	double 			x_direction;
-	double 			y_direction;
+	// playerのx,y position
+	double			x_pos;
+	double			y_pos;
+	// playerが向いている向き
+	double			x_dir;
+	double			y_dir;
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
-	double			x_camera_plane;
-	double 			y_camera_plane;
-	unsigned int	floor_color;
-	unsigned int	ceiling_color;
+	double			x_cam_plane;
+	double			y_cam_plane;
+	unsigned int	floor_col;
+	unsigned int	ceil_col;
 	t_data			*data;
 	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
-}				t_vars;
+}					t_vars;
 
 typedef struct s_flag
 {
@@ -186,18 +181,18 @@ typedef struct s_flag
 typedef struct s_ray
 {
 	// rayベクトルのx,y成分
-	double			x_direction;
-	double			y_direction;
+	double			x_dir;
+	double			y_dir;
 	// rayのマップ上の現在のブロックのx,y座標
-	int				current_x_in_map;
-	int				current_y_in_map;
-	// rayが壁にぶつかるまでのx,y距離
-	double			x_side_distance;
-	double			y_side_distance;
+	int				x_map;
+	int				y_map;
+	// rayが座標上の整数値に当たるまでのx,y距離
+	double			x_side_dist;
+	double			y_side_dist;
 	// rayが次のx,y方向のブロックの境界に到達するたびに
 	// side_distanceに加えるべき距離を表します。
-	double			x_delta_distance;
-	double			y_delta_distance;
+	double			x_delta_dist;
+	double			y_delta_dist;
 }					t_ray;
 
 typedef struct s_info
@@ -205,7 +200,6 @@ typedef struct s_info
 	t_map			*map;
 	t_vars			*vars;
 	t_data			*data;
-	t_plane			*plane;
 	t_flag			*flag;
 	t_ray			*ray;
 	t_texture		*texture;
@@ -214,41 +208,42 @@ typedef struct s_info
 typedef struct s_draw_wall
 {
 	// rayが衝突した軸がx軸かy軸か判定する。
-	int		side;
-	// playerの現在位置からそのrayが衝突した壁までの距離
-	double	perpendicular_wall_distance;
+	int				side;
+	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
+	double			wall_dist;
 	// 描画する壁の高さ
-	int		line_height;
+	int				line_height;
 	// 壁の描画を開始する画面のy座標
-	int		start;
+	int				start_y;
 	// 壁の描画を終了する画面のy座標
-	int		end;
-}	t_draw_wall;
+	int				end_y;
+}					t_draw_wall;
 
 typedef struct s_draw_texture
 {
 	// 描画する壁のテクスチャ
-	int		list_number;
+	int				index;
 	// 描画する壁（テクスチャ）のx軸上の位置
-	double	wall_x;
+	double			wall_x;
 	// 描画する壁のx座標
-	int		x_coordinate;
+	int				x_coord;
 	// 描画する壁の間隔
-	double	step;
+	double			span;
 	// 現在描画する壁の位置
-	double	position;
-}	t_draw_texture;
+	double			current_pos;
+}					t_draw_texture;
 
-typedef struct s_draw_background {
-	// 描画するテクスチャの間隔(x軸)
-	float	x_move_amount;
-	// 描画するテクスチャの間隔(y軸)
-	float	y_move_amount;
+typedef struct s_draw_background
+{
+	// 描画するテクスチャの列の間隔(x軸)
+	float			x_span;
+	// 描画するテクスチャの行の間隔(y軸)
+	float			y_span;
 	// 描画するテクスチャのx座標
-	float	x_coordinate;
+	float			x_coord;
 	// 描画するテクスチャのy座標
-	float	y_coordinate;
-}	t_draw_background;
+	float			y_coord;
+}					t_draw_background;
 
 // init
 void				init(t_info *info, t_map *map, t_vars *vars, t_data *data);
@@ -300,7 +295,7 @@ void				player_move(t_info *info, int keycode);
 // RAYCASTING
 // ------------------------------------------------
 
-void			raycasting(t_info *info);
+void				raycasting(t_info *info);
 void				draw_line(t_ray *ray, t_info *info, int x,
 						double wall_distance, bool side);
 void				my_mlx_pixel_put_line(t_vars *vars, int x, int y1, int y2,
@@ -312,7 +307,7 @@ bool				calculate_nearest_axis(t_ray *ray, t_vars *vars,
 // WINDOW
 // ------------------------------------------------
 
-void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
+void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int					close_window(t_info *info);
 int					new_window(t_vars *vars);
 

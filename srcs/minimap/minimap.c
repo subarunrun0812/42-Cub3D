@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/04 16:03:05 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 16:02:32 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,13 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	
 	(void)data;
 	// マップのx,y軸の表示する範囲
-	start_i = (int)info->vars->x_position_vector - DISPLAY_RADIUS / BLOCK_SIZE;
-	end_i = (int)info->vars->x_position_vector + DISPLAY_RADIUS / BLOCK_SIZE;
+	start_i = (int)info->vars->x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	end_i = (int)info->vars->x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
     	end_i++;
 
-	start_j = (int)info->vars->y_position_vector - DISPLAY_RADIUS / BLOCK_SIZE;
-	end_j = (int)info->vars->y_position_vector + DISPLAY_RADIUS / BLOCK_SIZE;
+	start_j = (int)info->vars->y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	end_j = (int)info->vars->y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
     	end_j++;
 	i = start_i;
@@ -80,8 +80,8 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 					|| info->map->map_data[i][j] == 'W')
 			{
 				draw_one_block(info, j - start_j, i - start_i, BLUE);
-				info->map->player_x = j;
-				info->map->player_y = i;
+				info->map->x_player = j;
+				info->map->y_player = i;
 			}
 			else
 				draw_one_block(info, j - start_j, i - start_i, MAP_RED);
@@ -96,8 +96,8 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 	
 	while (ray_len < 30)
 	{
-		tmp_x = (ray_len * info->vars->y_direction);
-		tmp_y = (ray_len * info->vars->x_direction);
+		tmp_x = (ray_len * info->vars->y_dir);
+		tmp_y = (ray_len * info->vars->x_dir);
 		my_mlx_pixel_put(info->data, DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_x\
 		,DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y,FUCHSIA);
 		ray_len++;
