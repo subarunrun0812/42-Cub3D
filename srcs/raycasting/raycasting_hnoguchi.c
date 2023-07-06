@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting_hnoguchi.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 09:41:31 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 13:18:09 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -625,6 +625,8 @@ int	key_action(int keycode, t_info *info)
 		close_window(info);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
+	else 
+		return (-1);
 	draw_color_floor_and_ceiling(info->vars,
 		info->vars->floor_color, info->vars->ceiling_color);
 	try_draw_texture_floor_and_ceiling(info->vars);
@@ -633,13 +635,9 @@ int	key_action(int keycode, t_info *info)
 		info->vars->data->img, 0, 0);
 	updata_pos_map(info->vars, info, keycode);
 	minimap(info, info->data);
-	printf("key_code %d", keycode);
+	(void)keycode;
 	return (0);
 }
-
-// debug_print_mapdata(info);
-// printf("map_data[%f][%f]\n", info->vars->x_position_vector,
-		// info->vars->y_position_vector);
 
 // TODO: create_xpm_textures.c
 void	exit_create_texture(t_info *info,
@@ -721,7 +719,7 @@ void	create_xpm_textures(t_texture *texture, t_info *info)
 		texture->we, &info->vars->texture_list[WEST_WALL]);
 }
 
-//TODO:北南、東西、で関数をまとめれそう
+//TODO:北南、東西で関数をまとめれそう
 void	set_north_player_direction(t_vars *vars)
 {
 	vars->x_direction = -1.0;
@@ -839,19 +837,37 @@ void	initialize_vars(t_info *info)
 	draw_wall(info);
 }
 
-int	close_window(t_info *info)
+t_info *g_info;
+
+int mouse_action(int mousecode, t_info *info)
 {
-	mlx_loop_end(info->vars->mlx);
+	int keycode;
+
+	(void)info;
+	if (mousecode == R_CLICK)
+	{
+		keycode = D_KEY;
+	}
+	else if (mousecode == L_CLICK)
+	{
+		keycode = A_KEY;
+	}
+	else
+		return (-1);
+	return (key_action(keycode, g_info));
 	return (0);
 }
 
 void	raycasting(t_info *info)
 {
+	g_info = info;
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 		info->vars->data->img, 0, 0);
 	minimap(info, info->data);
+	ft_test(info);
 	mlx_key_hook(info->vars->win, key_action, info);
+	mlx_mouse_hook(info->vars->win, mouse_action, info);
 	mlx_hook(info->vars->win, ON_DESTROY, 1L<<ON_DESTROY, close_window, info);
 	mlx_loop(info->vars->mlx);
 	destruct_raycasting(info);
