@@ -32,8 +32,6 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MINIMAP_DIR)/corner_map.c\
           $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/player_coordinates.c\
-
-          $(MINIMAP_DIR)/updata_pos_map.c\
 		  $(RAYCASTING_DIR)/clean_image.c\
 		  $(RAYCASTING_DIR)/draw_wall.c\
 		  $(RAYCASTING_DIR)/init_nswe_direction.c\

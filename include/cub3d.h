@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/06 19:50:35 by susasaki         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -116,143 +128,144 @@ extern t_info			*g_info;
 
 typedef struct s_map
 {
-	// map_data[y][x]
-	char			**map_data;
-	int				x_player;
-	int				y_player;
-	int				height;
-	int				width;
-}					t_map;
+	char				**map_data;
+	int					x_player;
+	int					y_player;
+	int					height;
+	int					width;
+}						t_map;
 
 typedef struct s_data
 {
-	void			*img;
-	unsigned int	*addr;
-	int				bits_per_pixel;
-	int				line_length;
-	int				endian;
-}					t_data;
+	void				*img;
+	unsigned int		*addr;
+	int					bits_per_pixel;
+	int					line_length;
+	int					endian;
+}						t_data;
 
 typedef struct s_texture_data
 {
-	t_data			data;
-	int				width;
-	int				height;
-}					t_texture_data;
+	t_data				data;
+	int					width;
+	int					height;
+}						t_texture_data;
 
 typedef struct s_rgb
 {
-	int				red;
-	int				green;
-	int				blue;
-}					t_rgb;
+	int					red;
+	int					green;
+	int					blue;
+}						t_rgb;
 
 typedef struct s_texture
 {
-	char			*no;
-	char			*so;
-	char			*we;
-	char			*ea;
-	char			*f_tex;
-	char			*c_tex;
-	t_rgb			*f_rgb;
-	t_rgb			*c_rgb;
-}					t_texture;
+	char				*no;
+	char				*so;
+	char				*we;
+	char				*ea;
+	char				*f_tex;
+	char				*c_tex;
+	t_rgb				*f_rgb;
+	t_rgb				*c_rgb;
+}						t_texture;
 
 typedef struct s_vars
 {
-	void			*mlx;
-	void			*win;
+	void				*mlx;
+	void				*win;
 	// playerのx,y position
-	double			x_pos;
-	double			y_pos;
+	double				x_pos;
+	double				y_pos;
 	// playerが向いている向き
-	double			x_dir;
-	double			y_dir;
+	double				x_dir;
+	double				y_dir;
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
-	double			x_cam_plane;
-	double			y_cam_plane;
-	unsigned int	floor_col;
-	unsigned int	ceil_col;
-	t_data			*data;
-	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
-}					t_vars;
+	double				x_cam_plane;
+	double				y_cam_plane;
+	unsigned int		floor_col;
+	unsigned int		ceil_col;
+	t_data				*data;
+	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
+}						t_vars;
 
 typedef struct s_flag
 {
-	int				map;
-}					t_flag;
+	int					map;
+}						t_flag;
 
 typedef struct s_ray
 {
 	// rayベクトルのx,y成分
-	double			x_dir;
-	double			y_dir;
+	double				x_dir;
+	double				y_dir;
 	// rayのマップ上の現在のブロックのx,y座標
-	int				x_map;
-	int				y_map;
+	int					x_map;
+	int					y_map;
 	// rayが座標上の整数値に当たるまでのx,y距離
-	double			x_side_dist;
-	double			y_side_dist;
+	double				x_side_dist;
+	double				y_side_dist;
 	// rayが次のx,y方向のブロックの境界に到達するたびに
 	// side_distanceに加えるべき距離を表します。
-	double			x_delta_dist;
-	double			y_delta_dist;
-}					t_ray;
+	double				x_delta_dist;
+	double				y_delta_dist;
+}						t_ray;
 
-struct s_info
+struct					s_info
 {
-	t_map			*map;
-	t_vars			*vars;
-	t_data			*data;
-	t_flag			*flag;
-	t_ray			*ray;
-	t_texture		*texture;
+	t_map				*map;
+	t_vars				*vars;
+	t_data				*data;
+	t_flag				*flag;
+	t_ray				*ray;
+	t_texture			*texture;
 };
 
 typedef struct s_draw_wall
 {
 	// rayが衝突した軸がx軸かy軸か判定する。
-	int				side;
+	int					side;
 	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
-	double			wall_dist;
+	double				wall_dist;
 	// 描画する壁の高さ
-	int				line_height;
+	int					line_height;
 	// 壁の描画を開始する画面のy座標
-	int				start_y;
+	int					start_y;
 	// 壁の描画を終了する画面のy座標
-	int				end_y;
-}					t_draw_wall;
+	int					end_y;
+}						t_draw_wall;
 
 typedef struct s_draw_texture
 {
 	// 描画する壁のテクスチャ
-	int				index;
+	int					index;
 	// 描画する壁（テクスチャ）のx軸上の位置
-	double			wall_x;
+	double				wall_x;
 	// 描画する壁のx座標
-	int				x_coord;
+	int					x_coord;
 	// 描画する壁の間隔
-	double			span;
+	double				span;
 	// 現在描画する壁の位置
-	double			current_pos;
-}					t_draw_texture;
+	double				current_pos;
+}						t_draw_texture;
 
 typedef struct s_draw_background
 {
 	// 描画するテクスチャの列の間隔(x軸)
-	float			x_span;
+	float				x_span;
 	// 描画するテクスチャの行の間隔(y軸)
-	float			y_span;
+	float				y_span;
 	// 描画するテクスチャのx座標
-	float			x_coord;
+	float				x_coord;
 	// 描画するテクスチャのy座標
-	float			y_coord;
-}					t_draw_background;
+	float				y_coord;
+}						t_draw_background;
 
 // init
-void				init(t_info *info, t_map *map, t_vars *vars, t_data *data);
-void				init_second(t_info *info, t_flag *flag, t_texture *texture);
+void					init(t_info *info, t_map *map, t_vars *vars,
+							t_data *data);
+void					init_second(t_info *info, t_flag *flag,
+							t_texture *texture);
 
 // ------------------------------------------------
 // FILE
@@ -260,108 +273,109 @@ void				init_second(t_info *info, t_flag *flag, t_texture *texture);
 
 // MAP
 
-void				read_file(char *path, t_info *info);
-void				get_data_file(int fd, t_info *info);
-void				check_map_wall(t_info *info);
-void				check_only_one_nswe(t_map *map);
-int					mapdata_width_length(char *width);
-int					maxwidth_length(t_map *map);
-void				updata_pos_map(t_vars *vars, t_info *info, int keycode);
-char				**map_str_add(char **array, char *new);
+void					read_file(char *path, t_info *info);
+void					get_data_file(int fd, t_info *info);
+void					check_map_wall(t_info *info);
+void					check_only_one_nswe(t_map *map);
+int						mapdata_width_length(char *width);
+int						maxwidth_length(t_map *map);
+void					updata_pos_map(t_vars *vars, t_info *info, int keycode);
+char					**map_str_add(char **array, char *new);
 
 // FILE
-int					check_num(char *num_str);
-void				init_rgb_values(t_rgb *rgb);
-int					check_num(char *num_str);
-int					check_texture_section(char *str);
-void				handle_texture_part(int fd, char **str, t_info *info,
-						int *count);
-int					read_texture(char *str, t_texture *texture);
-char				*assign_to_structure(char **str, char *identifier,
-						t_texture *texture);
-void				parse_and_assign_rgb_values(char *path, char *identifier,
-						t_texture *texture);
-int					first_word_len(char **str);
-int					mapdata_width_length(char *width);
-int					skip_new_line(char **map_data);
-int					skip_space_width(char **map_data, int _y);
+int						check_num(char *num_str);
+void					init_rgb_values(t_rgb *rgb);
+int						check_num(char *num_str);
+int						check_texture_section(char *str);
+void					handle_texture_part(int fd, char **str, t_info *info,
+							int *count);
+int						read_texture(char *str, t_texture *texture);
+char					*assign_to_structure(char **str, char *identifier,
+							t_texture *texture);
+void					parse_and_assign_rgb_values(char *path,
+							char *identifier, t_texture *texture);
+int						first_word_len(char **str);
+int						mapdata_width_length(char *width);
+int						skip_new_line(char **map_data);
+int						skip_space_width(char **map_data, int _y);
 
 // ------------------------------------------------
 // MINIMAP
 // ------------------------------------------------
 
-int					minimap(t_info *info, t_data *data);
-void				central_draw_one_block(t_info *info, int draw_x, int draw_y,
-						int color);
-void				draw_ray_player_fov(t_info *info, int start_x, int start_y);
-void				central_map(t_info *info);
-void				corner_map(t_info *info, t_data *data);
-void				corner_draw_one_block(t_info *info, int draw_x, int draw_y,
-						int color);
+int						minimap(t_info *info, t_data *data);
+void					central_draw_one_block(t_info *info, int draw_x,
+							int draw_y, int color);
+void					draw_ray_player_fov(t_info *info, int start_x,
+							int start_y);
+void					central_map(t_info *info);
+void					corner_map(t_info *info, t_data *data);
+void					corner_draw_one_block(t_info *info, int draw_x,
+							int draw_y, int color);
 
 // ------------------------------------------------
 // PLAYER
 // ------------------------------------------------
 
-int					key_hook(int keycode, t_vars *vars);
-int					ft_key_hook(int keycode, t_info *info);
-int					player_coordinate(t_info *info);
-void				init_player_coordinate(t_map *map, t_info *info);
-void				player_move(t_info *info, int keycode);
+int						key_hook(int keycode, t_vars *vars);
+int						ft_key_hook(int keycode, t_info *info);
+int						player_coordinate(t_info *info);
+void					init_player_coordinate(t_map *map, t_info *info);
+void					player_move(t_info *info, int keycode);
 
 // ------------------------------------------------
 // RAYCASTING
 // ------------------------------------------------
 
-void				raycasting(t_info *info);
-void				clean_image(t_vars *vars);
-void				create_xpm_textures(t_texture *texture, t_info *info);
-void				destruct_raycasting(t_info *info);
-void				draw_color_floor_and_ceil(t_vars *vars,
-						unsigned int floor_col, unsigned int ceil_col);
-int					draw_wall(t_info *info);
-void				*exit_mlx_new_image(void *mlx);
-void				*exit_mlx_new_window(void *mlx);
-void				*exit_mlx_init(void);
-int					get_nearest_axis(t_ray *ray, t_info *info);
-void				init_nswe_dirction(char player_dir, t_vars *vars);
-int					key_action(int keycode, t_info *info);
-void				my_mlx_pixel_put_line(t_vars *vars, int x_axis, int y_axis[2],
-						unsigned int color);
-int					mouse_action(int mousecode, t_info *info);
-void				put_texture_ceil(t_draw_background *draw, t_vars *vars,
-						int coord_screen[2], int cell[2]);
-void				put_texture_floor(t_draw_background *draw, t_vars *vars,
-						int coord_screen[2], int cell[2]);
-void				set_draw_texture_data(t_draw_texture *texture,
-						t_draw_wall *wall, t_ray *ray, t_vars *vars);
-void				set_draw_wall_data(t_draw_wall *wall,
-						t_ray *ray, t_info *info);
-void				try_draw_texture_floor_and_ceil(t_vars *vars);
+void					raycasting(t_info *info);
+void					clean_image(t_vars *vars);
+void					create_xpm_textures(t_texture *texture, t_info *info);
+void					destruct_raycasting(t_info *info);
+void					draw_color_floor_and_ceil(t_vars *vars,
+							unsigned int floor_col, unsigned int ceil_col);
+int						draw_wall(t_info *info);
+void					*exit_mlx_new_image(void *mlx);
+void					*exit_mlx_new_window(void *mlx);
+void					*exit_mlx_init(void);
+int						get_nearest_axis(t_ray *ray, t_info *info);
+void					init_nswe_dirction(char player_dir, t_vars *vars);
+int						key_action(int keycode, t_info *info);
+void					my_mlx_pixel_put_line(t_vars *vars, int x_axis,
+							int y_axis[2], unsigned int color);
+int						mouse_action(int mousecode, t_info *info);
+void					put_texture_ceil(t_draw_background *draw, t_vars *vars,
+							int coord_screen[2], int cell[2]);
+void					put_texture_floor(t_draw_background *draw, t_vars *vars,
+							int coord_screen[2], int cell[2]);
+void					set_draw_texture_data(t_draw_texture *texture,
+							t_draw_wall *wall, t_ray *ray, t_vars *vars);
+void					set_draw_wall_data(t_draw_wall *wall, t_ray *ray,
+							t_info *info);
+void					try_draw_texture_floor_and_ceil(t_vars *vars);
 
 // ------------------------------------------------
 // WINDOW
 // ------------------------------------------------
 
-void				my_mlx_pixel_put(t_data *data, int x, int y, int color);
-int					close_window(t_info *info);
-int					new_window(t_vars *vars);
+void					my_mlx_pixel_put(t_data *data, int x, int y, int color);
+int						close_window(t_info *info);
+int						new_window(t_vars *vars);
 
 // ------------------------------------------------
 // ERROR
 // ------------------------------------------------
 
 // free
-void				free_mapdata(char **map_data, int vertical);
-void				free_texture(t_info *info);
+void					free_mapdata(char **map_data, int vertical);
+void					free_texture(t_info *info);
 
 // print_error
-void				print_error(char *str);
+void					print_error(char *str);
 
 // ------------------------------------------------
 // DEBUG
 // ------------------------------------------------
 
-void				debug_print_mapdata(t_info *info);
+void					debug_print_mapdata(t_info *info);
 
 #endif
