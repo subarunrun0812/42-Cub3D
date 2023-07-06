@@ -55,6 +55,11 @@
 # define RIGHT_KEY 124
 # define DOWN_KEY 125
 # define UP_KEY 126
+//mouse
+# define L_CLICK 1
+# define R_CLICK 2
+
+
 
 //------------------------------
 //			RAYCASTING

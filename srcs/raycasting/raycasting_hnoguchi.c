@@ -621,6 +621,8 @@ int	key_action(int keycode, t_info *info)
 		close_window(info);
 	else if (keycode == M_KEY)
 		info->flag->map *= -1;
+	else 
+		return (-1);
 	draw_color_floor_and_ceiling(info->vars,
 		info->vars->floor_color, info->vars->ceiling_color);
 	try_draw_texture_floor_and_ceiling(info->vars);
@@ -631,10 +633,6 @@ int	key_action(int keycode, t_info *info)
 	minimap(info, info->data);
 	return (0);
 }
-
-// debug_print_mapdata(info);
-// printf("map_data[%f][%f]\n", info->vars->x_position_vector,
-		// info->vars->y_position_vector);
 
 // TODO: create_xpm_textures.c
 void	exit_create_texture(t_info *info,
@@ -870,36 +868,37 @@ void	initialize_vars(t_info *info)
 	draw_wall(info);
 }
 
-// TODO: mouse_action.c
-int	mouse_action(int keycode, t_info *info)
+t_info *g_info;
+
+int mouse_action(int mousecode, t_info *info)
 {
-	if (keycode == L_CLICK)
-		rotate_left_camera(info->vars);
-	else if (keycode == R_CLICK)
-		rotate_right_camera(info->vars);
+	int keycode;
+
+	(void)info;
+	if (mousecode == R_CLICK)
+	{
+		keycode = D_KEY;
+	}
+	else if (mousecode == L_CLICK)
+	{
+		keycode = A_KEY;
+	}
 	else
 		return (-1);
-	draw_color_floor_and_ceiling(info->vars,
-		info->vars->floor_color, info->vars->ceiling_color);
-	try_draw_texture_floor_and_ceiling(info->vars);
-	draw_wall(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->data->img, 0, 0);
-	updata_pos_map(info->vars, info, keycode);
-	minimap(info, info->data);
-	return (0);
+	return (key_action(keycode, g_info));
 }
 
 // TODO: raycasting.c
 void	raycasting(t_info *info)
 {
+	g_info = info;
 	initialize_vars(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
 		info->vars->data->img, 0, 0);
 	minimap(info, info->data);
-	mlx_hook(info->vars->win, ON_DESTROY, 1L<<ON_DESTROY, close_window, info);
 	mlx_key_hook(info->vars->win, key_action, info);
-	mlx_mouse_hook(info->vars->win, mouse_action, &info);
+	mlx_mouse_hook(info->vars->win, mouse_action, info);
+	mlx_hook(info->vars->win, ON_DESTROY, 1L<<ON_DESTROY, close_window, info);
 	mlx_loop(info->vars->mlx);
 	destruct_raycasting(info);
 }
