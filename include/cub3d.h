@@ -121,12 +121,6 @@ typedef struct s_map
 	int				width;
 }					t_map;
 
-typedef struct s_plane
-{
-	double			x;
-	double			y;
-}					t_plane;
-
 typedef struct s_data
 {
 	void			*img;
@@ -165,15 +159,17 @@ typedef struct s_vars
 {
 	void			*mlx;
 	void			*win;
-	double			x_position_vector;
-	double 			y_position_vector;
-	double 			x_direction;
-	double 			y_direction;
+	//playerのx,y position
+	double			x_pos;
+	double 			y_pos;
+	//playerが向いている向き
+	double 			x_dir;
+	double 			y_dir;
 	//カメラ平面のx,y成分(FOV)。-1から1の範囲
-	double			x_camera_plane;
-	double 			y_camera_plane;
-	unsigned int	floor_color;
-	unsigned int	ceiling_color;
+	double			x_cam_plane;
+	double 			y_cam_plane;
+	unsigned int	floor_col;
+	unsigned int	ceil_col;
 	t_data			*data;
 	t_texture_data	texture_list[TEXTURE_LIST_SIZE];
 }				t_vars;
@@ -186,12 +182,12 @@ typedef struct s_flag
 typedef struct s_ray
 {
 	// rayベクトルのx,y成分
-	double			x_direction;
-	double			y_direction;
+	double			x_dir;
+	double			y_dir;
 	// rayのマップ上の現在のブロックのx,y座標
-	int				current_x_in_map;
-	int				current_y_in_map;
-	// rayが壁にぶつかるまでのx,y距離
+	int				x_map;
+	int				y_map;
+	// rayが座標上の整数値に当たるまでのx,y距離
 	double			x_side_distance;
 	double			y_side_distance;
 	// rayが次のx,y方向のブロックの境界に到達するたびに
@@ -205,7 +201,6 @@ typedef struct s_info
 	t_map			*map;
 	t_vars			*vars;
 	t_data			*data;
-	t_plane			*plane;
 	t_flag			*flag;
 	t_ray			*ray;
 	t_texture		*texture;
