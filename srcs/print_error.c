@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_error.c                                           :+:      :+:    :+:   */
+/*   print_error.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/28 16:33:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/04/28 17:31:13 by susasaki         ###   ########.fr       */
+/*   Created: 2023/07/06 13:28:57 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/06 13:29:02 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "../include/cub3d.h"
+#include "../include/cub3d.h"
 
-void print_error(char *str)
+void	print_error(char *str)
 {
-    printf("\x1b[31mError: %s\x1b[0m\n",str);
-    exit(1);
+	printf("\x1b[31mError: %s\x1b[0m\n", str);
+	exit(1);
 }
