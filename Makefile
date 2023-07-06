@@ -33,8 +33,11 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(FILE_READ_DIR)/read_texture.c\
           $(FILE_READ_DIR)/rgb_utils.c\
           $(FILE_READ_DIR)/utils.c\
-          $(MINIMAP_DIR)/minimap.c\
+          $(MINIMAP_DIR)/central_map_utils.c\
           $(MINIMAP_DIR)/central_map.c\
+          $(MINIMAP_DIR)/corner_map_utils.c\
+          $(MINIMAP_DIR)/corner_map.c\
+          $(MINIMAP_DIR)/minimap.c\
           $(MINIMAP_DIR)/player_coordinates.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
           $(RAYCASTING_DIR)/raycasting_hnoguchi.c\

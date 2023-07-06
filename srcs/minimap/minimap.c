@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 22:32:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:41:36 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 19:00:21 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	draw_one_block(t_info *info, int draw_x, int draw_y, int color)
 	}
 }
 
-void	range_to_display_with_player(t_info *info, t_data *data)
+void	corner_map(t_info *info, t_data *data)
 {
 	int	start_i;
 	int	end_i;
@@ -108,9 +108,9 @@ void	range_to_display_with_player(t_info *info, t_data *data)
 int	minimap(t_info *info, t_data *data)
 {
 	data->addr = (unsigned int *)mlx_get_data_addr(&data->img,
-		&data->bits_per_pixel, &data->line_length, &data->endian);
+			&data->bits_per_pixel, &data->line_length, &data->endian);
 	if (info->flag->map == CORNER)
-		range_to_display_with_player(info, data);
+		corner_map(info, data);
 	else
 		central_map(info);
 	mlx_put_image_to_window(info->vars->mlx, info->vars->win, info->data->img,

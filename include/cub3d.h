@@ -260,7 +260,7 @@ void				check_map_wall(t_info *info);
 void				check_only_one_nswe(t_map *map);
 int					minimap(t_info *info, t_data *data);
 void				central_map(t_info *info);
-void				range_to_display_with_player(t_info *info, t_data *data);
+void				corner_map(t_info *info, t_data *data);
 void				draw_one_block(t_info *info, int draw_x, int draw_y,
 						int color);
 int					mapdata_width_length(char *width);
