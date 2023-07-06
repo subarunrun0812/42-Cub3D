@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:01:44 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 18:09:49 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,36 @@ static int	non_specific_chara(char *str)
 	return (0);
 }
 
+void	lack_of_texture(t_info *info)
+{
+	free_texture(info);
+	print_error("texture num");
+}
+
+void	process_map_data(char **str, t_info *info, int *flag, int fd)
+{
+	if (non_specific_chara(*str) == 1)
+		*flag = 1;
+	info->map->map_data = map_str_add(info->map->map_data, *str);
+	*str = get_next_line(fd);
+	info->map->height++;
+	if (*flag == 1)
+	{
+		free_mapdata(info->map->map_data, info->map->height);
+		print_error("get_next_line");
+	}
+}
+
 void	get_data_file(int fd, t_info *info)
 {
 	char	*str;
 	int		flag;
 	int		count;
-	int		i;
 
 	str = get_next_line(fd);
 	if (!str)
 		print_error("get_next_line");
 	flag = 0;
-	i = 0;
 	count = 0;
 	while (str)
 	{
@@ -47,26 +65,10 @@ void	get_data_file(int fd, t_info *info)
 			count += read_texture(str, info->texture);
 			free(str);
 			str = get_next_line(fd);
-			i++;
 		}
 		else if (count < 6)
-		{
-			free_texture(info);
-			print_error("texture num");
-		}
+			lack_of_texture(info);
 		else
-		{
-			if (non_specific_chara(str) == 1)
-				flag = 1;
-			info->map->map_data = map_str_add(info->map->map_data, str);
-			str = get_next_line(fd);
-			i++;
-			info->map->height++;
-			if (flag == 1)
-			{
-				free_mapdata(info->map->map_data, info->map->height);
-				print_error("get_next_line");
-			}
-		}
+			process_map_data(&str, info, &flag, fd);
 	}
 }
