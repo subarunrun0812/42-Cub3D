@@ -10,13 +10,6 @@ RAYCASTING_DIR = $(SOURCES_DIR)/raycasting
 WINDOW_DIR = $(SOURCES_DIR)/window
 MINIMAP_DIR = $(SOURCES_DIR)/minimap
 
-# SOURCES = $(RAYCASTING_DIR)/raycaster_flat.c
-# SOURCES = $(RAYCASTING_DIR)/xpm_image.c
-# SOURCES = $(RAYCASTING_DIR)/raycaster_textured.c
-# SOURCES = $(RAYCASTING_DIR)/raycaster_xpm_textured.c
-# SOURCES = $(RAYCASTING_DIR)/raycaster_floor.c
-# SOURCES = $(RAYCASTING_DIR)/raycasting_hnoguchi.c
-
 SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
@@ -34,7 +27,23 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(MINIMAP_DIR)/central_map.c\
           $(MINIMAP_DIR)/player_coordinates.c\
           $(MINIMAP_DIR)/updata_pos_map.c\
-          $(RAYCASTING_DIR)/raycasting_hnoguchi.c\
+		  $(RAYCASTING_DIR)/clean_image.c\
+		  $(RAYCASTING_DIR)/draw_wall.c\
+		  $(RAYCASTING_DIR)/init_nswe_direction.c\
+		  $(RAYCASTING_DIR)/put_texture_ceil.c\
+		  $(RAYCASTING_DIR)/set_draw_wall_data.c\
+		  $(RAYCASTING_DIR)/create_xpm_textures.c\
+		  $(RAYCASTING_DIR)/exit_mlx.c\
+		  $(RAYCASTING_DIR)/key_action.c\
+		  $(RAYCASTING_DIR)/put_texture_floor.c\
+		  $(RAYCASTING_DIR)/try_draw_texture_floor_and_ceil.c\
+		  $(RAYCASTING_DIR)/destruct_raycasting.c\
+		  $(RAYCASTING_DIR)/get_nearest_axis.c\
+		  $(RAYCASTING_DIR)/my_mlx_pixel_put_line.c\
+		  $(RAYCASTING_DIR)/raycasting.c\
+		  $(RAYCASTING_DIR)/draw_color_floor_and_ceil.c\
+		  $(RAYCASTING_DIR)/mouse_action.c\
+		  $(RAYCASTING_DIR)/set_draw_texture_data.c\
           $(WINDOW_DIR)/close_window.c\
           $(WINDOW_DIR)/my_mlx_pixel_put.c\
           $(WINDOW_DIR)/new_window.c\
