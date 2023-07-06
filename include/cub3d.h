@@ -213,26 +213,40 @@ typedef struct s_info
 
 typedef struct s_draw_wall
 {
+	// rayが衝突した軸がx軸かy軸か判定する。
 	int		side;
+	// playerの現在位置からそのrayが衝突した壁までの距離
 	double	perpendicular_wall_distance;
+	// 描画する壁の高さ
 	int		line_height;
+	// 壁の描画を開始する画面のy座標
 	int		start;
+	// 壁の描画を終了する画面のy座標
 	int		end;
 }	t_draw_wall;
 
 typedef struct s_draw_texture
 {
+	// 描画する壁のテクスチャ
 	int		list_number;
+	// 描画する壁（テクスチャ）のx軸上の位置
 	double	wall_x;
+	// 描画する壁のx座標
 	int		x_coordinate;
+	// 描画する壁の間隔
 	double	step;
+	// 現在描画する壁の位置
 	double	position;
 }	t_draw_texture;
 
 typedef struct s_draw_background {
+	// 描画するテクスチャの間隔(x軸)
 	float	x_move_amount;
+	// 描画するテクスチャの間隔(y軸)
 	float	y_move_amount;
+	// 描画するテクスチャのx座標
 	float	x_coordinate;
+	// 描画するテクスチャのy座標
 	float	y_coordinate;
 }	t_draw_background;
 
