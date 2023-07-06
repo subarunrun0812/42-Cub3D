@@ -24,9 +24,10 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(FILE_READ_DIR)/assign_to_structure.c\
           $(FILE_READ_DIR)/assign_to_structure_rgb.c\
           $(FILE_READ_DIR)/read_file.c\
-          $(FILE_READ_DIR)/get_data_file.c\
-          $(FILE_READ_DIR)/check_map_wall.c\
           $(FILE_READ_DIR)/check_only_one_nswe.c\
+          $(FILE_READ_DIR)/get_data_file.c\
+          $(FILE_READ_DIR)/mapdata_check.c\
+          $(FILE_READ_DIR)/mapdata_utils.c\
           $(FILE_READ_DIR)/read_texture.c\
           $(FILE_READ_DIR)/utils.c\
           $(MINIMAP_DIR)/minimap.c\

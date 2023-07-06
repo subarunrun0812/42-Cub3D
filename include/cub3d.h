@@ -275,6 +275,12 @@ void				parse_and_assign_rgb_values(char *path, char *identifier,
 						t_texture *texture);
 int					first_word_len(char **str);
 
+int					mapdata_width_length(char *width);
+
+int					mapdata_maxwidth_length(t_map *map);
+int					skip_new_line(char **map_data);
+int					skip_space_width(char **map_data, int _y);
+
 // ------------------------------------------------
 // PLAYER
 // ------------------------------------------------

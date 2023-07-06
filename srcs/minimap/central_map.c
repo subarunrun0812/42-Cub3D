@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 16:42:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:19:28 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,41 +31,42 @@ static void	central_draw_one_block(t_info *info, int draw_x, int draw_y,
 	}
 }
 
-void draw_ray_player_fov(t_info *info, int start_x, int start_y)
+void	draw_ray_player_fov(t_info *info, int start_x, int start_y)
 {
-	// FOVの範囲のrayを出力。
 	int	ray_len;
 	int	middle_ray_x;
 	int	middle_ray_y;
 
+	// FOVの範囲のrayを出力。
 	ray_len = BLOCK_SIZE / 2;
 	middle_ray_x = 0;
 	middle_ray_y = 0;
-	
 	ray_len = 0;
 	while (ray_len < 100)
 	{
 		//-1はFOVの一番左を指している
-		middle_ray_x = (ray_len * (info->vars->y_dir
-				+ (info->vars->y_cam_plane * -1)));
-		middle_ray_y = (ray_len * (info->vars->x_dir
-				+ (info->vars->x_cam_plane * -1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->x_player * BLOCK_SIZE
-				+ (BLOCK_SIZE / 2)) + middle_ray_x\
-		,start_y + (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
+		middle_ray_x = (ray_len * (info->vars->y_dir + (info->vars->y_cam_plane
+					* -1)));
+		middle_ray_y = (ray_len * (info->vars->x_dir + (info->vars->x_cam_plane
+					* -1)));
+		my_mlx_pixel_put(info->data, start_x + (info->map->x_player * BLOCK_SIZE
+				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
+			+ (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))
+			+ middle_ray_y, RED);
 		ray_len++;
 	}
 	ray_len = 0;
 	while (ray_len < 100)
 	{
 		//-1はFOVの一番左を指している
-		middle_ray_x = (ray_len * (info->vars->y_dir
-				+ (info->vars->y_cam_plane * 1)));
-		middle_ray_y = (ray_len * (info->vars->x_dir
-				+ (info->vars->x_cam_plane * 1)));
-		my_mlx_pixel_put(info->data,start_x + (info->map->x_player * BLOCK_SIZE
-				+ (BLOCK_SIZE / 2)) + middle_ray_x\
-		,start_y + (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2)) + middle_ray_y,RED);
+		middle_ray_x = (ray_len * (info->vars->y_dir + (info->vars->y_cam_plane
+					* 1)));
+		middle_ray_y = (ray_len * (info->vars->x_dir + (info->vars->x_cam_plane
+					* 1)));
+		my_mlx_pixel_put(info->data, start_x + (info->map->x_player * BLOCK_SIZE
+				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
+			+ (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))
+			+ middle_ray_y, RED);
 		ray_len++;
 	}
 }
@@ -122,27 +123,27 @@ void	central_map(t_info *info)
 				;
 			else if (info->map->map_data[y][x] == '1')
 			{
-				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
-					start_y + (y * BLOCK_SIZE), MAP_GREEN);
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE), start_y
+					+ (y * BLOCK_SIZE), MAP_GREEN);
 			}
 			else if (info->map->map_data[y][x] == '0')
 			{
-				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
-					start_y + (y * BLOCK_SIZE), MAP_WHITE);
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE), start_y
+					+ (y * BLOCK_SIZE), MAP_WHITE);
 			}
 			else if (info->map->map_data[y][x] == 'N'
 				|| info->map->map_data[y][x] == 'S'
 				|| info->map->map_data[y][x] == 'E'
 				|| info->map->map_data[y][x] == 'W')
 			{
-				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
-					start_y + (y * BLOCK_SIZE), BLUE);
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE), start_y
+					+ (y * BLOCK_SIZE), BLUE);
 				info->map->x_player = x;
 				info->map->y_player = y;
 			}
 			else
-				central_draw_one_block(info, start_x + (x * BLOCK_SIZE),
-					start_y + (y * BLOCK_SIZE), MAP_RED);
+				central_draw_one_block(info, start_x + (x * BLOCK_SIZE), start_y
+					+ (y * BLOCK_SIZE), MAP_RED);
 			x++;
 		}
 		y++;
