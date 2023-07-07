@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 17:15:56 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:36:25 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void	destroy_textures(t_vars *vars)
 
 void	destruct_raycasting(t_info *info)
 {
-	destroy_window(info->vars);
-	destroy_textures(info->vars);
-	free(info->vars->mlx);
+	destroy_window(&info->vars);
+	destroy_textures(&info->vars);
+	free(info->vars.mlx);
 }

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 17:03:42 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:31:48 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ static void	exit_create_texture(t_info *info,
 		char *path, t_texture_data *texture)
 {
 	texture->data.img
-		= mlx_xpm_file_to_image(info->vars->mlx, path,
+		= mlx_xpm_file_to_image(info->vars.mlx, path,
 			&texture->width, &texture->height);
 	if (texture->data.img == NULL)
 	{
@@ -77,16 +77,16 @@ static void	initialize_texture_list(t_texture_data *texture_list)
 
 void	create_xpm_textures(t_texture *texture, t_info *info)
 {
-	initialize_texture_list(info->vars->texture_list);
-	create_texture_floor(info, texture->f_tex, info->vars->texture_list);
+	initialize_texture_list(info->vars.texture_list);
+	create_texture_floor(info, texture->f_tex, info->vars.texture_list);
 	create_texture_ceil(info,
-		texture->c_tex, &info->vars->texture_list[CEILING]);
+		texture->c_tex, &info->vars.texture_list[CEILING]);
 	exit_create_texture(info,
-		texture->so, &info->vars->texture_list[SOUTH_WALL]);
+		texture->so, &info->vars.texture_list[SOUTH_WALL]);
 	exit_create_texture(info,
-		texture->no, &info->vars->texture_list[NORTH_WALL]);
+		texture->no, &info->vars.texture_list[NORTH_WALL]);
 	exit_create_texture(info,
-		texture->ea, &info->vars->texture_list[EAST_WALL]);
+		texture->ea, &info->vars.texture_list[EAST_WALL]);
 	exit_create_texture(info,
-		texture->we, &info->vars->texture_list[WEST_WALL]);
+		texture->we, &info->vars.texture_list[WEST_WALL]);
 }

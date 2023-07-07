@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:54:00 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 13:51:51 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ typedef struct s_vars
 	double				y_cam_plane;
 	unsigned int		floor_col;
 	unsigned int		ceil_col;
-	t_data				*data;
+	// t_data				data;
 	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
 }						t_vars;
 
@@ -205,12 +205,18 @@ typedef struct s_ray
 
 struct					s_info
 {
-	t_map				*map;
-	t_vars				*vars;
-	t_data				*data;
-	t_flag				*flag;
-	t_ray				*ray;
-	t_texture			*texture;
+	t_map				map;
+	t_vars				vars;
+	t_data				data;
+	t_flag				flag;
+	t_ray				ray;
+	t_texture			texture;
+	// t_map				*map;
+	// t_vars				*vars;
+	// t_data				*data;
+	// t_flag				*flag;
+	// t_ray				*ray;
+	// t_texture			*texture;
 };
 
 typedef struct s_draw_wall
@@ -240,10 +246,11 @@ typedef struct s_draw_background
 }						t_draw_background;
 
 // init
-void					init(t_info *info, t_map *map, t_vars *vars,
-							t_data *data);
-void					init_second(t_info *info, t_flag *flag,
-							t_texture *texture);
+void					init(t_info *info);
+// void					init(t_info *info, t_map *map, t_vars *vars,
+// 							t_data *data);
+// void					init_second(t_info *info, t_flag *flag,
+// 							t_texture *texture);
 
 // ------------------------------------------------
 // FILE
@@ -306,10 +313,10 @@ void					player_move(t_info *info, int keycode);
 // ------------------------------------------------
 
 void					raycasting(t_info *info);
-void					clean_image(t_vars *vars);
+void					clean_image(t_data *data);
 void					create_xpm_textures(t_texture *texture, t_info *info);
 void					destruct_raycasting(t_info *info);
-void					draw_color_floor_and_ceil(t_vars *vars,
+void					draw_color_floor_and_ceil(t_data *data,
 							unsigned int floor_col, unsigned int ceil_col);
 int						draw_wall(t_info *info);
 void					*exit_mlx_new_image(void *mlx);
@@ -318,18 +325,18 @@ void					*exit_mlx_init(void);
 int						get_nearest_axis(t_ray *ray, t_info *info);
 void					init_nswe_dirction(char player_dir, t_vars *vars);
 int						key_action(int keycode, t_info *info);
-void					my_mlx_pixel_put_line(t_vars *vars, int x_axis,
+void					my_mlx_pixel_put_line(t_data *data, int x_axis,
 							int y_axis[2], unsigned int color);
 int						mouse_action(int mousecode, t_info *info);
-void					put_texture_ceil(t_draw_background *draw, t_vars *vars,
+void					put_texture_ceil(t_draw_background *draw, t_info *info,
 							int coord_screen[2], int cell[2]);
-void					put_texture_floor(t_draw_background *draw, t_vars *vars,
+void					put_texture_floor(t_draw_background *draw, t_info *info,
 							int coord_screen[2], int cell[2]);
 void					set_draw_texture_data(t_draw_texture *texture,
 							t_draw_wall *wall, t_ray *ray, t_vars *vars);
 void					set_draw_wall_data(t_draw_wall *wall, t_ray *ray,
 							t_info *info);
-void					try_draw_texture_floor_and_ceil(t_vars *vars);
+void					try_draw_texture_floor_and_ceil(t_info *info);
 
 // ------------------------------------------------
 // WINDOW
