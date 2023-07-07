@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:09:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:04:54 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,12 @@ void	process_map_data(char **str, t_info *info, int *flag, int fd)
 {
 	if (non_specific_chara(*str) == 1)
 		*flag = 1;
-	info->map->map_data = map_str_add(info->map->map_data, *str);
+	info->map.map_data = map_str_add(info->map.map_data, *str);
 	*str = get_next_line(fd);
-	info->map->height++;
+	info->map.height++;
 	if (*flag == 1)
 	{
-		free_mapdata(info->map->map_data, info->map->height);
+		free_mapdata(info->map.map_data, info->map.height);
 		print_error("get_next_line");
 	}
 }
@@ -62,7 +62,7 @@ void	get_data_file(int fd, t_info *info)
 	{
 		if (check_texture_section(str) == 0)
 		{
-			count += read_texture(str, info->texture);
+			count += read_texture(str, &info->texture);
 			free(str);
 			str = get_next_line(fd);
 		}

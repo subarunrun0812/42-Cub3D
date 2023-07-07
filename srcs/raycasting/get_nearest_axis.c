@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 17:12:28 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:37:16 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 	int	step_y;
 	int	axis;
 
-	step_x = calculate_step_x_direction(ray, info->vars);
-	step_y = calculate_step_y_direction(ray, info->vars);
+	step_x = calculate_step_x_direction(ray, &info->vars);
+	step_y = calculate_step_y_direction(ray, &info->vars);
 	while (1)
 	{
 		if (ray->x_side_dist < ray->y_side_dist)
@@ -71,7 +71,7 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 			ray->y_map += step_y;
 			axis = Y_AXIS;
 		}
-		if (is_hit_wall(info->map->map_data, ray))
+		if (is_hit_wall(info->map.map_data, ray))
 			break ;
 	}
 	return (axis);
