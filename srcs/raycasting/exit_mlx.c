@@ -39,15 +39,12 @@ void	*exit_mlx_new_window(void *mlx)
 void	*exit_mlx_new_image(void *mlx)
 {
 	void	*image;
-	int		i;
 
 	i = 0;
 	image = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
-	printf("[%d]\n", i++);
 	if (image == NULL)
 	{
 		print_error("Failed malloc.");
 	}
-	printf("[%d]\n", i++);
 	return (image);
 }
