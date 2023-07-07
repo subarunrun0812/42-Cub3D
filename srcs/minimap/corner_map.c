@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 15:39:49 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:46:48 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,15 @@ int	determine_block_color(t_info *info, int _x, int _y)
 		return (MAP_RED);
 }
 
-void	draw_map(t_info *info, int start_x, int start_y, int end_x, int end_y)
+void	draw_map(t_info *info, int end_x, int end_y)
 {
-	int _x, _y;
+	int	_x;
+	int	_y;
+	int	start_y;
+	int	start_x;
+
+	start_y = (int)info->vars.x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	start_x = (int)info->vars.y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
 	_y = start_y;
 	while (_y < end_y)
 	{
@@ -76,21 +82,16 @@ void	draw_ray(t_info *info)
 
 void	corner_map(t_info *info, t_data *data)
 {
-	int	start_y;
 	int	end_y;
-	int	start_x;
 	int	end_x;
 
 	(void)data;
-	// マップのx,y軸の表示する範囲
-	start_y = (int)info->vars.x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
 	end_y = (int)info->vars.x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
 		end_y++;
-	start_x = (int)info->vars.y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
 	end_x = (int)info->vars.y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
 		end_x++;
-	draw_map(info, start_x, start_y, end_x, end_y);
+	draw_map(info, end_x, end_y);
 	draw_ray(info);
 }
