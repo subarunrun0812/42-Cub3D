@@ -6,64 +6,76 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:41:20 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:21:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
-
-static int	get_draw_color(t_info *info, int i, int j)
+void	corner_map(t_info *info, t_data *data)
 {
-	char	pos;
-
-	pos = info->map->map_data[i][j];
-	if (i < 0 || i >= info->map->height || j < 0
-		|| j > mapdata_width_length(info->map->map_data[i]) || pos == ' ')
-		return (MAP_PINK);
-	else if (pos == '1' || pos == '2' || pos == '3' || pos == '4')
-		return (MAP_GREEN);
-	else if (pos == '0')
-		return (MAP_WHITE);
-	else if (pos == 'N' || pos == 'S' || pos == 'E' || pos == 'W')
-	{
-		info->map->x_player = j;
-		info->map->y_player = i;
-		return (BLUE);
-	}
-	else
-		return (MAP_RED);
-}
-
-static void	draw_corner_map(t_info *info, int end_i, int end_j)
-{
-	int	i;
-	int	j;
-	int	start_i;
-	int	start_j;
-	int	color;
-
-	start_i = (int)info->vars->x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
-	start_j = (int)info->vars->y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
-	i = start_i;
-	j = start_j;
-	while (i < end_i)
-	{
-		j = start_j;
-		while (j < end_j)
-		{
-			color = get_draw_color(info, i, j);
-			corner_draw_one_block(info, j - start_j, i - start_i, color);
-			j++;
-		}
-		i++;
-	}
-}
-
-static void	draw_ray(t_info *info, int ray_len)
-{
+	int	start_y;
+	int	end_y;
+	int	start_x;
+	int	end_x;
+	int	_y;
+	int	_x;
+	int	ray_len;
 	int	tmp_x;
 	int	tmp_y;
 
+	(void)data;
+	// マップのx,y軸の表示する範囲
+	start_y = (int)info->vars->x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	end_y = (int)info->vars->x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
+	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
+		end_y++;
+	start_x = (int)info->vars->y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	end_x = (int)info->vars->y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
+	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
+		end_x++;
+	_y = start_y;
+	_x = start_x;
+	while (_y < end_y)
+	{
+		_x = start_x;
+		while (_x < end_x)
+		{
+			//マップがいの場合
+			if (_y < 0 || _y >= info->map->height || _x < 0
+				|| _x > mapdata_width_length(info->map->map_data[_y])
+				|| info->map->map_data[_y][_x] == ' ')
+			{
+				corner_draw_one_block(info, _x - start_x, _y - start_y, MAP_PINK);
+			}
+			else if (info->map->map_data[_y][_x] == '1'
+				|| info->map->map_data[_y][_x] == '2'
+				|| info->map->map_data[_y][_x] == '3'
+				|| info->map->map_data[_y][_x] == '4')
+			{
+				corner_draw_one_block(info, _x - start_x, _y - start_y, MAP_GREEN);
+			}
+			else if (info->map->map_data[_y][_x] == '0')
+			{
+				corner_draw_one_block(info, _x - start_x, _y - start_y, MAP_WHITE);
+			}
+			else if (info->map->map_data[_y][_x] == 'N'
+				|| info->map->map_data[_y][_x] == 'S'
+				|| info->map->map_data[_y][_x] == 'E'
+				|| info->map->map_data[_y][_x] == 'W')
+			{
+				corner_draw_one_block(info, _x - start_x, _y - start_y, BLUE);
+				info->map->x_player = _x;
+				info->map->y_player = _y;
+			}
+			else
+				corner_draw_one_block(info, _x - start_x, _y - start_y, MAP_RED);
+			_x++;
+		}
+		_y++;
+	}
+	ray_len = BLOCK_SIZE / 2;
+	tmp_x = 0;
+	tmp_y = 0;
 	while (ray_len < 30)
 	{
 		tmp_x = (ray_len * info->vars->y_dir);
@@ -72,22 +84,4 @@ static void	draw_ray(t_info *info, int ray_len)
 			DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y, FUCHSIA);
 		ray_len++;
 	}
-}
-
-void	corner_map(t_info *info, t_data *data)
-{
-	int	end_i;
-	int	end_j;
-	int	ray_len;
-
-	(void)data;
-	end_i = (int)info->vars->x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
-	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_i++;
-	end_j = (int)info->vars->y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
-	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_j++;
-	draw_corner_map(info, end_i, end_j);
-	ray_len = BLOCK_SIZE / 2;
-	draw_ray(info, ray_len);
 }
