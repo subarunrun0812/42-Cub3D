@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 13:22:11 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:46:09 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,11 +24,11 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 	{
 		y_coordinate_texture
 			= (int)texture->current_pos
-			& (info->vars.texture_list[texture->index].height
+			& (info->texture_list[texture->index].height
 				- 1);
 		texture->current_pos += texture->span;
-		color = *(info->vars.texture_list[texture->index].data.addr
-				+ info->vars.texture_list[texture->index].height
+		color = *(info->texture_list[texture->index].data.addr
+				+ info->texture_list[texture->index].height
 				* y_coordinate_texture + texture->x_coord);
 		if (wall->side == Y_AXIS)
 		{
@@ -79,7 +79,7 @@ int	draw_wall(t_info *info)
 	{
 		set_ray_data(&ray, &info->vars, x_coordinate_screen);
 		set_draw_wall_data(&wall, &ray, info);
-		set_draw_texture_data(&texture, &wall, &ray, &info->vars);
+		set_draw_texture_data(&texture, &wall, &ray, info);
 		put_texture(&texture, &wall, info, x_coordinate_screen);
 		x_coordinate_screen += 1;
 	}

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 13:52:59 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:13:29 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ static int	draw_texture_ceil(t_info *info)
 
 void	try_draw_texture_floor_and_ceil(t_info *info)
 {
-	if (info->vars.texture_list[FLOOR_1].data.img != NULL)
+	if (info->texture_list[FLOOR_1].data.img != NULL)
 	{
 		draw_texture_floor(info);
 	}
-	if (info->vars.texture_list[CEILING].data.img != NULL)
+	if (info->texture_list[CEILING].data.img != NULL)
 	{
 		draw_texture_ceil(info);
 	}

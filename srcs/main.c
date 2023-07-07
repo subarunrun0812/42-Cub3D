@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 13:17:28 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:50:31 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,23 +34,15 @@ void	debug_print_mapdata(t_info *info)
 int	main(int argc, char **argv)
 {
 	t_info		info;
-	// t_map		map;
-	// t_vars		vars;
-	// t_data		data;
-	// t_flag		flag;
-	// t_texture	texture;
 	t_rgb		f_rgb;
 	t_rgb		c_rgb;
 
 	if (argc != 2)
 		print_error("no map specified.");
-	// init(&info, &map, &vars, &data);
 	init(&info);
-	// init_second(&info, &flag, &texture);
 	info.texture.f_rgb = &f_rgb;
 	info.texture.c_rgb = &c_rgb;
 	read_file(argv[1], &info);
-	// init_player_coordinate(&map, &info);
 	init_player_coordinate(&info.map, &info);
 	raycasting(&info);
 	free_texture(&info);
