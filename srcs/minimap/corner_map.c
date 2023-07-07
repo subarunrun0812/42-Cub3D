@@ -6,64 +6,70 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 15:10:48 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:46:48 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/cub3d.h"
 
-static int	get_draw_color(t_info *info, int i, int j)
+int	determine_block_color(t_info *info, int _x, int _y)
 {
-	char	pos;
-
-	pos = info->map.map_data[i][j];
-	if (i < 0 || i >= info->map.height || j < 0
-		|| j > mapdata_width_length(info->map.map_data[i]) || pos == ' ')
+	if (_y < 0 || _y >= info->map.height || _x < 0
+		|| _x > mapdata_width_length(info->map.map_data[_y])
+		|| info->map.map_data[_y][_x] == ' ')
 		return (MAP_PINK);
-	else if (pos == '1' || pos == '2' || pos == '3' || pos == '4')
+	else if (info->map.map_data[_y][_x] == '1'
+		|| info->map.map_data[_y][_x] == '2'
+		|| info->map.map_data[_y][_x] == '3'
+		|| info->map.map_data[_y][_x] == '4')
 		return (MAP_GREEN);
-	else if (pos == '0')
+	else if (info->map.map_data[_y][_x] == '0')
 		return (MAP_WHITE);
-	else if (pos == 'N' || pos == 'S' || pos == 'E' || pos == 'W')
+	else if (info->map.map_data[_y][_x] == 'N'
+		|| info->map.map_data[_y][_x] == 'S'
+		|| info->map.map_data[_y][_x] == 'E'
+		|| info->map.map_data[_y][_x] == 'W')
 	{
-		info->map.x_player = j;
-		info->map.y_player = i;
+		info->map.x_player = _x;
+		info->map.y_player = _y;
 		return (BLUE);
 	}
 	else
 		return (MAP_RED);
 }
 
-static void	draw_corner_map(t_info *info, int end_i, int end_j)
+void	draw_map(t_info *info, int end_x, int end_y)
 {
-	int	i;
-	int	j;
-	int	start_i;
-	int	start_j;
-	int	color;
+	int	_x;
+	int	_y;
+	int	start_y;
+	int	start_x;
 
-	start_i = (int)info->vars.x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
-	start_j = (int)info->vars.y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
-	i = start_i;
-	j = start_j;
-	while (i < end_i)
+	start_y = (int)info->vars.x_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	start_x = (int)info->vars.y_pos - DISPLAY_RADIUS / BLOCK_SIZE;
+	_y = start_y;
+	while (_y < end_y)
 	{
-		j = start_j;
-		while (j < end_j)
+		_x = start_x;
+		while (_x < end_x)
 		{
-			color = get_draw_color(info, i, j);
-			corner_draw_one_block(info, j - start_j, i - start_i, color);
-			j++;
+			corner_draw_one_block(info, _x - start_x, _y - start_y,
+				determine_block_color(info, _x, _y));
+			_x++;
 		}
-		i++;
+		_y++;
 	}
 }
 
-static void	draw_ray(t_info *info, int ray_len)
+void	draw_ray(t_info *info)
 {
+	int	ray_len;
 	int	tmp_x;
 	int	tmp_y;
 
+	ray_len = BLOCK_SIZE / 2;
+	tmp_x = 0;
+	tmp_y = 0;
 	while (ray_len < 30)
 	{
 		tmp_x = (ray_len * info->vars.y_dir);
@@ -76,18 +82,16 @@ static void	draw_ray(t_info *info, int ray_len)
 
 void	corner_map(t_info *info, t_data *data)
 {
-	int	end_i;
-	int	end_j;
-	int	ray_len;
+	int	end_y;
+	int	end_x;
 
 	(void)data;
-	end_i = (int)info->vars.x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
+	end_y = (int)info->vars.x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_i++;
-	end_j = (int)info->vars.y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
+		end_y++;
+	end_x = (int)info->vars.y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
 	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_j++;
-	draw_corner_map(info, end_i, end_j);
-	ray_len = BLOCK_SIZE / 2;
-	draw_ray(info, ray_len);
+		end_x++;
+	draw_map(info, end_x, end_y);
+	draw_ray(info);
 }
