@@ -13,6 +13,7 @@
         "vector": "c",
         "raycasting.h": "c",
         "cub3d.h": "c",
-        "filesystem": "c"
+        "filesystem": "c",
+        "math.h": "c"
     },
 }

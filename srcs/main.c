@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 12:58:01 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 14:50:31 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:47:54 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void	debug_print_mapdata(t_info *info)
 
 int	main(int argc, char **argv)
 {
-	t_info		info;
-	t_rgb		f_rgb;
-	t_rgb		c_rgb;
+	t_info	info;
+	t_rgb	f_rgb;
+	t_rgb	c_rgb;
 
 	if (argc != 2)
 		print_error("no map specified.");

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 11:24:59 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:48:00 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,8 @@ static int	get_central_draw_color(t_info *info, int x, int y)
 	{
 		return (MAP_WHITE);
 	}
-	else if (info->map.map_data[y][x] == 'N'
-		|| info->map.map_data[y][x] == 'S' || info->map.map_data[y][x] == 'E'
-		|| info->map.map_data[y][x] == 'W')
+	else if (info->map.map_data[y][x] == 'N' || info->map.map_data[y][x] == 'S'
+		|| info->map.map_data[y][x] == 'E' || info->map.map_data[y][x] == 'W')
 	{
 		info->map.x_player = x;
 		info->map.y_player = y;
@@ -67,7 +66,8 @@ static void	draw_central_map(t_info *info)
 	int	start_y;
 	int	color;
 
-	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE) / 2);
+	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE)
+			/ 2);
 	start_y = (WIN_HEIGHT / 2) - (((info->map.height) * BLOCK_SIZE) / 2);
 	y = 0;
 	while (y < info->map.height)
@@ -93,7 +93,8 @@ void	central_map(t_info *info)
 	int	start_y;
 
 	draw_central_map(info);
-	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE) / 2);
+	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE)
+			/ 2);
 	start_y = (WIN_HEIGHT / 2) - (((info->map.height) * BLOCK_SIZE) / 2);
 	draw_ray_player_direction(info, start_x, start_y);
 	draw_ray_player_fov(info, start_x, start_y);
