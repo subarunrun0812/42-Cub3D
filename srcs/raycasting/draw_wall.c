@@ -6,14 +6,14 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 17:56:08 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 13:22:11 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
 static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
-		t_vars *vars, int x_coordinate_screen)
+		t_info *info, int x_coordinate_screen)
 {
 	unsigned int	color;
 	int				y_coordinate_screen;
@@ -24,17 +24,17 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 	{
 		y_coordinate_texture
 			= (int)texture->current_pos
-			& (vars->texture_list[texture->index].height
+			& (info->vars.texture_list[texture->index].height
 				- 1);
 		texture->current_pos += texture->span;
-		color = *(vars->texture_list[texture->index].data.addr
-				+ vars->texture_list[texture->index].height
+		color = *(info->vars.texture_list[texture->index].data.addr
+				+ info->vars.texture_list[texture->index].height
 				* y_coordinate_texture + texture->x_coord);
 		if (wall->side == Y_AXIS)
 		{
 			color = (color >> 1) & 8355711;
 		}
-		vars->data->addr[y_coordinate_screen * WIN_WIDTH
+		info->data.addr[y_coordinate_screen * WIN_WIDTH
 			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
 	}
@@ -77,10 +77,10 @@ int	draw_wall(t_info *info)
 	x_coordinate_screen = 0;
 	while (x_coordinate_screen < WIN_WIDTH)
 	{
-		set_ray_data(&ray, info->vars, x_coordinate_screen);
+		set_ray_data(&ray, &info->vars, x_coordinate_screen);
 		set_draw_wall_data(&wall, &ray, info);
-		set_draw_texture_data(&texture, &wall, &ray, info->vars);
-		put_texture(&texture, &wall, info->vars, x_coordinate_screen);
+		set_draw_texture_data(&texture, &wall, &ray, &info->vars);
+		put_texture(&texture, &wall, info, x_coordinate_screen);
 		x_coordinate_screen += 1;
 	}
 	return (0);
