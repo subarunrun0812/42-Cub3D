@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 13:51:51 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:50:05 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,8 +182,6 @@ typedef struct s_vars
 	double				y_cam_plane;
 	unsigned int		floor_col;
 	unsigned int		ceil_col;
-	// t_data				data;
-	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
 }						t_vars;
 
 typedef struct s_flag
@@ -207,16 +205,10 @@ struct					s_info
 {
 	t_map				map;
 	t_vars				vars;
-	t_data				data;
 	t_flag				flag;
-	t_ray				ray;
+	t_data				data;
 	t_texture			texture;
-	// t_map				*map;
-	// t_vars				*vars;
-	// t_data				*data;
-	// t_flag				*flag;
-	// t_ray				*ray;
-	// t_texture			*texture;
+	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
 };
 
 typedef struct s_draw_wall
@@ -247,10 +239,6 @@ typedef struct s_draw_background
 
 // init
 void					init(t_info *info);
-// void					init(t_info *info, t_map *map, t_vars *vars,
-// 							t_data *data);
-// void					init_second(t_info *info, t_flag *flag,
-// 							t_texture *texture);
 
 // ------------------------------------------------
 // FILE
@@ -333,7 +321,7 @@ void					put_texture_ceil(t_draw_background *draw, t_info *info,
 void					put_texture_floor(t_draw_background *draw, t_info *info,
 							int coord_screen[2], int cell[2]);
 void					set_draw_texture_data(t_draw_texture *texture,
-							t_draw_wall *wall, t_ray *ray, t_vars *vars);
+							t_draw_wall *wall, t_ray *ray, t_info *info);
 void					set_draw_wall_data(t_draw_wall *wall, t_ray *ray,
 							t_info *info);
 void					try_draw_texture_floor_and_ceil(t_info *info);

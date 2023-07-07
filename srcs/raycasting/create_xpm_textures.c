@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 11:31:48 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 14:12:17 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,16 +77,16 @@ static void	initialize_texture_list(t_texture_data *texture_list)
 
 void	create_xpm_textures(t_texture *texture, t_info *info)
 {
-	initialize_texture_list(info->vars.texture_list);
-	create_texture_floor(info, texture->f_tex, info->vars.texture_list);
+	initialize_texture_list(info->texture_list);
+	create_texture_floor(info, texture->f_tex, info->texture_list);
 	create_texture_ceil(info,
-		texture->c_tex, &info->vars.texture_list[CEILING]);
+		texture->c_tex, &info->texture_list[CEILING]);
 	exit_create_texture(info,
-		texture->so, &info->vars.texture_list[SOUTH_WALL]);
+		texture->so, &info->texture_list[SOUTH_WALL]);
 	exit_create_texture(info,
-		texture->no, &info->vars.texture_list[NORTH_WALL]);
+		texture->no, &info->texture_list[NORTH_WALL]);
 	exit_create_texture(info,
-		texture->ea, &info->vars.texture_list[EAST_WALL]);
+		texture->ea, &info->texture_list[EAST_WALL]);
 	exit_create_texture(info,
-		texture->we, &info->vars.texture_list[WEST_WALL]);
+		texture->we, &info->texture_list[WEST_WALL]);
 }
