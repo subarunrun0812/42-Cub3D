@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 12:46:47 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:48:29 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,14 +39,15 @@ void	*exit_mlx_new_window(void *mlx)
 void	*exit_mlx_new_image(void *mlx)
 {
 	void	*image;
-	int		i = 0;
+	int		i;
 
+	i = 0;
 	image = mlx_new_image(mlx, WIN_WIDTH, WIN_HEIGHT);
-	printf("[%d]\n",i++);
+	printf("[%d]\n", i++);
 	if (image == NULL)
 	{
 		print_error("Failed malloc.");
 	}
-	printf("[%d]\n",i++);
+	printf("[%d]\n", i++);
 	return (image);
 }
