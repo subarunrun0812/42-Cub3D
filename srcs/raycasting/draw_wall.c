@@ -6,11 +6,24 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 14:46:09 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:28:20 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+double	abs_double(double value)
+{
+	if (value == 0.0)
+	{
+		return (value);
+	}
+	if (value < 0)
+	{
+		value *= -1.0;
+	}
+	return (value);
+}
 
 static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 		t_info *info, int x_coordinate_screen)
@@ -58,13 +71,13 @@ static void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 		ray->x_delta_dist = 1e30;
 	}
 	else
-		ray->x_delta_dist = ABS(1 / ray->x_dir);
+		ray->x_delta_dist = abs_double(1 / ray->x_dir);
 	if (ray->y_dir == 0)
 	{
 		ray->y_delta_dist = 1e30;
 	}
 	else
-		ray->y_delta_dist = ABS(1 / ray->y_dir);
+		ray->y_delta_dist = abs_double(1 / ray->y_dir);
 }
 
 int	draw_wall(t_info *info)
