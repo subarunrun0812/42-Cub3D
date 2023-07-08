@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 16:28:20 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/08 15:22:47 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,15 @@ static void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 		ray->x_delta_dist = 1e30;
 	}
 	else
+	{
+		/*
+		ブロックが正方形であり、そのサイズが1であるという仮定があります。
+		レイのx方向とy方向の成分（ray->x_dirとray->y_dir）は、
+		レイが1ユニット移動するときにx方向とy方向にそれぞれどれだけ移動するかを示しています。
+		したがって、これらの値の逆数を取ると、レイがx方向またはy方向に1ユニット移動するために必要な距離が得られます。
+		*/
 		ray->x_delta_dist = abs_double(1 / ray->x_dir);
+	}
 	if (ray->y_dir == 0)
 	{
 		ray->y_delta_dist = 1e30;

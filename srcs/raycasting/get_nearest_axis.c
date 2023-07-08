@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 11:37:16 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/08 14:07:58 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 	int	step_y;
 	int	axis;
 
+	//次の整数座標までの値を求める
 	step_x = calculate_step_x_direction(ray, &info->vars);
 	step_y = calculate_step_y_direction(ray, &info->vars);
 	while (1)
