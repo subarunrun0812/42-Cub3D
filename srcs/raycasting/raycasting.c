@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 13:54:12 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:16:52 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,15 +21,15 @@ static unsigned int	create_rgb(int r, int g, int b)
 	rgb = 0;
 	if (r < 0 || 255 < r)
 	{
-		r = 0;
+		r = 255;
 	}
 	if (g < 0 || 255 < g)
 	{
-		g = 0;
+		g = 255;
 	}
 	if (b < 0 || 255 < b)
 	{
-		b = 0;
+		b = 255;
 	}
 	rgb |= (r & 0xFF) << 16;
 	rgb |= (g & 0xFF) << 8;
