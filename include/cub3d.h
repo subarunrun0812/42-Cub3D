@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:50:35 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:29:53 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,8 @@
 # define Y 1
 
 //キーを押した時の移動距離
+
 # define MOVE_DIST 0.5
-// aの絶対値を返す関数
-# define ABS(a) ((a) < 0 ? -(a) : (a))
 
 //------------------------------
 //			TEXTURE
@@ -174,19 +173,14 @@ typedef struct s_vars
 {
 	void				*mlx;
 	void				*win;
-	// playerのx,y position
 	double				x_pos;
 	double				y_pos;
-	// playerが向いている向き
 	double				x_dir;
 	double				y_dir;
-	//カメラ平面のx,y成分(FOV)。-1から1の範囲
 	double				x_cam_plane;
 	double				y_cam_plane;
 	unsigned int		floor_col;
 	unsigned int		ceil_col;
-	t_data				*data;
-	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
 }						t_vars;
 
 typedef struct s_flag
@@ -196,76 +190,54 @@ typedef struct s_flag
 
 typedef struct s_ray
 {
-	// rayベクトルのx,y成分
 	double				x_dir;
 	double				y_dir;
-	// rayのマップ上の現在のブロックのx,y座標
 	int					x_map;
 	int					y_map;
-	// rayが座標上の整数値に当たるまでのx,y距離
 	double				x_side_dist;
 	double				y_side_dist;
-	// rayが次のx,y方向のブロックの境界に到達するたびに
-	// side_distanceに加えるべき距離を表します。
 	double				x_delta_dist;
 	double				y_delta_dist;
 }						t_ray;
 
 struct					s_info
 {
-	t_map				*map;
-	t_vars				*vars;
-	t_data				*data;
-	t_flag				*flag;
-	t_ray				*ray;
-	t_texture			*texture;
+	t_map				map;
+	t_vars				vars;
+	t_flag				flag;
+	t_data				data;
+	t_texture			texture;
+	t_texture_data		texture_list[TEXTURE_LIST_SIZE];
 };
 
 typedef struct s_draw_wall
 {
-	// rayが衝突した軸がx軸かy軸か判定する。
 	int					side;
-	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
 	double				wall_dist;
-	// 描画する壁の高さ
 	int					line_height;
-	// 壁の描画を開始する画面のy座標
 	int					start_y;
-	// 壁の描画を終了する画面のy座標
 	int					end_y;
 }						t_draw_wall;
 
 typedef struct s_draw_texture
 {
-	// 描画する壁のテクスチャ
 	int					index;
-	// 描画する壁（テクスチャ）のx軸上の位置
 	double				wall_x;
-	// 描画する壁のx座標
 	int					x_coord;
-	// 描画する壁の間隔
 	double				span;
-	// 現在描画する壁の位置
 	double				current_pos;
 }						t_draw_texture;
 
 typedef struct s_draw_background
 {
-	// 描画するテクスチャの列の間隔(x軸)
 	float				x_span;
-	// 描画するテクスチャの行の間隔(y軸)
 	float				y_span;
-	// 描画するテクスチャのx座標
 	float				x_coord;
-	// 描画するテクスチャのy座標
 	float				y_coord;
 }						t_draw_background;
 
 // init
-void					init(t_info *info, t_map *map, t_vars *vars,
-							t_data *data);
-void					init_second(t_info *info, t_flag *flag,
-							t_texture *texture);
+void					init(t_info *info);
 
 // ------------------------------------------------
 // FILE
@@ -328,10 +300,10 @@ void					player_move(t_info *info, int keycode);
 // ------------------------------------------------
 
 void					raycasting(t_info *info);
-void					clean_image(t_vars *vars);
+void					clean_image(t_data *data);
 void					create_xpm_textures(t_texture *texture, t_info *info);
 void					destruct_raycasting(t_info *info);
-void					draw_color_floor_and_ceil(t_vars *vars,
+void					draw_color_floor_and_ceil(t_data *data,
 							unsigned int floor_col, unsigned int ceil_col);
 int						draw_wall(t_info *info);
 void					*exit_mlx_new_image(void *mlx);
@@ -340,18 +312,18 @@ void					*exit_mlx_init(void);
 int						get_nearest_axis(t_ray *ray, t_info *info);
 void					init_nswe_dirction(char player_dir, t_vars *vars);
 int						key_action(int keycode, t_info *info);
-void					my_mlx_pixel_put_line(t_vars *vars, int x_axis,
+void					my_mlx_pixel_put_line(t_data *data, int x_axis,
 							int y_axis[2], unsigned int color);
 int						mouse_action(int mousecode, t_info *info);
-void					put_texture_ceil(t_draw_background *draw, t_vars *vars,
+void					put_texture_ceil(t_draw_background *draw, t_info *info,
 							int coord_screen[2], int cell[2]);
-void					put_texture_floor(t_draw_background *draw, t_vars *vars,
+void					put_texture_floor(t_draw_background *draw, t_info *info,
 							int coord_screen[2], int cell[2]);
 void					set_draw_texture_data(t_draw_texture *texture,
-							t_draw_wall *wall, t_ray *ray, t_vars *vars);
+							t_draw_wall *wall, t_ray *ray, t_info *info);
 void					set_draw_wall_data(t_draw_wall *wall, t_ray *ray,
 							t_info *info);
-void					try_draw_texture_floor_and_ceil(t_vars *vars);
+void					try_draw_texture_floor_and_ceil(t_info *info);
 
 // ------------------------------------------------
 // WINDOW

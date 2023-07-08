@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/04 22:24:39 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 18:00:51 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:06:11 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,18 +75,18 @@ void	check_map_wall(t_info *info)
 	int	_y;
 	int	fast;
 
-	_y = skip_new_line(info->map->map_data);
+	_y = skip_new_line(info->map.map_data);
 	fast = _y;
-	while (_y < info->map->height)
+	while (_y < info->map.height)
 	{
 		if (_y == fast)
-			check_map_upper_or_lower(info->map->map_data, _y);
-		else if (_y == info->map->height - 1)
-			check_map_upper_or_lower(info->map->map_data, _y);
+			check_map_upper_or_lower(info->map.map_data, _y);
+		else if (_y == info->map.height - 1)
+			check_map_upper_or_lower(info->map.map_data, _y);
 		else
 		{
-			check_left_right_handsides(info->map->map_data, _y);
-			check_space_around_zero(_y, info->map->map_data);
+			check_left_right_handsides(info->map.map_data, _y);
+			check_space_around_zero(_y, info->map.map_data);
 		}
 		_y++;
 	}

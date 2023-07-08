@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/06 17:05:41 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 13:53:11 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,26 +98,26 @@ void	rotate_left_camera(t_vars *vars)
 int	key_action(int keycode, t_info *info)
 {
 	if (keycode == W_KEY || keycode == UP_KEY)
-		move_forward(info->map->map_data, info->vars);
+		move_forward(info->map.map_data, &info->vars);
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
-		move_backward(info->map->map_data, info->vars);
+		move_backward(info->map.map_data, &info->vars);
 	else if (keycode == D_KEY || keycode == RIGHT_KEY)
-		rotate_right_camera(info->vars);
+		rotate_right_camera(&info->vars);
 	else if (keycode == A_KEY || keycode == LEFT_KEY)
-		rotate_left_camera(info->vars);
+		rotate_left_camera(&info->vars);
 	else if (keycode == ESC_KEY)
 		close_window(info);
 	else if (keycode == M_KEY)
-		info->flag->map *= -1;
+		info->flag.map *= -1;
 	else
 		return (-1);
-	draw_color_floor_and_ceil(info->vars,
-		info->vars->floor_col, info->vars->ceil_col);
-	try_draw_texture_floor_and_ceil(info->vars);
+	draw_color_floor_and_ceil(&info->data,
+		info->vars.floor_col, info->vars.ceil_col);
+	try_draw_texture_floor_and_ceil(info);
 	draw_wall(info);
-	mlx_put_image_to_window(info->vars->mlx, info->vars->win,
-		info->vars->data->img, 0, 0);
-	updata_pos_map(info->vars, info, keycode);
-	minimap(info, info->data);
+	mlx_put_image_to_window(info->vars.mlx, info->vars.win,
+		info->data.img, 0, 0);
+	updata_pos_map(&info->vars, info, keycode);
+	minimap(info, &info->data);
 	return (0);
 }

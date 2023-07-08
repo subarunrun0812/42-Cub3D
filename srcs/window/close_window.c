@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/09 15:30:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 16:47:01 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:42:50 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	close_window(t_info *info)
 {
-	mlx_destroy_window(info->vars->mlx, info->vars->win);
+	mlx_destroy_window(info->vars.mlx, info->vars.win);
 	free_texture(info);
 	exit(0);
 }

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/19 15:20:00 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/06 19:41:07 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 15:48:00 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ static void	draw_ray_player_direction(t_info *info, int start_x, int start_y)
 	middle_ray_y = 0;
 	while (ray_len < 100)
 	{
-		middle_ray_x = (ray_len * info->vars->y_dir);
-		middle_ray_y = (ray_len * info->vars->x_dir);
-		my_mlx_pixel_put(info->data, start_x + (info->map->x_player * BLOCK_SIZE
+		middle_ray_x = (ray_len * info->vars.y_dir);
+		middle_ray_y = (ray_len * info->vars.x_dir);
+		my_mlx_pixel_put(&info->data, start_x + (info->map.x_player * BLOCK_SIZE
 				+ (BLOCK_SIZE / 2)) + middle_ray_x, start_y
-			+ (info->map->y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))
+			+ (info->map.y_player * BLOCK_SIZE + (BLOCK_SIZE / 2))
 			+ middle_ray_y, BLACK);
 		ray_len++;
 	}
@@ -35,24 +35,23 @@ static void	draw_ray_player_direction(t_info *info, int start_x, int start_y)
 
 static int	get_central_draw_color(t_info *info, int x, int y)
 {
-	if (info->map->map_data[y][x] == ' ')
+	if (info->map.map_data[y][x] == ' ')
 	{
 		return (NO_COLOR);
 	}
-	else if (info->map->map_data[y][x] == '1')
+	else if (info->map.map_data[y][x] == '1')
 	{
 		return (MAP_GREEN);
 	}
-	else if (info->map->map_data[y][x] == '0')
+	else if (info->map.map_data[y][x] == '0')
 	{
 		return (MAP_WHITE);
 	}
-	else if (info->map->map_data[y][x] == 'N'
-		|| info->map->map_data[y][x] == 'S' || info->map->map_data[y][x] == 'E'
-		|| info->map->map_data[y][x] == 'W')
+	else if (info->map.map_data[y][x] == 'N' || info->map.map_data[y][x] == 'S'
+		|| info->map.map_data[y][x] == 'E' || info->map.map_data[y][x] == 'W')
 	{
-		info->map->x_player = x;
-		info->map->y_player = y;
+		info->map.x_player = x;
+		info->map.y_player = y;
 		return (BLUE);
 	}
 	else
@@ -67,13 +66,14 @@ static void	draw_central_map(t_info *info)
 	int	start_y;
 	int	color;
 
-	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(info->map) * BLOCK_SIZE) / 2);
-	start_y = (WIN_HEIGHT / 2) - (((info->map->height) * BLOCK_SIZE) / 2);
+	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE)
+			/ 2);
+	start_y = (WIN_HEIGHT / 2) - (((info->map.height) * BLOCK_SIZE) / 2);
 	y = 0;
-	while (y < info->map->height)
+	while (y < info->map.height)
 	{
 		x = 0;
-		while (x < mapdata_width_length(info->map->map_data[y]) + 1)
+		while (x < mapdata_width_length(info->map.map_data[y]) + 1)
 		{
 			color = get_central_draw_color(info, x, y);
 			if (color != NO_COLOR)
@@ -93,8 +93,9 @@ void	central_map(t_info *info)
 	int	start_y;
 
 	draw_central_map(info);
-	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(info->map) * BLOCK_SIZE) / 2);
-	start_y = (WIN_HEIGHT / 2) - (((info->map->height) * BLOCK_SIZE) / 2);
+	start_x = (WIN_WIDTH / 2) - ((maxwidth_length(&info->map) * BLOCK_SIZE)
+			/ 2);
+	start_y = (WIN_HEIGHT / 2) - (((info->map.height) * BLOCK_SIZE) / 2);
 	draw_ray_player_direction(info, start_x, start_y);
 	draw_ray_player_fov(info, start_x, start_y);
 	return ;
