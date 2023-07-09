@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 15:46:48 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/09 16:29:52 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,7 @@ int	determine_block_color(t_info *info, int _x, int _y)
 		|| _x > mapdata_width_length(info->map.map_data[_y])
 		|| info->map.map_data[_y][_x] == ' ')
 		return (MAP_PINK);
-	else if (info->map.map_data[_y][_x] == '1'
-		|| info->map.map_data[_y][_x] == '2'
-		|| info->map.map_data[_y][_x] == '3'
-		|| info->map.map_data[_y][_x] == '4')
+	else if (info->map.map_data[_y][_x] == '1')
 		return (MAP_GREEN);
 	else if (info->map.map_data[_y][_x] == '0')
 		return (MAP_WHITE);
