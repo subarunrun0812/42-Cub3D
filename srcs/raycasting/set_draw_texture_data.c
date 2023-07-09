@@ -6,12 +6,13 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 14:48:48 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/09 14:54:57 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
+//壁の東西南北のテクスチャの決定
 static int	decide_draw_texture(t_ray *ray, t_vars *vars, int side)
 {
 	if (side == Y_AXIS)
