@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 11:37:16 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/09 13:27:07 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 static bool	is_hit_wall(char **map, t_ray *ray)
 {
-	if ('0' < map[ray->x_map][ray->y_map]
-		&& map[ray->x_map][ray->y_map] <= '9')
+	if ('1' == map[ray->x_map][ray->y_map])
 	{
 		return (true);
 	}
