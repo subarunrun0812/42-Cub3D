@@ -14,8 +14,7 @@
 
 static bool	is_hit_wall(char **map, t_ray *ray)
 {
-	if ('0' < map[ray->x_map][ray->y_map]
-		&& map[ray->x_map][ray->y_map] <= '9')
+	if ('1' == map[ray->x_map][ray->y_map])
 	{
 		return (true);
 	}
