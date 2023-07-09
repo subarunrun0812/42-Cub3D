@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 16:29:53 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/07 16:37:58 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,8 @@
 //			RAYCASTING
 //------------------------------
 
-# define X_AXIS true
-# define Y_AXIS false
-
-# define X 0
-# define Y 1
+# define X_AXIS 0
+# define Y_AXIS 1
 
 //キーを押した時の移動距離
 
