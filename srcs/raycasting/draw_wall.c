@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/08 15:22:47 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/09 16:22:55 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,14 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 	y_coordinate_screen = wall->start_y;
 	while (y_coordinate_screen < wall->end_y)
 	{
+		// &(モジャロ演算)される。
 		y_coordinate_texture
 			= (int)texture->current_pos
 			& (info->texture_list[texture->index].height
 				- 1);
 		texture->current_pos += texture->span;
+		//addrは一次元配列なので、textureのaddress + height * y + x
+		//で画像ファイルのメモリにアクセスでき、colorを指定できる
 		color = *(info->texture_list[texture->index].data.addr
 				+ info->texture_list[texture->index].height
 				* y_coordinate_texture + texture->x_coord);
@@ -47,6 +50,7 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 		{
 			color = (color >> 1) & 8355711;
 		}
+		//計算された色がスクリーンの正しい位置に配置する。
 		info->data.addr[y_coordinate_screen * WIN_WIDTH
 			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;

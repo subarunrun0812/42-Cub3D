@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/09 14:04:04 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/09 16:05:01 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,6 +137,7 @@ typedef struct s_map
 typedef struct s_data
 {
 	void				*img;
+	//xpmファイルの画像情報が一次元配列で格納されている
 	unsigned int		*addr;
 	int					bits_per_pixel;
 	int					line_length;
@@ -236,11 +237,11 @@ typedef struct s_draw_texture
 {
 	// 描画する壁のテクスチャ
 	int					index;
-	// 描画する壁（テクスチャ）のx軸上の位置
+	// 描画する壁（テクスチャ）の位置
 	double				wall_x;
 	// 描画する壁のx座標
 	int					x_coord;
-	// 描画する壁の間隔
+	// 描画する壁のpixelの間隔
 	double				span;
 	// 現在描画する壁の位置
 	double				current_pos;
