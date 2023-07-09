@@ -1,7 +1,6 @@
 NAME = cub3D
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -g -fsanitize=address
-# CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 LIBS = -Lmlx -lmlx -framework OpenGL -framework AppKit
 SOURCES_DIR = ./srcs
 LIBFT_DIR = ./srcs/libft
@@ -95,3 +94,7 @@ fclean : clean
 	$(MAKE) -C $(LIBFT_DIR) fclean
 
 re: fclean all
+
+.PHONY: over_flow
+over_flow: CFLAGS += -g -fsanitize=address
+over_flow: re
