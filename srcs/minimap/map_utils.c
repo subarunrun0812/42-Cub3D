@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:26:35 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/09 14:47:38 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/07 11:25:24 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,10 @@ void	central_draw_one_block(t_info *info, int draw_x, int draw_y, int color)
 	int	y;
 
 	x = draw_x;
-	while (x < draw_x + BLOCK_SIZE -1)
+	while (x < draw_x + BLOCK_SIZE)
 	{
 		y = draw_y;
-		while (y < (draw_y + BLOCK_SIZE -1))
+		while (y < (draw_y + BLOCK_SIZE))
 		{
 			my_mlx_pixel_put(&info->data, x, y, color);
 			y++;

@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/09 14:50:43 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:55:01 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 static double	get_wall_distance(t_ray *ray, int side)
 {
-	//side_dist = 壁に衝突した距離 + 次の整数座標までのdelta_dist
 	if (side == X_AXIS)
 	{
 		return (ray->x_side_dist - ray->x_delta_dist);
@@ -51,8 +50,6 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 	wall->side = get_nearest_axis(ray, info);
 	wall->wall_dist
 		= get_wall_distance(ray, wall->side);
-	printf("wall_dist=%f\n",wall->wall_dist);
-	printf("line_height=%d\n",wall->line_height);
 	wall->line_height = (int)(WIN_HEIGHT
 			/ wall->wall_dist);
 	wall->start_y = get_draw_start_y_coordinate(wall->line_height);
