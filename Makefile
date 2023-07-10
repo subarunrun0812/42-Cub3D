@@ -13,6 +13,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
           $(SOURCES_DIR)/free.c\
           $(SOURCES_DIR)/init.c\
           $(SOURCES_DIR)/print_error.c\
+          $(SOURCES_DIR)/ft_strstr.c\
           $(FILE_READ_DIR)/assign_to_structure_rgb.c\
           $(FILE_READ_DIR)/assign_to_structure.c\
           $(FILE_READ_DIR)/read_file.c\
