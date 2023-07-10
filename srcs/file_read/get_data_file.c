@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 18:01:49 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/07 11:04:54 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/10 13:45:24 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,19 @@ void	get_data_file(int fd, t_info *info)
 	count = 0;
 	while (str)
 	{
-		if (check_texture_section(str) == 0)
+		if (check_texture_section(str) == 0 && count < 6)
 		{
 			count += read_texture(str, &info->texture);
 			free(str);
 			str = get_next_line(fd);
 		}
 		else if (count < 6)
+		{
 			lack_of_texture(info);
+		}
 		else
+		{
 			process_map_data(&str, info, &flag, fd);
+		}
 	}
 }
