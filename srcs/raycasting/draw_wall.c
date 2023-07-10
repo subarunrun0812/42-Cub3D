@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/08 11:56:29 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/10 11:44:34 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,11 +36,14 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 	y_coordinate_screen = wall->start_y;
 	while (y_coordinate_screen < wall->end_y)
 	{
+		// &(モジャロ演算)される。
 		y_coordinate_texture
 			= (int)texture->current_pos
 			& (info->texture_list[texture->index].height
 				- 1);
 		texture->current_pos += texture->span;
+		//addrは一次元配列なので、textureのaddress + height * y + x
+		//で画像ファイルのメモリにアクセスでき、colorを指定できる
 		color = *(info->texture_list[texture->index].data.addr
 				+ info->texture_list[texture->index].height
 				* y_coordinate_texture + texture->x_coord);
@@ -48,6 +51,7 @@ static void	put_texture(t_draw_texture *texture, t_draw_wall *wall,
 		{
 			color = (color >> 1) & 8355711;
 		}
+		//計算された色がスクリーンの正しい位置に配置する。
 		info->data.addr[y_coordinate_screen * WIN_WIDTH
 			+ x_coordinate_screen] = color;
 		y_coordinate_screen += 1;
@@ -80,6 +84,12 @@ static void	set_ray_data(t_ray *ray, t_vars *vars, int x)
 	else
 	{
 		// 水平に1グリッド進むのに必要な[実距離]を表す
+		/*
+		ブロックが正方形であり、そのサイズが1であるという仮定があります。
+		レイのx方向とy方向の成分（ray->x_dirとray->y_dir）は、
+		レイが1ユニット移動するときにx方向とy方向にそれぞれどれだけ移動するかを示しています。
+		したがって、これらの値の逆数を取ると、レイがx方向またはy方向に1ユニット移動するために必要な距離が得られます。
+		*/
 		ray->x_delta_dist = abs_double(1 / ray->x_dir);
 	}
 	if (ray->y_dir == 0)

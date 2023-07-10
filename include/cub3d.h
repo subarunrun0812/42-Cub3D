@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/08 10:47:53 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/10 11:45:25 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,11 +76,8 @@
 //			RAYCASTING
 //------------------------------
 
-# define X_AXIS true
-# define Y_AXIS false
-
-# define X 0
-# define Y 1
+# define X_AXIS 0
+# define Y_AXIS 1
 
 //キーを押した時の移動距離
 
@@ -105,8 +102,8 @@
 //			MINIMAP
 //------------------------------
 
-# define BLOCK_SIZE 12
-# define DISPLAY_RADIUS 60
+# define BLOCK_SIZE 24
+# define DISPLAY_RADIUS 120
 
 //------------------------------
 //			OTHER
@@ -137,6 +134,7 @@ typedef struct s_map
 typedef struct s_data
 {
 	void				*img;
+	//xpmファイルの画像情報が一次元配列で格納されている
 	unsigned int		*addr;
 	int					bits_per_pixel;
 	int					line_length;
@@ -237,11 +235,11 @@ typedef struct s_draw_texture
 {
 	// 描画する壁のテクスチャ
 	int					index;
-	// 描画する壁（テクスチャ）のx軸上の位置
+	// 描画する壁（テクスチャ）の位置
 	double				wall_x;
 	// 描画する壁のx座標
 	int					x_coord;
-	// 描画する壁の間隔
+	// 描画する壁のpixelの間隔
 	double				span;
 	// 現在描画する壁の位置
 	double				current_pos;
@@ -258,6 +256,7 @@ typedef struct s_draw_background
 	// 描画するテクスチャのy座標
 	float				y_coord;
 }						t_draw_background;
+
 
 // init
 void					init(t_info *info);
