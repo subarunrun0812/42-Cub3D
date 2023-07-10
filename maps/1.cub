@@ -2,8 +2,9 @@ NO textures/no.xpm
 SO textures/so.xpm
 WE textures/we.xpm
 EA textures/ea.xpm
-F 
-C 0,10,-10
+
+F 220,100,0
+C 225,30,0
 
 111111111
 100000001

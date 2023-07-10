@@ -6,6 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
+/*   Updated: 2023/07/10 13:59:29 by susasaki         ###   ########.fr       */
 /*   Updated: 2023/07/09 16:46:50 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
@@ -253,7 +254,7 @@ int						mapdata_width_length(char *width);
 int						maxwidth_length(t_map *map);
 void					updata_pos_map(t_vars *vars, t_info *info, int keycode);
 char					**map_str_add(char **array, char *new);
-
+char					*ft_strstr(const char *str, const char *c);
 // FILE
 int						check_num(char *num_str);
 void					init_rgb_values(t_rgb *rgb);
