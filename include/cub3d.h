@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
 /*   Updated: 2023/07/10 13:59:29 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/09 16:46:50 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +80,9 @@
 # define X_AXIS 0
 # define Y_AXIS 1
 
+# define X 0
+# define Y 1
+
 //キーを押した時の移動距離
 
 # define MOVE_DIST 0.5
@@ -102,8 +106,8 @@
 //			MINIMAP
 //------------------------------
 
-# define BLOCK_SIZE 24
-# define DISPLAY_RADIUS 120
+# define BLOCK_SIZE 12
+# define DISPLAY_RADIUS 60
 
 //------------------------------
 //			OTHER
@@ -134,7 +138,6 @@ typedef struct s_map
 typedef struct s_data
 {
 	void				*img;
-	//xpmファイルの画像情報が一次元配列で格納されている
 	unsigned int		*addr;
 	int					bits_per_pixel;
 	int					line_length;
@@ -171,13 +174,10 @@ typedef struct s_vars
 {
 	void				*mlx;
 	void				*win;
-	// playerのx,y position
 	double				x_pos;
 	double				y_pos;
-	// playerが向いている向き
 	double				x_dir;
 	double				y_dir;
-	//カメラ平面のx,y成分(FOV)。-1から1の範囲
 	double				x_cam_plane;
 	double				y_cam_plane;
 	unsigned int		floor_col;
@@ -191,17 +191,12 @@ typedef struct s_flag
 
 typedef struct s_ray
 {
-	// rayベクトルのx,y成分
 	double				x_dir;
 	double				y_dir;
-	// rayのマップ上の現在のブロックのx,y座標
 	int					x_map;
 	int					y_map;
-	// rayが座標上の整数値に当たるまでのx,y距離
 	double				x_side_dist;
 	double				y_side_dist;
-	// rayが次のx,y方向のブロックの境界に到達するたびに
-	// side_distanceに加えるべき距離を表します。
 	double				x_delta_dist;
 	double				y_delta_dist;
 }						t_ray;
@@ -218,44 +213,29 @@ struct					s_info
 
 typedef struct s_draw_wall
 {
-	// rayが衝突した軸がx軸かy軸か判定する。
 	int					side;
-	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
 	double				wall_dist;
-	// 描画する壁の高さ
 	int					line_height;
-	// 壁の描画を開始する画面のy座標
 	int					start_y;
-	// 壁の描画を終了する画面のy座標
 	int					end_y;
 }						t_draw_wall;
 
 typedef struct s_draw_texture
 {
-	// 描画する壁のテクスチャ
 	int					index;
-	// 描画する壁（テクスチャ）の位置
 	double				wall_x;
-	// 描画する壁のx座標
 	int					x_coord;
-	// 描画する壁のpixelの間隔
 	double				span;
-	// 現在描画する壁の位置
 	double				current_pos;
 }						t_draw_texture;
 
 typedef struct s_draw_background
 {
-	// 描画するテクスチャの列の間隔(x軸)
 	float				x_span;
-	// 描画するテクスチャの行の間隔(y軸)
 	float				y_span;
-	// 描画するテクスチャのx座標
 	float				x_coord;
-	// 描画するテクスチャのy座標
 	float				y_coord;
 }						t_draw_background;
-
 
 // init
 void					init(t_info *info);

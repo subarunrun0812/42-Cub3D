@@ -7,6 +7,7 @@
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
 /*   Updated: 2023/07/10 13:36:07 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/06 17:55:01 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +15,6 @@
 
 static double	get_wall_distance(t_ray *ray, int side)
 {
-	//side_dist = 壁に衝突した距離 + 次の整数座標までのdelta_dist
 	if (side == X_AXIS)
 	{
 		return (ray->x_side_dist - ray->x_delta_dist);
