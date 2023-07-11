@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 19:54:54 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/11 19:54:56 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 21:03:16 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,8 @@ void	move_forward(char **map, t_vars *vars)
 		return ;
 	else
 	{
-		if (0 < one_forward_x_pos_vec && 0 < (int)vars->x_pos)
-		{
-			vars->x_pos += vars->x_dir * MOVE_DIST;
-		}
-		if (0 < one_forward_y_pos_vec && 0 < (int)vars->y_pos)
-		{
-			vars->y_pos += vars->y_dir * MOVE_DIST;
-		}
+		vars->x_pos += vars->x_dir * MOVE_DIST;
+		vars->y_pos += vars->y_dir * MOVE_DIST;
 	}
 }
 
@@ -49,10 +43,8 @@ void	move_backward(char **map, t_vars *vars)
 		return ;
 	else
 	{
-		if (0 < one_backward_x_pos_vec && 0 < (int)vars->x_pos)
-			vars->x_pos -= vars->x_dir * MOVE_DIST;
-		if (0 < one_backward_y_pos_vec && 0 < (int)vars->y_pos)
-			vars->y_pos -= vars->y_dir * MOVE_DIST;
+		vars->x_pos -= vars->x_dir * MOVE_DIST;
+		vars->y_pos -= vars->y_dir * MOVE_DIST;
 	}
 }
 
@@ -69,14 +61,8 @@ void	move_right(char **map, t_vars *vars)
 		return ;
 	else
 	{
-		if (0 < one_right_x_pos_vec && 0 < (int)vars->x_pos)
-		{
-			vars->x_pos += vars->y_dir * MOVE_DIST;
-		}
-		if (0 < one_right_y_pos_vec && 0 < (int)vars->y_pos)
-		{
-			vars->y_pos -= vars->x_dir * MOVE_DIST;
-		}
+		vars->x_pos += vars->y_dir * MOVE_DIST;
+		vars->y_pos -= vars->x_dir * MOVE_DIST;
 	}
 }
 
@@ -94,13 +80,7 @@ void	move_left(char **map, t_vars *vars)
 		return ;
 	else
 	{
-		if (0 < one_left_x_pos_vec && 0 < (int)vars->x_pos)
-		{
-			vars->x_pos -= vars->y_dir * MOVE_DIST;
-		}
-		if (0 < one_left_y_pos_vec && 0 < (int)vars->y_pos)
-		{
-			vars->y_pos += vars->x_dir * MOVE_DIST;
-		}
+		vars->x_pos -= vars->y_dir * MOVE_DIST;
+		vars->y_pos += vars->x_dir * MOVE_DIST;
 	}
 }
