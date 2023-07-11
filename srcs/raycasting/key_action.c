@@ -6,60 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/07 13:53:11 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/11 19:55:05 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	move_forward(char **map, t_vars *vars)
-{
-	int		one_forward_x_pos_vec;
-	int		one_forward_y_pos_vec;
-	char	distination;
-
-	one_forward_x_pos_vec = vars->x_pos
-		+ (vars->x_dir * MOVE_DIST);
-	one_forward_y_pos_vec = vars->y_pos
-		+ (vars->y_dir * MOVE_DIST);
-	distination
-		= map[one_forward_x_pos_vec][one_forward_y_pos_vec];
-	if (distination == '1')
-		return ;
-	else
-	{
-		if (0 < one_forward_x_pos_vec && 0 < (int)vars->x_pos)
-		{
-			vars->x_pos += vars->x_dir * MOVE_DIST;
-		}
-		if (0 < one_forward_y_pos_vec && 0 < (int)vars->y_pos)
-		{
-			vars->y_pos += vars->y_dir * MOVE_DIST;
-		}
-	}
-}
-
-void	move_backward(char **map, t_vars *vars)
-{
-	int		one_backward_x_pos_vec;
-	int		one_backward_y_pos_vec;
-	char	distination;
-
-	one_backward_x_pos_vec
-		= vars->x_pos - (vars->x_dir * MOVE_DIST);
-	one_backward_y_pos_vec
-		= vars->y_pos - (vars->y_dir * MOVE_DIST);
-	distination = map[one_backward_x_pos_vec][one_backward_y_pos_vec];
-	if (distination == '1')
-		return ;
-	else
-	{
-		if (0 < one_backward_x_pos_vec && 0 < (int)vars->x_pos)
-			vars->x_pos -= vars->x_dir * MOVE_DIST;
-		if (0 < one_backward_y_pos_vec && 0 < (int)vars->y_pos)
-			vars->y_pos -= vars->y_dir * MOVE_DIST;
-	}
-}
 
 void	rotate_right_camera(t_vars *vars)
 {
@@ -101,9 +52,13 @@ int	key_action(int keycode, t_info *info)
 		move_forward(info->map.map_data, &info->vars);
 	else if (keycode == S_KEY || keycode == DOWN_KEY)
 		move_backward(info->map.map_data, &info->vars);
-	else if (keycode == D_KEY || keycode == RIGHT_KEY)
+	else if (keycode == D_KEY)
+		move_right(info->map.map_data, &info->vars);
+	else if (keycode == A_KEY)
+		move_left(info->map.map_data, &info->vars);
+	else if (keycode == RIGHT_KEY)
 		rotate_right_camera(&info->vars);
-	else if (keycode == A_KEY || keycode == LEFT_KEY)
+	else if (keycode == LEFT_KEY)
 		rotate_left_camera(&info->vars);
 	else if (keycode == ESC_KEY)
 		close_window(info);
