@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   set_draw_wall_data.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/09 14:50:43 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 10:33:44 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,8 +51,6 @@ void	set_draw_wall_data(t_draw_wall *wall, t_ray *ray, t_info *info)
 	wall->side = get_nearest_axis(ray, info);
 	wall->wall_dist
 		= get_wall_distance(ray, wall->side);
-	printf("wall_dist=%f\n",wall->wall_dist);
-	printf("line_height=%d\n",wall->line_height);
 	wall->line_height = (int)(WIN_HEIGHT
 			/ wall->wall_dist);
 	wall->start_y = get_draw_start_y_coordinate(wall->line_height);

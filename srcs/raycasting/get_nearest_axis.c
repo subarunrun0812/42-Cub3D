@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_nearest_axis.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
+/*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/09 13:39:29 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 12:12:44 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	get_nearest_axis(t_ray *ray, t_info *info)
 	int	step_y;
 	int	axis;
 
-	//次の整数座標までの値を求める
+	//始めの整数座標までの値を求め、ray->side_distに代入
 	step_x = calculate_step_x_direction(ray, &info->vars);
 	step_y = calculate_step_y_direction(ray, &info->vars);
 	while (1)

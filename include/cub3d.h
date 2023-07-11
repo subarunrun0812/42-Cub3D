@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/10 11:45:25 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 14:25:39 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -221,7 +221,7 @@ typedef struct s_draw_wall
 {
 	// rayが衝突した軸がx軸かy軸か判定する。
 	int					side;
-	// playerの現在位置からそのrayが衝突した壁までの距離。perpendicular=垂直
+	// playerの現在位置からそのrayが衝突した壁までの距離。
 	double				wall_dist;
 	// 描画する壁の高さ
 	int					line_height;
