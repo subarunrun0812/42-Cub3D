@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/09 16:29:52 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 18:30:14 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,11 +84,7 @@ void	corner_map(t_info *info, t_data *data)
 
 	(void)data;
 	end_y = (int)info->vars.x_pos + DISPLAY_RADIUS / BLOCK_SIZE;
-	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_y++;
 	end_x = (int)info->vars.y_pos + DISPLAY_RADIUS / BLOCK_SIZE;
-	if (DISPLAY_RADIUS % BLOCK_SIZE != 0)
-		end_x++;
 	draw_map(info, end_x, end_y);
 	draw_ray(info);
 }

@@ -6,8 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/10 13:59:29 by susasaki         ###   ########.fr       */
-/*   Updated: 2023/07/09 16:46:50 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/11 19:57:46 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -325,6 +324,12 @@ void					set_draw_texture_data(t_draw_texture *texture,
 void					set_draw_wall_data(t_draw_wall *wall, t_ray *ray,
 							t_info *info);
 void					try_draw_texture_floor_and_ceil(t_info *info);
+//player move
+void					move_forward(char **map, t_vars *vars);
+void					move_backward(char **map, t_vars *vars);
+void					move_right(char **map, t_vars *vars);
+void					move_left(char **map, t_vars *vars);
+
 
 // ------------------------------------------------
 // WINDOW

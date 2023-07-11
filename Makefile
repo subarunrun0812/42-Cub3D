@@ -40,6 +40,7 @@ SOURCES = $(SOURCES_DIR)/main.c\
 		  $(RAYCASTING_DIR)/create_xpm_textures.c\
 		  $(RAYCASTING_DIR)/exit_mlx.c\
 		  $(RAYCASTING_DIR)/key_action.c\
+		  $(RAYCASTING_DIR)/player_move.c\
 		  $(RAYCASTING_DIR)/put_texture_floor.c\
 		  $(RAYCASTING_DIR)/try_draw_texture_floor_and_ceil.c\
 		  $(RAYCASTING_DIR)/destruct_raycasting.c\
