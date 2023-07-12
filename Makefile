@@ -100,3 +100,13 @@ re: fclean all
 .PHONY: over_flow
 over_flow: CFLAGS += -g -fsanitize=address
 over_flow: re
+
+.PHONY: norm
+norm:
+	norminette include srcs
+
+.PHONY: check_func
+check_func:
+	nm -u cub3D | \
+	grep -v "\( open \| close \| read \| write \| printf \| malloc \| free \| perror \| strerror \| exit\)" | \
+	grep -v '\w\+\s_\w\+'
