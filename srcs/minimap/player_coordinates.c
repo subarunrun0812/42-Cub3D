@@ -6,43 +6,44 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/11 21:13:14 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:19:35 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/cub3d.h"
 
-static void	updata_pos_map_W_S_KEY(t_vars *vars, t_info *info, int keycode)
+static void	updata_pos_map_w_s_key(t_vars *vars, t_info *info, int keycode)
 {
 	if (keycode == W_KEY)
 	{
 		info->map.map_data[(int)(vars->x_pos + (-vars->x_dir
-				* MOVE_DIST))][(int)(vars->y_pos + (-vars->y_dir
-				* MOVE_DIST))] = '0';
+					* MOVE_DIST))][(int)(vars->y_pos + (-vars->y_dir
+					* MOVE_DIST))] = '0';
 		info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] = 'N';
 	}
 	else if (keycode == S_KEY)
 	{
 		info->map.map_data[(int)(vars->x_pos + (vars->x_dir
-				* MOVE_DIST))][(int)(vars->y_pos + (vars->y_dir
-				* MOVE_DIST))] = '0';
+					* MOVE_DIST))][(int)(vars->y_pos + (vars->y_dir
+					* MOVE_DIST))] = '0';
 		info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] = 'N';
 	}
 }
-static void	updata_pos_map_A_D_KEY(t_vars *vars, t_info *info, int keycode)
+
+static void	updata_pos_map_a_d_key(t_vars *vars, t_info *info, int keycode)
 {
 	if (keycode == A_KEY)
 	{
 		info->map.map_data[(int)(vars->x_pos + (vars->y_dir
-				* MOVE_DIST))][(int)(vars->y_pos + (-vars->x_dir
-				* MOVE_DIST))] = '0';
+					* MOVE_DIST))][(int)(vars->y_pos + (-vars->x_dir
+					* MOVE_DIST))] = '0';
 		info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] = 'N';
 	}
 	else if (keycode == D_KEY)
 	{
 		info->map.map_data[(int)(vars->x_pos + (-vars->y_dir
-				* MOVE_DIST))][(int)(vars->y_pos + (vars->x_dir
-				* MOVE_DIST))] = '0';
+					* MOVE_DIST))][(int)(vars->y_pos + (vars->x_dir
+					* MOVE_DIST))] = '0';
 		info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] = 'N';
 	}
 }
@@ -53,11 +54,11 @@ void	updata_pos_map(t_vars *vars, t_info *info, int keycode)
 	{
 		if (keycode == W_KEY || keycode == S_KEY)
 		{
-			updata_pos_map_W_S_KEY(vars, info, keycode);
+			updata_pos_map_w_s_key(vars, info, keycode);
 		}
 		else if (keycode == A_KEY || keycode == D_KEY)
 		{
-			updata_pos_map_A_D_KEY(vars, info, keycode);
+			updata_pos_map_a_d_key(vars, info, keycode);
 		}
 	}
 	else if (info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] == '1')
