@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:50:22 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/12 12:03:50 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 15:37:09 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,8 @@
 # define X_AXIS 0
 # define Y_AXIS 1
 
-# define X 0
-# define Y 1
-
 //キーを押した時の移動距離
-# define MOVE_DIST 0.5
+# define MOVE_DIST 0.4
 //視点を20度回転させる
 # define ROTATION 0.349066
 
@@ -330,7 +327,6 @@ void					move_forward(char **map, t_vars *vars);
 void					move_backward(char **map, t_vars *vars);
 void					move_right(char **map, t_vars *vars);
 void					move_left(char **map, t_vars *vars);
-
 
 // ------------------------------------------------
 // WINDOW
