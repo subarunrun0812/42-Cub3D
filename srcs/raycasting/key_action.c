@@ -19,14 +19,14 @@ void	rotate_right_camera(t_vars *vars)
 
 	x_old_dir = vars->x_dir;
 	x_old_plane = vars->x_cam_plane;
-	vars->x_dir = vars->x_dir * cos(-MOVE_DIST)
-		- vars->y_dir * sin(-MOVE_DIST);
-	vars->y_dir = x_old_dir * sin(-MOVE_DIST)
-		+ vars->y_dir * cos(-MOVE_DIST);
-	vars->x_cam_plane = vars->x_cam_plane * cos(-MOVE_DIST)
-		- vars->y_cam_plane * sin(-MOVE_DIST);
-	vars->y_cam_plane = x_old_plane * sin(-MOVE_DIST)
-		+ vars->y_cam_plane * cos(-MOVE_DIST);
+	vars->x_dir = vars->x_dir * cos(-ROTATION)
+		- vars->y_dir * sin(-ROTATION);
+	vars->y_dir = x_old_dir * sin(-ROTATION)
+		+ vars->y_dir * cos(-ROTATION);
+	vars->x_cam_plane = vars->x_cam_plane * cos(-ROTATION)
+		- vars->y_cam_plane * sin(-ROTATION);
+	vars->y_cam_plane = x_old_plane * sin(-ROTATION)
+		+ vars->y_cam_plane * cos(-ROTATION);
 }
 
 void	rotate_left_camera(t_vars *vars)
@@ -36,14 +36,14 @@ void	rotate_left_camera(t_vars *vars)
 
 	x_old_dir = vars->x_dir;
 	x_old_plane = vars->x_cam_plane;
-	vars->x_dir = vars->x_dir * cos(MOVE_DIST)
-		- vars->y_dir * sin(MOVE_DIST);
-	vars->y_dir = x_old_dir * sin(MOVE_DIST) + vars->y_dir
-		* cos(MOVE_DIST);
-	vars->x_cam_plane = vars->x_cam_plane * cos(MOVE_DIST)
-		- vars->y_cam_plane * sin(MOVE_DIST);
-	vars->y_cam_plane = x_old_plane * sin(MOVE_DIST)
-		+ vars->y_cam_plane * cos(MOVE_DIST);
+	vars->x_dir = vars->x_dir * cos(ROTATION)
+		- vars->y_dir * sin(ROTATION);
+	vars->y_dir = x_old_dir * sin(ROTATION) + vars->y_dir
+		* cos(ROTATION);
+	vars->x_cam_plane = vars->x_cam_plane * cos(ROTATION)
+		- vars->y_cam_plane * sin(ROTATION);
+	vars->y_cam_plane = x_old_plane * sin(ROTATION)
+		+ vars->y_cam_plane * cos(ROTATION);
 }
 
 void	re_draw_window(int keycode, t_info *info)
