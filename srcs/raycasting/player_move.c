@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 19:54:54 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/11 21:12:24 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:09:43 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,14 +68,13 @@ void	move_right(char **map, t_vars *vars)
 
 void	move_left(char **map, t_vars *vars)
 {
-	int one_left_x_pos_vec;
-	int one_left_y_pos_vec;
-	char destination;
+	int		one_left_x_pos_vec;
+	int		one_left_y_pos_vec;
+	char	destination;
 
 	one_left_x_pos_vec = vars->x_pos + (-vars->y_dir * MOVE_DIST);
 	one_left_y_pos_vec = vars->y_pos + (vars->x_dir * MOVE_DIST);
 	destination = map[one_left_x_pos_vec][one_left_y_pos_vec];
-
 	if (destination == '1')
 		return ;
 	else

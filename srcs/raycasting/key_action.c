@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/06/14 14:33:56 by hnoguchi          #+#    #+#             */
-/*   Updated: 2023/07/12 12:12:27 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 14:16:00 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,18 @@ void	rotate_left_camera(t_vars *vars)
 		+ vars->y_cam_plane * cos(ROTATION);
 }
 
+void	re_draw_window(int keycode, t_info *info)
+{
+	draw_color_floor_and_ceil(&info->data,
+		info->vars.floor_col, info->vars.ceil_col);
+	try_draw_texture_floor_and_ceil(info);
+	draw_wall(info);
+	mlx_put_image_to_window(info->vars.mlx, info->vars.win,
+		info->data.img, 0, 0);
+	updata_pos_map(&info->vars, info, keycode);
+	minimap(info, &info->data);
+}
+
 int	key_action(int keycode, t_info *info)
 {
 	if (keycode == W_KEY || keycode == UP_KEY)
@@ -66,15 +78,6 @@ int	key_action(int keycode, t_info *info)
 		info->flag.map *= -1;
 	else
 		return (-1);
-	// printf("x_dir=%f\n",info->vars.x_dir);
-	// printf("y_dir=%f\n",info->vars.y_dir);
-	draw_color_floor_and_ceil(&info->data,
-		info->vars.floor_col, info->vars.ceil_col);
-	try_draw_texture_floor_and_ceil(info);
-	draw_wall(info);
-	mlx_put_image_to_window(info->vars.mlx, info->vars.win,
-		info->data.img, 0, 0);
-	updata_pos_map(&info->vars, info, keycode);
-	minimap(info, &info->data);
+	re_draw_window(keycode, info);
 	return (0);
 }
