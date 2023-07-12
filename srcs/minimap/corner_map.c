@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/06 19:16:26 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/11 18:30:14 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 11:57:08 by susasaki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	draw_ray(t_info *info)
 		tmp_x = (ray_len * info->vars.y_dir);
 		tmp_y = (ray_len * info->vars.x_dir);
 		my_mlx_pixel_put(&info->data, DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_x,
-			DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y, FUCHSIA);
+			DISPLAY_RADIUS + (BLOCK_SIZE / 2) + tmp_y, BLACK);
 		ray_len++;
 	}
 }
