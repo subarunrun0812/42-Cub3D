@@ -6,7 +6,7 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/05/11 16:44:42 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/12 15:22:55 by susasaki         ###   ########.fr       */
+/*   Updated: 2023/07/12 15:52:29 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@ void	updata_pos_map(t_vars *vars, t_info *info, int keycode)
 {
 	if (info->map.map_data[(int)(vars->x_pos)][(int)(vars->y_pos)] == '0')
 	{
-		if (keycode == W_KEY || keycode == S_KEY  || keycode == UP_KEY
-		|| keycode == DOWN_KEY)
+		if (keycode == W_KEY || keycode == S_KEY || keycode == UP_KEY
+			|| keycode == DOWN_KEY)
 		{
 			updata_pos_map_w_s_key(vars, info, keycode);
 		}
