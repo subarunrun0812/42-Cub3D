@@ -6,13 +6,11 @@
 /*   By: susasaki <susasaki@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/11 19:54:54 by susasaki          #+#    #+#             */
-/*   Updated: 2023/07/13 19:01:30 by hnoguchi         ###   ########.fr       */
+/*   Updated: 2023/07/14 16:43:55 by hnoguchi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-# define PLAYER_BODY 0.4
 
 void	move_forward(char **map, t_vars *vars)
 {
