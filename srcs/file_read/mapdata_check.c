@@ -30,11 +30,8 @@ static void	check_map_upper_or_lower(char **map_data, int y)
 
 static void	check_left_right_handsides(char **map_data, int _y)
 {
-	int	width_len;
 	int	_x;
 
-	width_len = 0;
-	width_len = mapdata_width_length(map_data[_y]);
 	_x = skip_space_width(map_data, _y);
 	if (map_data[_y][_x] != '1' || map_data[_y][_x] != '1')
 		print_error("map is not true. left right handsides");
